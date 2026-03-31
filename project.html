@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html class="font-sans text-base antialiased" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gleb Sergeev | Project</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="styles.css?v=1774887100" />
+  </head>
+  <body class="page-body" data-page="project">
+    <div class="nav-root" x-data="{ siteOpen: false }">
+      <ul class="nav-bar nav-bar--project">
+        <li class="nav-left nav-site-stack">
+          <a
+            class="link-underline nav-site-name"
+            href="#"
+            role="button"
+            :aria-expanded="siteOpen"
+            @click.prevent="siteOpen = !siteOpen; $nextTick(() => window.dispatchEvent(new CustomEvent('site-intro-layout')))"
+            >Gleb Sergeev</a>
+          <div x-show="siteOpen" x-cloak class="nav-panel nav-panel--site-intro" id="siteIntroPanelProject">
+            <p id="siteIntroTextProject"></p>
+          </div>
+        </li>
+        <li class="nav-center"><a class="link-underline" href="index.html">Index</a></li>
+        <li class="nav-right nav-external-links">
+          <a class="link-underline" href="https://www.instagram.com/" target="_blank" rel="noreferrer noopener">Instagram</a><a class="link-underline" href="mailto:hello@example.com">Contact</a>
+        </li>
+      </ul>
+    </div>
+
+    <section class="carousel-section project-carousel">
+      <div class="project-fixed-block" id="projectTitleBlock">
+        <h1
+          class="project-fixed-title project-fixed-title--toggle"
+          id="projectTitle"
+          tabindex="0"
+          role="button"
+          aria-expanded="false"
+        ></h1>
+        <p class="project-series-desc" id="projectSeriesDesc" hidden></p>
+      </div>
+      <div class="carousel-section__inner">
+        <button type="button" class="nav-hit nav-hit--prev" id="swiperPrev" aria-label="Previous"></button>
+        <div class="swiper swiper-main project-swiper">
+          <div class="swiper-wrapper" id="projectWrapper"></div>
+        </div>
+        <button type="button" class="nav-hit nav-hit--next" id="swiperNext" aria-label="Next"></button>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="app.js?v=1774887100"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+  </body>
+</html>

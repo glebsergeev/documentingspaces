@@ -1,0 +1,732 @@
+/* Gleb Sergeev — layout grid: --g = vertical/horizontal gutters (margins, gaps, middle band).
+   Index desktop: viewport split by horizontal band of height --g at 50%: title line sits on its
+   top edge, image top on its bottom edge; bottom margin --g. */
+
+@font-face {
+  font-family: "Antique-Legacy";
+  src: url("https://corbinmahieu.be/dist/fonts/Antique-Legacy-Medium.woff2") format("woff2"),
+    url("https://corbinmahieu.be/dist/fonts/Antique-Legacy-Medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --text: #000000;
+  --font-size: 14px;
+  --line-height: 17px;
+  --nav-pad-x: 0.75rem;
+  --nav-pad-y: 0.5rem;
+  --section-pt-mobile: 31px;
+  /* vh jumps when browser UI shows/hides; dvh is stable on supporting browsers */
+  --section-pt-desktop: 28vh;
+  --g: 12px;
+  /* Default cover (project page, index mobile); index desktop overrides */
+  --cover: min(52vh, calc(100vw - 2 * var(--g)), 520px);
+  --nav-bar-h: calc(var(--nav-pad-y) * 2 + var(--line-height));
+  --index-content-top: calc(var(--g) + var(--nav-bar-h));
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --section-pt-desktop: 28dvh;
+    --cover: min(52dvh, calc(100vw - 2 * var(--g)), 520px);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  font-feature-settings: normal;
+  font-family: "Antique-Legacy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.page-body {
+  margin: 0;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* One leading for all titles and body copy site-wide (avoid per-block line-height: 1) */
+body.page-body :where(h1, h2, h3, h4, h5, h6, p) {
+  line-height: var(--line-height);
+}
+
+@media (min-width: 768px) {
+  body.page-body {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  body.page-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+p {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+}
+
+strong {
+  font-weight: 400;
+}
+
+p + p {
+  margin-top: 1rem;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+.nav-root {
+  position: relative;
+  z-index: 99999;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* First vertical gutter: space above header links; panel overlays so height stays stable */
+body[data-page="index"] .nav-root {
+  padding-top: var(--g);
+  overflow: visible;
+  max-height: none;
+}
+
+body[data-page="index"] .nav-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 100000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+body[data-page="project"] .nav-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 100000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* On project page nav should not push layout down; same top gutter as index */
+.page-body[data-page="project"] .nav-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-top: var(--g);
+  overflow: visible;
+  max-height: none;
+}
+
+.nav-bar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: var(--nav-pad-y) var(--nav-pad-x);
+  list-style: none;
+  background: var(--bg);
+}
+
+body[data-page="index"] .nav-bar {
+  align-items: flex-start;
+}
+
+/* Name + intro stack: intro sits on the next typographic line under the link */
+.nav-site-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  min-width: 0;
+}
+
+body[data-page="index"] .nav-site-stack {
+  position: relative;
+}
+
+/* Same horizontal rhythm as between carousel images (--g) */
+.nav-external-links {
+  display: flex;
+  align-items: center;
+  gap: var(--g);
+}
+
+.nav-bar--project {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: var(--g);
+}
+
+body[data-page="project"] .nav-bar--project {
+  align-items: start;
+}
+
+.nav-bar--project .nav-left {
+  justify-self: start;
+}
+
+.nav-bar--project .nav-center {
+  justify-self: center;
+}
+
+.nav-bar--project .nav-right {
+  justify-self: end;
+}
+
+.nav-bar a.nav-trigger {
+  display: block;
+}
+
+.nav-panel {
+  padding: var(--nav-pad-y) var(--nav-pad-x);
+  background: var(--bg);
+  border-bottom: 2px solid var(--text);
+}
+
+.nav-panel p {
+  margin-bottom: 1rem;
+}
+
+.nav-panel p:last-child {
+  margin-bottom: 0;
+}
+
+/* Site / series intro: same column width as covers (--g + --cover) */
+.nav-panel.nav-panel--site-intro {
+  width: var(--cover);
+  max-width: calc(100vw - 2 * var(--g));
+  left: var(--g);
+  right: auto;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.nav-panel--site-intro p {
+  margin: 0;
+  padding-left: var(--g);
+  box-sizing: border-box;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 400;
+}
+
+body[data-page="project"] .nav-panel.nav-panel--site-intro {
+  width: var(--project-cover);
+}
+
+/* Plain text under the name: no panel chrome; in-flow under the link (not below full bar) */
+body[data-page="index"] .nav-panel.nav-panel--site-intro,
+body[data-page="project"] .nav-panel.nav-panel--site-intro {
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
+  z-index: auto;
+  box-shadow: none;
+  background: transparent;
+  border-bottom: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 0;
+}
+
+/* On index intro must overlay, not push the carousel row down */
+body[data-page="index"] .nav-site-stack > .nav-panel.nav-panel--site-intro {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: auto;
+  z-index: 100000;
+}
+
+.carousel-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--section-pt-mobile);
+  padding-bottom: 0;
+}
+
+/* Project: start carousel below fixed nav (same T as index) */
+body[data-page="project"] .carousel-section.project-carousel {
+  padding-top: var(--index-content-top);
+}
+
+@media (min-width: 768px) {
+  .carousel-section {
+    padding-top: var(--section-pt-desktop);
+  }
+
+  body[data-page="index"] .carousel-section {
+    padding-top: 0;
+  }
+}
+
+.carousel-section__inner {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-section__inner .swiper-main {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  height: 100%;
+}
+
+.swiper-slide--work {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  contain: layout style;
+}
+
+@media (min-width: 768px) {
+  .swiper-slide--work {
+    width: calc(var(--g) + var(--cover));
+    max-width: none;
+  }
+
+  .swiper-slide--work:last-child {
+    margin-right: var(--g);
+  }
+}
+
+.slide-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+/* Pushing the block with margin-top: auto is more stable on resize than a flex-grow spacer */
+.slide-top-spacer {
+  display: none;
+}
+
+.slide-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g);
+  width: var(--cover);
+  max-width: calc(100vw - 2 * var(--g));
+  margin-top: auto;
+  margin-left: var(--g);
+  margin-right: auto;
+  margin-bottom: var(--g);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  body[data-page="index"] {
+    --cover: min(
+      calc((100vh - 3 * var(--g)) / 2),
+      calc(100vw - 2 * var(--g)),
+      520px
+    );
+  }
+
+  body[data-page="index"] .slide-bottom {
+    gap: 0;
+    margin-top: 0;
+    /* Third vertical gutter (--g) below image: bottom of block = 100vh/dvh - g */
+    height: calc(100vh - var(--g) - var(--index-content-top));
+  }
+
+  /* Do NOT use flex-direction: column on h1 — it stacks text and <a> on separate lines. */
+  body[data-page="index"] .slide-hit {
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  body[data-page="index"] .slide-title {
+    flex: 0 0 auto;
+    margin-top: 0;
+    white-space: nowrap;
+  }
+
+  body[data-page="index"] .slide-main {
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    body[data-page="index"] {
+      --cover: min(
+        calc((100dvh - 3 * var(--g)) / 2),
+        calc(100vw - 2 * var(--g)),
+        520px
+      );
+    }
+
+    body[data-page="index"] .slide-bottom {
+      height: calc(100dvh - var(--g) - var(--index-content-top));
+    }
+  }
+}
+
+.slide-title {
+  margin: 0;
+  text-align: left;
+}
+
+body[data-page="index"] .slide-bottom {
+  position: relative;
+  width: calc(var(--cover) + 6px);
+  padding: 3px;
+  margin-left: calc(var(--g) - 3px);
+  margin-bottom: calc(var(--g) - 3px);
+}
+
+body[data-page="index"] .slide-hit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g);
+  width: var(--cover);
+  max-width: calc(100vw - 2 * var(--g));
+  box-sizing: border-box;
+}
+
+body[data-page="index"] .slide-title,
+body[data-page="index"] .slide-main {
+  width: var(--cover);
+}
+
+body[data-page="index"] .slide-title a.link-underline {
+  margin-left: var(--g);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, visibility 160ms ease;
+}
+
+/* Hover only over title + image (incl. gap between them), not empty area above the band */
+body[data-page="index"] .slide-hit:hover .slide-title a.link-underline,
+body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  body[data-page="index"] .slide-title a.link-underline {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+.slide-main {
+  position: relative;
+  width: 100%;
+  height: var(--cover);
+  min-height: var(--cover);
+}
+
+.slide-overlay {
+  position: fixed;
+  z-index: 9998;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: var(--bg);
+  overflow-y: auto;
+  padding: var(--g);
+}
+
+.slide-overlay-inner {
+  max-width: 42em;
+}
+
+.slide-overlay p {
+  margin-bottom: 1rem;
+}
+
+.slide-overlay p:last-child {
+  margin-bottom: 0;
+}
+
+.slide-visual {
+  position: relative;
+  width: 100%;
+  height: var(--cover);
+  transition: opacity 0.2s ease;
+}
+
+.slide-visual.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cover-square {
+  width: 100%;
+  height: var(--cover);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f4f4f4;
+  cursor: pointer;
+}
+
+.cover-square img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Project mobile: previous flexible cover */
+.page-body[data-page="project"] {
+  --project-cover: min(
+    calc(var(--cover) * 1.5),
+    calc(100vw - 2 * var(--g)),
+    calc(100vh - var(--section-pt-mobile) - 2 * var(--g))
+  );
+}
+
+@supports (height: 100dvh) {
+  .page-body[data-page="project"] {
+    --project-cover: min(
+      calc(var(--cover) * 1.5),
+      calc(100vw - 2 * var(--g)),
+      calc(100dvh - var(--section-pt-mobile) - 2 * var(--g))
+    );
+  }
+}
+
+/*
+ * Project desktop (≥768): viewport split into 4 equal bands.
+ * Gutter of height --g on the boundary at 25vh: title baseline on its top, image top on its bottom.
+ * Images occupy the lower 3/4 of the viewport (height = 75vh − 3g/2 within the band model).
+ */
+@media (min-width: 768px) {
+  .page-body[data-page="project"] {
+    --project-cover: min(
+      calc(75vh - 3 * var(--g) / 2),
+      calc(100vw - 2 * var(--g)),
+      780px
+    );
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    .page-body[data-page="project"] {
+      --project-cover: min(
+        calc(75dvh - 3 * var(--g) / 2),
+        calc(100vw - 2 * var(--g)),
+        780px
+      );
+    }
+  }
+}
+
+.project-carousel {
+  padding-bottom: 0;
+}
+
+.project-fixed-block {
+  position: fixed;
+  left: var(--g);
+  width: var(--project-cover);
+  max-width: calc(100vw - 2 * var(--g));
+  z-index: 60;
+  text-align: left;
+  pointer-events: none;
+  top: auto;
+  bottom: auto;
+}
+
+.project-fixed-title {
+  position: static;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  pointer-events: none;
+}
+
+.project-fixed-title--toggle {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.project-series-desc {
+  margin: 0;
+  margin-top: 0;
+  padding: 0;
+  padding-left: var(--g);
+  box-sizing: border-box;
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 400;
+  pointer-events: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.swiper-slide--project {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .swiper-slide--project {
+    width: calc(var(--g) + var(--project-cover));
+    max-width: none;
+  }
+
+  .swiper-slide--project:last-child {
+    margin-right: var(--g);
+  }
+}
+
+.project-slide-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.project-bottom {
+  width: var(--project-cover);
+  max-width: calc(100vw - 2 * var(--g));
+  margin-top: auto;
+  margin-left: var(--g);
+  margin-right: auto;
+  margin-bottom: var(--g);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  body[data-page="project"] .project-slide-card {
+    /* Image top at 25vh + g/2 from viewport top; T = index-content-top from carousel padding */
+    padding-top: max(0px, calc(25vh + var(--g) / 2 - var(--index-content-top)));
+  }
+
+  body[data-page="project"] .project-bottom {
+    margin-top: 0;
+  }
+
+  body[data-page="project"] .project-image-wrap {
+    height: var(--project-cover);
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    body[data-page="project"] .project-slide-card {
+      padding-top: max(0px, calc(25dvh + var(--g) / 2 - var(--index-content-top)));
+    }
+  }
+}
+
+.project-image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+
+.project-image-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.nav-hit {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 50;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: w-resize;
+}
+
+@media (min-width: 768px) {
+  .nav-hit {
+    display: block;
+  }
+}
+
+.nav-hit--prev {
+  left: 0;
+  width: 100px;
+}
+
+.nav-hit--next {
+  right: 0;
+  left: auto;
+  width: 100px;
+  cursor: e-resize;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-visual {
+    transition: none;
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="font-sans text-base antialiased" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gleb Sergeev | Photography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="styles.css?v=1774887300" />
+  </head>
+  <body class="page-body" data-page="index">
+    <div class="nav-root" x-data="{ navOpen: false }">
+      <ul class="nav-bar">
+        <li class="nav-site-stack">
+          <a
+            class="nav-trigger link-underline"
+            href="#"
+            role="button"
+            :aria-expanded="navOpen"
+            @click.prevent="navOpen = !navOpen; $nextTick(() => window.dispatchEvent(new CustomEvent('site-intro-layout')))"
+            >Gleb Sergeev</a>
+          <div x-show="navOpen" x-cloak class="nav-panel nav-panel--site-intro" id="siteIntroPanel">
+            <p id="siteIntroText"></p>
+          </div>
+        </li>
+        <li class="nav-external-links">
+          <a class="link-underline" href="https://www.instagram.com/" target="_blank" rel="noreferrer noopener">Instagram</a><a class="link-underline" href="mailto:hello@example.com">Contact</a>
+        </li>
+      </ul>
+    </div>
+
+    <section class="carousel-section" x-data="carousel()" x-init="initSwiper()">
+      <div class="carousel-section__inner">
+        <button type="button" class="nav-hit nav-hit--prev" id="swiperPrev" aria-label="Previous"></button>
+        <div class="swiper swiper-main" x-ref="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Winter Light, 2024<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>This year the work followed snowless weeks and sudden thaws, focusing on patient light across facades and pavements.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0007.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Riverside Drift<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Riverside observations built around current, reflection, and small traces of daily urban use.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0237.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Interior Notes, 2023<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Quiet interiors where objects and daylight define atmosphere without staged gestures.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0408.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Market Day<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Dense market rhythms balancing gesture, inventory, and tactile urban color fields.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0655.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Night Walks, 2025<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Night streets captured through rain, neon, and brief transitions in public space.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0755.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Coastal Fog<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Coastal mornings with minimal contrast and shifting visibility in dense sea fog.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF0913.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Studio Still Life<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Small-object studies focused on texture, light falloff, and restrained composition.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF1774.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Transit Lines, 2022<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Public transport environments where movement, timing, and anonymity define each frame.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF4784.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Highland Silence<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Highland weather and topography studied through gradual light changes and distance.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF4801.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Archive Room<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>An archive sequence around material traces, catalog systems, and acts of preservation.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF9625.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+            <div class="swiper-slide swiper-slide--work"><div x-data="{ show: false }" class="slide-card" @click.away="show = false"><div class="slide-top-spacer" aria-hidden="true"></div><div class="slide-bottom"><div class="slide-hit"><h1 class="slide-title">Summer Roof, 2024<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1><div class="slide-main"><div x-show="show" x-cloak class="slide-overlay" x-transition><div class="slide-overlay-inner"><p>Single-frame summer rooftop study. © Gleb Sergeev.</p></div></div><div class="slide-visual" :class="show ? 'is-hidden' : ''"><div class="cover-square"><img src="assets/DSCF9771.jpg" alt="" width="800" height="800" loading="lazy" /></div></div></div></div></div></div></div>
+          </div>
+        </div>
+        <button type="button" class="nav-hit nav-hit--next" id="swiperNext" aria-label="Next"></button>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="app.js?v=1774887100"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+  </body>
+</html>
