@@ -516,29 +516,26 @@ function readProjectIndex() {
   return Math.max(0, raw);
 }
 
-/**
- * Prefer ?slug=… from URL; otherwise ?project= index among published (legacy).
- */
-function resolvePublishedProject(published) {
+function resolveProjectFromList(list) {
   const params = new URLSearchParams(window.location.search);
   const slugRaw = params.get("slug");
-  if (slugRaw != null && String(slugRaw).trim() !== "" && published.length) {
+  if (slugRaw != null && String(slugRaw).trim() !== "" && list.length) {
     const slug = String(slugRaw).trim();
-    const i = published.findIndex((p) => p && p.slug === slug);
+    const i = list.findIndex((p) => p && p.slug === slug);
     if (i >= 0) {
-      return { project: published[i], index: i };
+      return { project: list[i], index: i };
     }
     console.warn("Unknown project slug:", slug);
-    return { project: published[0], index: 0 };
+    return { project: list[0], index: 0 };
   }
   const rawIdx = readProjectIndex();
-  if (published.length === 0) {
+  if (list.length === 0) {
     const maxLegacy = Math.max(0, PROJECT_TITLES.length - 1);
     const projectIdx = Math.min(Math.max(0, rawIdx), maxLegacy);
     return { project: null, index: projectIdx };
   }
-  const projectIdx = Math.min(Math.max(0, rawIdx), published.length - 1);
-  return { project: published[projectIdx], index: projectIdx };
+  const projectIdx = Math.min(Math.max(0, rawIdx), list.length - 1);
+  return { project: list[projectIdx], index: projectIdx };
 }
 
 function initProjectSiteIntroPanel() {
@@ -576,10 +573,15 @@ async function initProjectPage() {
 
   const data = await loadProjectsDataOrNull();
   const published = data ? getPublishedProjectsSorted(data) : [];
+  const allSorted = data?.projects
+    ? [...data.projects].sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+    : [];
   if (data) {
     applyIndexSiteMeta(data);
   }
-  const { project, index: projectIdx } = resolvePublishedProject(published);
+  const inEditMode = new URLSearchParams(window.location.search).get("edit") === "1";
+  const sourceProjects = inEditMode ? allSorted : published;
+  const { project, index: projectIdx } = resolveProjectFromList(sourceProjects);
 
   if (project?.title && data?.siteTitle) {
     document.title = `${project.title} | ${data.siteTitle}`;
@@ -596,11 +598,11 @@ async function initProjectPage() {
         : pickRandom(PROJECT_SERIES_TEXTS);
   }
 
-  if (new URLSearchParams(window.location.search).get("edit") === "1") {
+  if (inEditMode) {
     if (typeof window.initProjectGalleryEdit === "function") {
       await window.initProjectGalleryEdit({
         data,
-        published,
+        published: sourceProjects,
         project,
         projectIdx,
         wrapper,
@@ -953,6 +955,10 @@ async function initProjectPage() {
   });
 }
 
+function isIndexEditMode() {
+  return new URLSearchParams(window.location.search).get("edit") === "1";
+}
+
 function carousel() {
   return {
     swiper: null,
@@ -969,6 +975,17 @@ function carousel() {
       if (!el || typeof Swiper === "undefined") return;
       const wrapper = el.querySelector(".swiper-wrapper");
       if (!wrapper) return;
+
+      if (isIndexEditMode()) {
+        if (typeof window.initIndexGalleryEdit === "function") {
+          await window.initIndexGalleryEdit({
+            data,
+            wrapper,
+            swiperEl: el,
+          });
+        }
+        return;
+      }
 
       const published = getPublishedProjectsSorted(data);
       wrapper.innerHTML = published.map(buildIndexSlideHtml).join("");

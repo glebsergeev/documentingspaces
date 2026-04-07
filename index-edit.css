@@ -1,0 +1,253 @@
+body.index-gallery-edit .nav-hit--prev,
+body.index-gallery-edit .nav-hit--next {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: none;
+  width: 100%;
+  gap: 0;
+  box-sizing: border-box;
+  padding-bottom: 14px;
+}
+
+body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip::-webkit-scrollbar {
+  height: 8px;
+}
+
+body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, CanvasText 25%, transparent);
+  border-radius: 4px;
+}
+
+body.index-gallery-edit .swiper-slide--work.index-edit-slide {
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+body.index-gallery-edit .swiper-slide--work.index-edit-slide:active {
+  cursor: grabbing;
+}
+
+body.index-gallery-edit .index-edit-slide .slide-hit {
+  position: relative;
+}
+
+body.index-gallery-edit .index-edit-slide .index-edit-meta-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.45rem;
+  margin-bottom: 0.4rem;
+}
+
+body.index-gallery-edit .index-edit-toggle,
+body.index-gallery-edit .index-edit-open-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.1rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #000;
+  background: color-mix(in srgb, Canvas 72%, transparent);
+  color: #000;
+  font: inherit;
+  font-size: 0.94rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.index-gallery-edit .index-edit-toggle.is-on {
+  background: #000;
+  color: #fff;
+}
+
+body.index-gallery-edit .index-edit-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.42rem;
+}
+
+body.index-gallery-edit .index-edit-slug {
+  opacity: 0.6;
+}
+
+body.index-gallery-edit .index-edit-title-input-row {
+  margin-top: 0.55rem;
+}
+
+body.index-gallery-edit .index-edit-title-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 2.1rem;
+  padding: 0 0.75rem;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: color-mix(in srgb, Canvas 72%, transparent);
+  color: #000;
+  font: inherit;
+  font-size: 0.94rem;
+  letter-spacing: -0.01em;
+}
+
+body.index-gallery-edit .index-edit-slide--draft .cover-square img {
+  filter: grayscale(1);
+  opacity: 0.84;
+}
+
+body.index-gallery-edit .index-edit-slide--dragging {
+  opacity: 0.45;
+}
+
+.index-edit-insert-gap {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  width: 1.25rem;
+  min-width: 20px;
+  max-width: 20px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-right: calc(-1 * var(--g));
+  position: relative;
+  z-index: 2;
+  transition: width 0.16s ease, min-width 0.16s ease, max-width 0.16s ease;
+}
+
+.index-edit-insert-gap-hit {
+  display: block;
+  height: var(--project-cover);
+  width: calc(100% - 8px);
+  margin: 0 4px var(--g) 4px;
+}
+
+.index-edit-insert-gap::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: var(--g);
+  width: 1px;
+  height: var(--project-cover);
+  background: #000;
+  transform: translateX(-0.5px) scaleY(0.7);
+  transform-origin: center bottom;
+  opacity: 0;
+  transition: opacity 0.14s ease, transform 0.16s ease;
+  pointer-events: none;
+}
+
+body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-insert {
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+}
+
+body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-insert::after {
+  opacity: 1;
+  transform: translateX(-0.5px) scaleY(1);
+}
+
+.index-edit-add-tile {
+  flex: 0 0 auto;
+  width: calc(var(--g) + var(--project-cover));
+  max-width: calc(var(--g) + var(--project-cover));
+  align-self: flex-end;
+  padding-left: var(--g);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.index-edit-add-tile-inner {
+  width: var(--project-cover);
+  height: var(--project-cover);
+  max-width: var(--project-cover);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--g);
+  border-radius: 12px;
+  border: 1px dashed #000;
+  background: color-mix(in srgb, Canvas 55%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.index-edit-add-btn {
+  width: 53px;
+  height: 53px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #fff;
+  background: #000;
+  cursor: pointer;
+}
+
+.index-edit-add-hint {
+  font-size: 0.86rem;
+  color: color-mix(in srgb, CanvasText 55%, transparent);
+  text-align: center;
+}
+
+.index-edit-toolbar {
+  position: fixed;
+  right: var(--g);
+  bottom: var(--g);
+  z-index: 200001;
+}
+
+.index-edit-toolbar-pill {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  background: color-mix(in srgb, Canvas 92%, transparent);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.index-edit-toolbar-pill > button {
+  height: 2.1rem;
+  border: none;
+  background: transparent;
+  color: #000;
+  font: inherit;
+  font-size: 0.94rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  padding: 0 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.index-edit-toolbar-pill > button:hover {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
+}
+
+.index-edit-pill-divider {
+  display: block;
+  width: 1px;
+  height: 1.25rem;
+  background: color-mix(in srgb, CanvasText 22%, transparent);
+  margin: 0 2px;
+}
