@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Gleb Sergeev | Project</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="styles.css?v=1774887100" />
+    <link rel="stylesheet" href="styles.css?v=1774889400" />
+    <link rel="stylesheet" href="project-edit.css?v=1775003400" />
   </head>
   <body class="page-body" data-page="project">
     <div class="nav-root" x-data="{ siteOpen: false }">
@@ -24,7 +25,7 @@
         </li>
         <li class="nav-center"><a class="link-underline" href="index.html">Index</a></li>
         <li class="nav-right nav-external-links">
-          <a class="link-underline" href="https://www.instagram.com/" target="_blank" rel="noreferrer noopener">Instagram</a><a class="link-underline" href="mailto:hello@example.com">Contact</a>
+          <a id="navInstagram" class="link-underline" href="https://www.instagram.com/" target="_blank" rel="noreferrer noopener">Instagram</a><a id="navContact" class="link-underline" href="mailto:hello@example.com">Contact</a>
         </li>
       </ul>
     </div>
@@ -39,6 +40,7 @@
           aria-expanded="false"
         ></h1>
         <p class="project-series-desc" id="projectSeriesDesc" hidden></p>
+        <p class="project-fs-counter" id="projectFullscreenCounter" hidden aria-live="polite"></p>
       </div>
       <div class="carousel-section__inner">
         <button type="button" class="nav-hit nav-hit--prev" id="swiperPrev" aria-label="Previous"></button>
@@ -49,8 +51,39 @@
       </div>
     </section>
 
+    <div id="projectFullscreen" class="project-fullscreen" hidden aria-hidden="true">
+      <div class="project-fullscreen__stage">
+        <button
+          type="button"
+          class="project-fullscreen__backdrop"
+          id="projectFullscreenBackdrop"
+          aria-label="Exit fullscreen"
+        ></button>
+        <div class="project-fullscreen__stage-front">
+          <div class="project-fullscreen__img-outer" id="projectFullscreenImgOuter">
+            <img id="projectFullscreenImg" class="project-fullscreen__img" alt="" />
+            <div class="project-fullscreen__zones">
+              <button
+                type="button"
+                class="project-fullscreen__zone project-fullscreen__zone--prev"
+                id="projectFullscreenPrev"
+                aria-label="Previous image"
+              ></button>
+              <button
+                type="button"
+                class="project-fullscreen__zone project-fullscreen__zone--next"
+                id="projectFullscreenNext"
+                aria-label="Next image"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="app.js?v=1774887100"></script>
+    <script src="project-edit.js?v=1775003400"></script>
+    <script src="app.js?v=1774891000"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
   </body>
 </html>

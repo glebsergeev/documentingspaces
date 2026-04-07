@@ -1,0 +1,692 @@
+/* In-gallery editor: horizontal strip + liquid (Safari / macOS-like) chrome */
+
+body.project-gallery-edit {
+  /* Floating Save/Exit — no reserved footer band */
+  padding-bottom: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --edit-control-h: 2.1rem;
+  --edit-pill-track-h: calc(var(--edit-control-h) + 4px);
+  --edit-nav-end-r: calc(var(--edit-pill-track-h) / 2 - 5px);
+  --edit-btn-inner-r: 7px;
+  --edit-glass-bg: color-mix(in srgb, rgba(255, 255, 255, 0.78) 72%, rgba(255, 255, 255, 0.35));
+  --edit-glass-border: color-mix(in srgb, CanvasText 12%, transparent);
+  --edit-glass-shadow: 0 4px 24px color-mix(in srgb, CanvasText 8%, transparent);
+  /* Safari-style capsule controls */
+  --edit-pill-bg: rgba(255, 255, 255, 0.94);
+  --edit-pill-border: rgba(0, 0, 0, 0.09);
+  --edit-pill-shadow: 0 2px 10px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --edit-pill-divider: rgba(0, 0, 0, 0.1);
+  --edit-pill-hover: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  body.project-gallery-edit {
+    --edit-glass-bg: color-mix(in srgb, rgba(45, 45, 48, 0.86) 75%, rgba(25, 25, 28, 0.55));
+    --edit-glass-border: color-mix(in srgb, CanvasText 22%, transparent);
+    --edit-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --edit-pill-bg: rgba(58, 58, 60, 0.92);
+    --edit-pill-border: rgba(255, 255, 255, 0.12);
+    --edit-pill-shadow: 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25);
+    --edit-pill-divider: rgba(255, 255, 255, 0.14);
+    --edit-pill-hover: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Black UI on light glass is illegible in dark mode — use light strokes */
+  body.project-gallery-edit .project-edit-add-tile-inner {
+    border-color: #000;
+  }
+
+  body.project-gallery-edit .project-edit-add-tile-inner.project-edit-drop-active {
+    border-color: #000;
+    background: color-mix(in srgb, var(--edit-glass-bg) 70%, transparent);
+  }
+
+  body.project-gallery-edit .project-edit-add-btn {
+    background: #fff;
+    color: #000;
+  }
+
+  body.project-gallery-edit .project-edit-slide.project-edit-slide--selected .project-image-wrap {
+    outline-color: #fff;
+  }
+
+  body.project-gallery-edit .project-edit-slide-meta {
+    color: #fff;
+  }
+
+  body.project-gallery-edit .project-edit-slide-meta-order {
+    border-color: rgba(255, 255, 255, 0.88);
+  }
+
+  body.project-gallery-edit .project-edit-slide-meta-input {
+    color: #fff;
+  }
+
+  body.project-gallery-edit .project-edit-slide-meta-name-frame {
+    border-color: rgba(255, 255, 255, 0.88);
+  }
+
+  body.project-gallery-edit .project-edit-insert-gap:hover .project-edit-insert-gap-hit,
+  body.project-gallery-edit .project-edit-insert-gap--drop-target .project-edit-insert-gap-hit {
+    border-color: rgba(255, 255, 255, 0.88);
+  }
+}
+
+body.project-gallery-edit .project-swiper.project-swiper--edit {
+  overflow: visible;
+}
+
+/* In edit mode we add two UI rows above image; lift whole slide block on desktop
+   to keep 8/8 frame at the same visual baseline as project page. */
+body.project-gallery-edit {
+  /* Extra rows above image in edit mode (meta row + controls + inter-row gaps) */
+  --edit-ui-lift: calc(var(--edit-pill-track-h) * 2 + var(--g) * 2 + 1.2rem);
+  /* Actual 8/8 tile size in viewport (same constraint as project image width) */
+  --edit-image-h: min(var(--project-cover), calc(100vw - 2 * var(--g)));
+}
+
+body.project-gallery-edit .project-swiper--edit .swiper-wrapper.project-edit-strip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  width: 100%;
+  /* auto + visible on other axis forces both to scroll in browsers — extra vertical bar */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: none;
+  gap: 0;
+  box-sizing: border-box;
+  /* Keep strip level close to project page while clearing scrollbar */
+  padding-bottom: 14px;
+}
+
+body.project-gallery-edit .project-swiper--edit .swiper-wrapper.project-edit-strip::-webkit-scrollbar {
+  height: 8px;
+}
+
+body.project-gallery-edit .project-swiper--edit .swiper-wrapper.project-edit-strip::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, CanvasText 25%, transparent);
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  body.project-gallery-edit .project-edit-slide .project-slide-card {
+    padding-top: max(0px, calc(25vh + var(--g) / 2 - var(--index-content-top) - var(--edit-ui-lift)));
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    body.project-gallery-edit .project-edit-slide .project-slide-card {
+      padding-top: max(0px, calc(25dvh + var(--g) / 2 - var(--index-content-top) - var(--edit-ui-lift)));
+    }
+  }
+}
+
+body.project-gallery-edit #projectFullscreen {
+  display: none !important;
+}
+
+body.project-gallery-edit .nav-hit--prev,
+body.project-gallery-edit .nav-hit--next {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Add / drop tile (1:1, same base as gallery) */
+.project-edit-add-tile {
+  flex: 0 0 auto;
+  width: calc(var(--g) + var(--edit-image-h));
+  max-width: calc(var(--g) + var(--edit-image-h));
+  align-self: flex-end;
+  padding-left: var(--g);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.project-edit-add-tile-inner {
+  width: var(--edit-image-h);
+  height: var(--edit-image-h);
+  max-width: var(--edit-image-h);
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--g);
+  border-radius: 12px;
+  border: 1px dashed #000;
+  background: color-mix(in srgb, var(--edit-glass-bg) 40%, transparent);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.project-edit-add-tile-inner.project-edit-drop-active {
+  border-color: #000;
+  background: color-mix(in srgb, var(--edit-glass-bg) 65%, transparent);
+}
+
+.project-edit-add-btn {
+  width: 53px;
+  height: 53px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #fff;
+  background: #000;
+  box-shadow: var(--edit-glass-shadow);
+}
+
+.project-edit-add-btn:active {
+  transform: scale(0.96);
+}
+
+.project-edit-add-hint {
+  font-size: 0.86rem;
+  color: color-mix(in srgb, CanvasText 55%, transparent);
+  text-align: center;
+  padding: 0 0.5rem;
+  max-width: 12rem;
+}
+
+/* Strip between slides: click/drop to insert. flex-end + padding aligns with image row. */
+.project-edit-insert-gap {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  width: 1.25rem;
+  min-width: 20px;
+  max-width: 20px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding-bottom: var(--g);
+  margin-right: calc(-1 * var(--g));
+  position: relative;
+  z-index: 2;
+  transition: width 0.16s ease, min-width 0.16s ease, max-width 0.16s ease;
+}
+
+.project-edit-insert-gap--first {
+  padding-left: 0;
+}
+
+.project-edit-insert-gap::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: var(--g);
+  width: 1px;
+  height: var(--edit-image-h);
+  background: #000;
+  transform: translateX(-0.5px) scaleY(0.7);
+  transform-origin: center bottom;
+  opacity: 0;
+  transition: opacity 0.14s ease, transform 0.16s ease;
+  pointer-events: none;
+}
+
+body.project-gallery-edit .project-edit-insert-gap.project-edit-insert-gap--drag-insert {
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+}
+
+body.project-gallery-edit .project-edit-insert-gap.project-edit-insert-gap--drag-insert::after {
+  opacity: 1;
+  transform: translateX(-0.5px) scaleY(1);
+}
+
+.project-edit-insert-gap-hit {
+  display: block;
+  height: var(--edit-image-h);
+  width: calc(100% - 8px);
+  margin: 0 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px dashed transparent;
+  border-radius: 4px;
+  background: transparent;
+  transition: border-color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.project-gallery-edit .project-edit-insert-gap:hover .project-edit-insert-gap-hit,
+body.project-gallery-edit .project-edit-insert-gap--drop-target .project-edit-insert-gap-hit {
+  border-color: #000;
+}
+
+.project-edit-insert-gap-hit:focus {
+  outline: none;
+}
+
+.project-edit-insert-gap-hit:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, #007aff 70%, transparent);
+  border-radius: 4px;
+}
+
+/* Slide chrome */
+.project-edit-slide {
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+/* Position + filename above pill row; number in 1px pill-shaped frame, editable */
+body.project-gallery-edit .project-edit-slide-meta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.45rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  /* Top: чуть выше прежнего var(--g); снизу 0 — зазор до пилюль задаёт margin-top у .project-edit-chrome-row */
+  padding: calc(var(--g) - 0.2rem) var(--g) 0 var(--g);
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #000;
+  align-self: flex-start;
+  min-height: var(--edit-pill-track-h);
+  height: var(--edit-pill-track-h);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-order {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 0.45rem;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+}
+
+body.project-gallery-edit .project-edit-slide-meta-input {
+  display: block;
+  width: 2.75ch;
+  min-width: 2ch;
+  max-width: 4ch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--edit-control-h);
+  text-align: center;
+  color: #000;
+  box-sizing: content-box;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-input:focus {
+  outline: none;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-input:focus-visible {
+  outline: 2px solid color-mix(in srgb, #007aff 70%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-name-frame {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 0.45rem;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+}
+
+body.project-gallery-edit .project-edit-slide-meta-name-btn {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0.3em;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--edit-control-h);
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-name-btn:hover {
+  background: var(--edit-pill-hover);
+}
+
+body.project-gallery-edit .project-edit-slide-meta-name-btn:focus {
+  outline: none;
+}
+
+body.project-gallery-edit .project-edit-slide-meta-name-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, #007aff 70%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection: 1px black like meta frames */
+body.project-gallery-edit .project-edit-slide.project-edit-slide--selected .project-image-wrap {
+  outline: 1px solid #000;
+  outline-offset: -1px;
+  border-radius: 0;
+}
+
+.project-edit-slide:active {
+  cursor: grabbing;
+}
+
+.project-edit-slide.project-edit-dragging {
+  opacity: 0.45;
+}
+
+body.project-gallery-edit .project-edit-slide .project-slide-card {
+  align-items: stretch;
+}
+
+/* Left-aligned with image (same inset as .project-bottom) */
+.project-edit-chrome-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.54rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  /* Ровно gutter от нижнего края блока мета (рамка номера + имя) до верха пилюль */
+  margin: var(--g) 0 var(--g) var(--g);
+  padding-right: var(--g);
+  min-height: var(--edit-pill-track-h);
+  height: var(--edit-pill-track-h);
+  align-self: flex-start;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shared capsule (Safari-style) — one height for all three groups */
+.project-edit-pill {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+  border: 0.5px solid var(--edit-pill-border);
+  box-shadow: var(--edit-pill-shadow);
+}
+
+.project-edit-pill--nav {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.project-edit-pill--scale {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.project-edit-pill--remove {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+.project-edit-pill-divider {
+  flex: 0 0 auto;
+  width: 1px;
+  height: calc(var(--edit-control-h) - 4px);
+  max-height: 1.35rem;
+  margin: 0 2px;
+  background: var(--edit-pill-divider);
+  align-self: center;
+}
+
+.project-edit-icon-btn {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--edit-control-h);
+  height: var(--edit-control-h);
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: color-mix(in srgb, CanvasText 88%, transparent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover shape follows outer pill curve (concentric with capsule ends) */
+.project-edit-pill--nav > .project-edit-icon-btn:first-child {
+  border-top-left-radius: var(--edit-nav-end-r);
+  border-bottom-left-radius: var(--edit-nav-end-r);
+  border-top-right-radius: var(--edit-btn-inner-r);
+  border-bottom-right-radius: var(--edit-btn-inner-r);
+}
+
+.project-edit-pill--nav > .project-edit-icon-btn:last-child {
+  border-top-right-radius: var(--edit-nav-end-r);
+  border-bottom-right-radius: var(--edit-nav-end-r);
+  border-top-left-radius: var(--edit-btn-inner-r);
+  border-bottom-left-radius: var(--edit-btn-inner-r);
+}
+
+.project-edit-icon-btn:hover:not(:disabled) {
+  background: var(--edit-pill-hover);
+}
+
+.project-edit-icon-btn:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.project-edit-icon-btn .project-edit-sf-icon {
+  display: block;
+}
+
+.project-edit-scale {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: max-content;
+  height: var(--edit-control-h);
+  margin: 0;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  /* Native select can clip glyph descenders with full-height line-height */
+  line-height: 1.15;
+  padding: 0 0.42rem;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: CanvasText;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.project-edit-scale:hover {
+  background: var(--edit-pill-hover);
+}
+
+.project-edit-scale:focus {
+  outline: none;
+}
+
+.project-edit-scale:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in srgb, #007aff 45%, transparent);
+}
+
+.project-edit-remove-btn {
+  margin: 0;
+  height: var(--edit-control-h);
+  padding: 0 0.66rem;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: var(--edit-control-h);
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in srgb, CanvasText 82%, transparent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-edit-remove-btn:hover {
+  background: var(--edit-pill-hover);
+}
+
+/* Compact floating actions — overlay, no full-width bar */
+.project-edit-toolbar {
+  position: fixed;
+  z-index: 200;
+  right: max(var(--g), env(safe-area-inset-right, 0px));
+  bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+  left: auto;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  display: block;
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+
+.project-edit-toolbar .project-edit-toolbar-pill {
+  pointer-events: auto;
+}
+
+.project-edit-toolbar-pill {
+  --tb-track-h: 2.35rem;
+  --tb-pad-x: 6px;
+  --tb-end-r: calc(var(--tb-track-h) / 2 - var(--tb-pad-x));
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  min-height: var(--tb-track-h);
+  padding: 2px var(--tb-pad-x);
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+  border: 0.5px solid var(--edit-pill-border);
+  box-shadow: var(--edit-pill-shadow);
+}
+
+.project-edit-toolbar-pill .project-edit-pill-divider {
+  margin: 0 3px;
+}
+
+.project-edit-toolbar button {
+  padding: 0.42rem 0.9rem;
+  font-size: 1.008rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: CanvasText;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-edit-toolbar-pill > button:first-child {
+  border-top-left-radius: var(--tb-end-r);
+  border-bottom-left-radius: var(--tb-end-r);
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.project-edit-toolbar-pill > button:last-child {
+  border-top-right-radius: var(--tb-end-r);
+  border-bottom-right-radius: var(--tb-end-r);
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+.project-edit-toolbar button:hover {
+  background: var(--edit-pill-hover);
+}
+
+.project-edit-toolbar button.project-edit-toolbar-primary {
+  font-weight: 600;
+  color: #007aff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .project-edit-toolbar button.project-edit-toolbar-primary {
+    color: #0a84ff;
+  }
+}
+
+.project-edit-toolbar button.project-edit-toolbar-secondary {
+  font-weight: 500;
+  color: color-mix(in srgb, CanvasText 78%, transparent);
+}
+
+.project-edit-error {
+  padding: 2rem var(--g);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 767px) {
+  .project-edit-add-tile {
+    width: 100%;
+    padding-left: var(--g);
+    padding-right: var(--g);
+  }
+
+  .project-edit-add-tile-inner {
+    width: 100%;
+    max-width: min(100%, var(--project-cover));
+  }
+}

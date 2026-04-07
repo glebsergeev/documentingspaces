@@ -16,7 +16,8 @@
   --text: #000000;
   --font-size: 14px;
   --line-height: 17px;
-  --nav-pad-x: 0.75rem;
+  /* Match horizontal page gutter so name, intro, and project title share one left edge */
+  --nav-pad-x: var(--g);
   --nav-pad-y: 0.5rem;
   --section-pt-mobile: 31px;
   /* vh jumps when browser UI shows/hides; dvh is stable on supporting browsers */
@@ -51,6 +52,10 @@ html {
   line-height: var(--line-height);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Automatic hyphenation for lang="en" — uses the engine’s English rules (no extra asset). */
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
 }
 
 body.page-body {
@@ -231,10 +236,10 @@ body[data-page="project"] .nav-bar--project {
   margin-bottom: 0;
 }
 
-/* Site / series intro: same column width as covers (--g + --cover) */
+/* Site intro under the name: full viewport width minus side gutters */
 .nav-panel.nav-panel--site-intro {
-  width: var(--cover);
-  max-width: calc(100vw - 2 * var(--g));
+  width: calc(100vw - 2 * var(--g));
+  max-width: none;
   left: var(--g);
   right: auto;
   margin: 0;
@@ -244,14 +249,11 @@ body[data-page="project"] .nav-bar--project {
 .nav-panel--site-intro p {
   margin: 0;
   padding-left: var(--g);
+  padding-right: 0;
   box-sizing: border-box;
   font-size: inherit;
   line-height: inherit;
   font-weight: 400;
-}
-
-body[data-page="project"] .nav-panel.nav-panel--site-intro {
-  width: var(--project-cover);
 }
 
 /* Plain text under the name: no panel chrome; in-flow under the link (not below full bar) */
@@ -270,12 +272,21 @@ body[data-page="project"] .nav-panel.nav-panel--site-intro {
   margin-top: 0;
 }
 
+/* After margin reset: align full-width intro to viewport gutters (nav row has --nav-pad-x) */
+body[data-page="project"] .nav-site-stack > .nav-panel.nav-panel--site-intro {
+  margin-left: calc(var(--g) - var(--nav-pad-x));
+}
+
 /* On index intro must overlay, not push the carousel row down */
 body[data-page="index"] .nav-site-stack > .nav-panel.nav-panel--site-intro {
   position: absolute;
   top: 100%;
   left: 0;
   right: auto;
+  width: calc(100vw - 2 * var(--g));
+  max-width: none;
+  margin-left: calc(var(--g) - var(--nav-pad-x));
+  box-sizing: border-box;
   z-index: 100000;
 }
 
@@ -336,6 +347,11 @@ body[data-page="project"] .carousel-section.project-carousel {
     max-width: none;
   }
 
+  body[data-page="index"] .swiper-slide--work {
+    width: calc(var(--g) + var(--project-cover) * var(--cover-scale, 1));
+    max-width: none;
+  }
+
   .swiper-slide--work:last-child {
     margin-right: var(--g);
   }
@@ -377,16 +393,26 @@ body[data-page="project"] .carousel-section.project-carousel {
     );
   }
 
+  /* Same top edge for cover images as project gallery (title stays above image as before) */
+  body[data-page="index"] .slide-card {
+    padding-top: max(
+      0px,
+      calc(25vh + var(--g) / 2 - var(--index-content-top) - var(--line-height) - var(--g))
+    );
+  }
+
   body[data-page="index"] .slide-bottom {
     gap: 0;
     margin-top: 0;
-    /* Third vertical gutter (--g) below image: bottom of block = 100vh/dvh - g */
-    height: calc(100vh - var(--g) - var(--index-content-top));
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: flex-start;
   }
 
   /* Do NOT use flex-direction: column on h1 — it stacks text and <a> on separate lines. */
   body[data-page="index"] .slide-hit {
-    margin-top: auto;
+    margin-top: 0;
     flex-shrink: 0;
   }
 
@@ -412,8 +438,11 @@ body[data-page="project"] .carousel-section.project-carousel {
       );
     }
 
-    body[data-page="index"] .slide-bottom {
-      height: calc(100dvh - var(--g) - var(--index-content-top));
+    body[data-page="index"] .slide-card {
+      padding-top: max(
+        0px,
+        calc(25dvh + var(--g) / 2 - var(--index-content-top) - var(--line-height) - var(--g))
+      );
     }
   }
 }
@@ -425,7 +454,7 @@ body[data-page="project"] .carousel-section.project-carousel {
 
 body[data-page="index"] .slide-bottom {
   position: relative;
-  width: calc(var(--cover) + 6px);
+  width: calc(var(--project-cover) * var(--cover-scale, 1) + 6px);
   padding: 3px;
   margin-left: calc(var(--g) - 3px);
   margin-bottom: calc(var(--g) - 3px);
@@ -435,14 +464,27 @@ body[data-page="index"] .slide-hit {
   display: flex;
   flex-direction: column;
   gap: var(--g);
-  width: var(--cover);
+  width: calc(var(--project-cover) * var(--cover-scale, 1));
   max-width: calc(100vw - 2 * var(--g));
   box-sizing: border-box;
 }
 
 body[data-page="index"] .slide-title,
 body[data-page="index"] .slide-main {
-  width: var(--cover);
+  width: calc(var(--project-cover) * var(--cover-scale, 1));
+}
+
+body[data-page="index"] .slide-main {
+  height: calc(var(--project-cover) * var(--cover-scale, 1));
+  min-height: calc(var(--project-cover) * var(--cover-scale, 1));
+}
+
+body[data-page="index"] .slide-visual {
+  height: calc(var(--project-cover) * var(--cover-scale, 1));
+}
+
+body[data-page="index"] .cover-square {
+  height: calc(var(--project-cover) * var(--cover-scale, 1));
 }
 
 body[data-page="index"] .slide-title a.link-underline {
@@ -576,6 +618,47 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
   }
 }
 
+/* Index gallery tiles: same base size (8/8) as project gallery — use --project-cover, not --cover */
+body[data-page="index"] {
+  --project-cover: min(
+    calc(var(--cover) * 1.5),
+    calc(100vw - 2 * var(--g)),
+    calc(100vh - var(--section-pt-mobile) - 2 * var(--g))
+  );
+}
+
+@supports (height: 100dvh) {
+  body[data-page="index"] {
+    --project-cover: min(
+      calc(var(--cover) * 1.5),
+      calc(100vw - 2 * var(--g)),
+      calc(100dvh - var(--section-pt-mobile) - 2 * var(--g))
+    );
+  }
+}
+
+@media (min-width: 768px) {
+  body[data-page="index"] {
+    --project-cover: min(
+      calc(75vh - 3 * var(--g) / 2),
+      calc(100vw - 2 * var(--g)),
+      780px
+    );
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    body[data-page="index"] {
+      --project-cover: min(
+        calc(75dvh - 3 * var(--g) / 2),
+        calc(100vw - 2 * var(--g)),
+        780px
+      );
+    }
+  }
+}
+
 .project-carousel {
   padding-bottom: 0;
 }
@@ -590,6 +673,7 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
   pointer-events: none;
   top: auto;
   bottom: auto;
+  overflow: visible;
 }
 
 .project-fixed-title {
@@ -610,8 +694,10 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
   margin-top: 0;
   padding: 0;
   padding-left: var(--g);
+  padding-right: 0;
   box-sizing: border-box;
-  width: 100%;
+  width: calc(100vw - 2 * var(--g));
+  max-width: none;
   font-size: inherit;
   line-height: inherit;
   font-weight: 400;
@@ -628,7 +714,7 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
 
 @media (min-width: 768px) {
   .swiper-slide--project {
-    width: calc(var(--g) + var(--project-cover));
+    width: calc(var(--g) + var(--project-cover) * var(--project-scale, 1));
     max-width: none;
   }
 
@@ -646,7 +732,7 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
 }
 
 .project-bottom {
-  width: var(--project-cover);
+  width: calc(var(--project-cover) * var(--project-scale, 1));
   max-width: calc(100vw - 2 * var(--g));
   margin-top: auto;
   margin-left: var(--g);
@@ -666,7 +752,7 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
   }
 
   body[data-page="project"] .project-image-wrap {
-    height: var(--project-cover);
+    height: calc(var(--project-cover) * var(--project-scale, 1));
     aspect-ratio: 1 / 1;
   }
 }
@@ -681,6 +767,7 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
 
 .project-image-wrap {
   width: 100%;
+  height: calc(var(--project-cover) * var(--project-scale, 1));
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #f4f4f4;
@@ -692,6 +779,148 @@ body[data-page="index"] .slide-hit:focus-within .slide-title a.link-underline {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  cursor: pointer;
+}
+
+/* Dark chrome: black canvas for Safari tint; avoid color-scheme: dark here (extra tab row in Safari) */
+html:has(body.project-fullscreen-on) {
+  background-color: #000;
+}
+
+body.page-body.project-fullscreen-on {
+  background: #000;
+  --bg: #000;
+}
+
+/* Fullscreen project viewer: title stays in fixed block above overlay; carousel hidden */
+body.project-fullscreen-on .nav-root,
+body.project-fullscreen-on .carousel-section__inner {
+  visibility: hidden;
+}
+
+body.project-fullscreen-on .project-fixed-block {
+  z-index: 200001;
+  color: #fff;
+  pointer-events: none;
+}
+
+body.project-fullscreen-on .project-fixed-title--toggle {
+  pointer-events: none;
+  cursor: default;
+}
+
+body.project-fullscreen-on .project-series-desc {
+  display: none !important;
+}
+
+.project-fs-counter {
+  margin: 0;
+  margin-top: 0;
+  padding: 0;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: var(--line-height);
+  color: inherit;
+}
+
+@media (max-width: 767px) {
+  body.project-fullscreen-on.page-body {
+    overflow: hidden;
+  }
+}
+
+.project-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  box-sizing: border-box;
+  background: #000;
+}
+
+.project-fullscreen[hidden] {
+  display: none !important;
+}
+
+.project-fullscreen:not([hidden]) {
+  display: block;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.project-fullscreen__stage {
+  position: absolute;
+  inset: var(--g);
+  box-sizing: border-box;
+  overflow: hidden;
+  /* Explicit box so inner % / flex math matches viewport − 2×gutter */
+  width: calc(100vw - 2 * var(--g));
+  height: calc(100vh - 2 * var(--g));
+  height: calc(100dvh - 2 * var(--g));
+}
+
+.project-fullscreen__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+.project-fullscreen__stage-front {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.project-fullscreen__img-outer {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  pointer-events: auto;
+}
+
+.project-fullscreen__img {
+  display: block;
+  /* Same inner box as .project-fullscreen__stage: viewport minus one gutter top and bottom (and left/right) */
+  max-width: calc(100vw - 2 * var(--g));
+  max-height: calc(100vh - 2 * var(--g));
+  max-height: calc(100dvh - 2 * var(--g));
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.project-fullscreen__zones {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: row;
+  pointer-events: none;
+}
+
+.project-fullscreen__zone {
+  flex: 1 1 50%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  cursor: w-resize;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-fullscreen__zone--next {
+  cursor: e-resize;
 }
 
 .nav-hit {

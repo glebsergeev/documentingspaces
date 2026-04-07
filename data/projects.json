@@ -1,0 +1,239 @@
+{
+  "siteTitle": "Gleb Sergeev | Photography",
+  "siteDescription": null,
+  "instagramUrl": "https://www.instagram.com/",
+  "contactUrl": "mailto:hello@example.com",
+  "projects": [
+    {
+      "id": "1",
+      "title": "Winter Light, 2024",
+      "slug": "winter-light-2024",
+      "description": "This year the work followed snowless weeks and sudden thaws, focusing on patient light across facades and pavements.",
+      "isPublished": true,
+      "orderIndex": 0,
+      "coverImageId": "DSCF0007",
+      "images": [
+        "assets/DSCF0007.jpg",
+        "assets/DSCF0013.jpg",
+        "assets/DSCF0018.jpg",
+        "assets/DSCF0029.jpg",
+        "assets/DSCF0203.jpg",
+        "assets/DSCF0206.jpg",
+        "assets/DSCF0213.jpg",
+        "assets/DSCF0237.jpg",
+        "assets/DSCF0242.jpg",
+        "assets/DSCF0245.jpg"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Riverside Drift",
+      "slug": "riverside-drift",
+      "description": "Riverside observations built around current, reflection, and small traces of daily urban use.",
+      "isPublished": true,
+      "orderIndex": 1,
+      "coverImageId": "DSCF0237",
+      "images": [
+        "assets/DSCF0206.jpg",
+        "assets/DSCF0213.jpg",
+        "assets/DSCF0237.jpg",
+        "assets/DSCF0242.jpg",
+        "assets/DSCF0245.jpg",
+        "assets/DSCF0262.jpg",
+        "assets/DSCF0336.jpg",
+        "assets/DSCF0349.jpg",
+        "assets/DSCF0375.jpg",
+        "assets/DSCF0408.jpg"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Interior Notes, 2023",
+      "slug": "interior-notes-2023",
+      "description": "Quiet interiors where objects and daylight define atmosphere without staged gestures.",
+      "isPublished": true,
+      "orderIndex": 2,
+      "coverImageId": "DSCF0408",
+      "images": [
+        "assets/DSCF0262.jpg",
+        "assets/DSCF0336.jpg",
+        "assets/DSCF0349.jpg",
+        "assets/DSCF0375.jpg",
+        "assets/DSCF0408.jpg",
+        "assets/DSCF0654.jpg",
+        "assets/DSCF0655.jpg",
+        "assets/DSCF0673.jpg",
+        "assets/DSCF0701.jpg",
+        "assets/DSCF0755.jpg"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Market Day",
+      "slug": "market-day",
+      "description": "Dense market rhythms balancing gesture, inventory, and tactile urban color fields.",
+      "isPublished": true,
+      "orderIndex": 3,
+      "coverImageId": "DSCF0655",
+      "images": [
+        "assets/DSCF0654.jpg",
+        "assets/DSCF0655.jpg",
+        "assets/DSCF0673.jpg",
+        "assets/DSCF0701.jpg",
+        "assets/DSCF0755.jpg",
+        "assets/DSCF0763.jpg",
+        "assets/DSCF0861.jpg",
+        "assets/DSCF0913.jpg",
+        "assets/DSCF0975.jpg",
+        "assets/DSCF0990.jpg"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Night Walks, 2025",
+      "slug": "night-walks-2025",
+      "description": "Night streets captured through rain, neon, and brief transitions in public space.",
+      "isPublished": true,
+      "orderIndex": 4,
+      "coverImageId": "DSCF0755",
+      "images": [
+        "assets/DSCF0763.jpg",
+        "assets/DSCF0861.jpg",
+        "assets/DSCF0913.jpg",
+        "assets/DSCF0975.jpg",
+        "assets/DSCF0990.jpg",
+        "assets/DSCF1057.jpg",
+        "assets/DSCF1774.jpg",
+        "assets/DSCF1785.jpg",
+        "assets/DSCF1832.jpg",
+        "assets/DSCF4777.jpg"
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Coastal Fog",
+      "slug": "coastal-fog",
+      "description": "Coastal mornings with minimal contrast and shifting visibility in dense sea fog.",
+      "isPublished": true,
+      "orderIndex": 5,
+      "coverImageId": "DSCF0913",
+      "images": [
+        "assets/DSCF1057.jpg",
+        "assets/DSCF1774.jpg",
+        "assets/DSCF1785.jpg",
+        "assets/DSCF1832.jpg",
+        "assets/DSCF4777.jpg",
+        "assets/DSCF4778.jpg",
+        "assets/DSCF4783.jpg",
+        "assets/DSCF4784.jpg",
+        "assets/DSCF4786.jpg",
+        "assets/DSCF4796.jpg"
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Studio Still Life",
+      "slug": "studio-still-life",
+      "description": "Small-object studies focused on texture, light falloff, and restrained composition.",
+      "isPublished": true,
+      "orderIndex": 6,
+      "coverImageId": "DSCF1774",
+      "images": [
+        "assets/DSCF4778.jpg",
+        "assets/DSCF4783.jpg",
+        "assets/DSCF4784.jpg",
+        "assets/DSCF4786.jpg",
+        "assets/DSCF4796.jpg",
+        "assets/DSCF4799.jpg",
+        "assets/DSCF4801.jpg",
+        "assets/DSCF4803.jpg",
+        "assets/DSCF4804.jpg",
+        "assets/DSCF4818.jpg"
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Transit Lines, 2022",
+      "slug": "transit-lines-2022",
+      "description": "Public transport environments where movement, timing, and anonymity define each frame.",
+      "isPublished": true,
+      "orderIndex": 7,
+      "coverImageId": "DSCF4784",
+      "images": [
+        "assets/DSCF4799.jpg",
+        "assets/DSCF4801.jpg",
+        "assets/DSCF4803.jpg",
+        "assets/DSCF4804.jpg",
+        "assets/DSCF4818.jpg",
+        "assets/DSCF7069.jpg",
+        "assets/DSCF9469.jpg",
+        "assets/DSCF9478.jpg",
+        "assets/DSCF9544.jpg",
+        "assets/DSCF9555.jpg"
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Highland Silence",
+      "slug": "highland-silence",
+      "description": "Highland weather and topography studied through gradual light changes and distance.",
+      "isPublished": true,
+      "orderIndex": 8,
+      "coverImageId": "DSCF4801",
+      "images": [
+        "assets/DSCF7069.jpg",
+        "assets/DSCF9469.jpg",
+        "assets/DSCF9478.jpg",
+        "assets/DSCF9544.jpg",
+        "assets/DSCF9555.jpg",
+        "assets/DSCF9556.jpg",
+        "assets/DSCF9595.jpg",
+        "assets/DSCF9597.jpg",
+        "assets/DSCF9608.jpg",
+        "assets/DSCF9621.jpg"
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Archive Room",
+      "slug": "archive-room",
+      "description": "An archive sequence around material traces, catalog systems, and acts of preservation.",
+      "isPublished": true,
+      "orderIndex": 9,
+      "coverImageId": "DSCF9625",
+      "images": [
+        "assets/DSCF9556.jpg",
+        "assets/DSCF9595.jpg",
+        "assets/DSCF9597.jpg",
+        "assets/DSCF9608.jpg",
+        "assets/DSCF9621.jpg",
+        "assets/DSCF9625.jpg",
+        "assets/DSCF9645.jpg",
+        "assets/DSCF9651.jpg",
+        "assets/DSCF9674.jpg",
+        "assets/DSCF9690.jpg"
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Summer Roof, 2024",
+      "slug": "summer-roof-2024",
+      "description": "Single-frame summer rooftop study. © Gleb Sergeev.",
+      "isPublished": true,
+      "orderIndex": 10,
+      "coverImageId": "DSCF9771",
+      "images": [
+        "assets/DSCF9625.jpg",
+        "assets/DSCF9645.jpg",
+        "assets/DSCF9651.jpg",
+        "assets/DSCF9674.jpg",
+        "assets/DSCF9690.jpg",
+        "assets/DSCF9771.jpg",
+        "assets/DSCF9873.jpg",
+        "assets/DSCF0007.jpg",
+        "assets/DSCF0013.jpg",
+        "assets/DSCF0018.jpg"
+      ]
+    }
+  ]
+}

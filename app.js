@@ -76,21 +76,178 @@ const PROJECT_TITLES = [
 ];
 
 const SITE_INTRO_TEXTS = [
-  "Working mainly on long-form series, the practice treats the camera as a slow instrument for reading light, distance, and the habits that shape public space. Prints are produced in small editions; commissions begin with a conversation about place and duration rather than a fixed shot list. Each project is given time to settle before any public shape is proposed. The work assumes a reader who is willing to move slowly through a room or a sequence of pages.",
-  "The site gathers field notes from walks, interiors, and transitional zones where architecture meets weather and routine. Nothing here is staged for effect: sequences are edited for rhythm and silence, not for spectacle. Contact is open for editorial, exhibition, and limited print requests. New bodies of work surface here as they reach a coherent length, not on a fixed schedule.",
-  "Documentation here follows a simple rule: stay close to the subject until the frame stops asking for decoration. Color is used sparingly; contrast is carried by structure and air. If you are curating a show or need a restrained visual essay, write with a short description of the venue and timeline. Replies are usually sent within a few days once the brief is clear.",
+  "Working mainly on long-form series, the practice treats the camera as a slow instrument for reading light, distance, and the habits that shape public space. Prints are produced in small editions; commissions begin with a conversation about place and duration rather than a fixed shot list. Each project is given time to settle before any public shape is proposed. The work assumes a reader who is willing to move slowly through a room or a sequence of pages. Research usually starts before the first frame, with repeated walks at different hours and notes on traffic, shadows, and informal routes through the site. Contact sheets are reviewed weeks later, so decisions are made from memory and sequence logic rather than immediate novelty. The final pacing is tested in print dummies and simple wall layouts to ensure that transitions hold their weight without captions. When needed, text fragments are added only to clarify context, never to explain what an image should already carry. If a sequence still feels restless after several passes, it is set aside until the next season or light condition can offer a clearer counterweight to what is already on the wall.",
+  "The site gathers field notes from walks, interiors, and transitional zones where architecture meets weather and routine. Nothing here is staged for effect: sequences are edited for rhythm and silence, not for spectacle. Contact is open for editorial, exhibition, and limited print requests. New bodies of work surface here as they reach a coherent length, not on a fixed schedule. Many projects begin as small observations made over months, then are reassembled around recurring surfaces, distances, and gestures that survive across locations. The edit avoids narrative shortcuts, preferring small shifts that can be read over time and across neighboring frames. Installations are planned with attention to circulation and viewing speed, so the room itself supports the sequence rather than competing with it. Updates appear when the work is structurally ready, with no pressure to publish unfinished fragments for frequency alone. Correspondence is kept direct and unhurried, because the aim is to match the right piece of work to the right context rather than to fill a calendar with placeholders.",
+  "Documentation here follows a simple rule: stay close to the subject until the frame stops asking for decoration. Color is used sparingly; contrast is carried by structure and air. If you are curating a show or need a restrained visual essay, write with a short description of the venue and timeline. Replies are usually sent within a few days once the brief is clear. Assignments are approached as collaborative studies of place, with practical constraints discussed early to keep decisions transparent for everyone involved. During production, attention stays on continuity between images, so each frame extends the same spatial and tonal language instead of chasing isolated highlights. After delivery, files are reviewed in relation to print behavior, wall distance, and publication format to preserve consistency across contexts. Long-term archives are maintained with the same sequencing logic, allowing older material to be revisited when it meaningfully extends a newer body of work. Where schedules allow, a second visit is built into the process so the work can respond to how a site behaves once the first round of attention has passed.",
 ];
 
 const PROJECT_SERIES_TEXTS = [
-  "This series was assembled from several returns to the same streets across seasons. Frames that looked empty at first later revealed small shifts in material and tone; the edit keeps those changes legible without turning the work into a report. A few rolls were set aside for years before they found their place in the sequence. The final order was tested by walking through it on paper and on a wall.",
-  "The pictures come from a narrow window of days when fog and sun traded places every hour. Exposure choices favored texture over clarity, so the sequence reads less like a survey and more like a weather diary with architecture in the margins. Carrying one focal length forced a consistent distance from the scene. Prints from this set are available on request in a single size.",
-  "Made without assistants or added light, the set relies on patience and repetition. What repeats is not the subject but the distance between glances; the gallery is arranged so neighboring images argue quietly rather than illustrate a thesis. Several frames were discarded when they explained too much. The title arrived only after the edit felt stable.",
-  "A loose archive of corners, thresholds, and temporary barriers. The order is not chronological: it follows contrast and scale so the viewer can move through the room without a single dominant vantage point. Some negatives never left the contact sheet. The series name refers to a walk repeated until the route felt unfamiliar again.",
+  "This series was assembled from several returns to the same streets across seasons. Frames that looked empty at first later revealed small shifts in material and tone; the edit keeps those changes legible without turning the work into a report. A few rolls were set aside for years before they found their place in the sequence. The final order was tested by walking through it on paper and on a wall. Several late additions were made only after comparing edge detail and density between distant sessions, so changes in weather could sit beside changes in maintenance and use. The sequence is built as a gradual drift from open facades to tighter thresholds, allowing scale to narrow before opening again near the end. Captions are intentionally minimal to keep attention on physical evidence inside the frame. What remains unseen is part of the structure, not missing information. The closing images return to the same corner as the opening, but with a different quality of light, so the loop reads as continuity rather than repetition.",
+  "The pictures come from a narrow window of days when fog and sun traded places every hour. Exposure choices favored texture over clarity, so the sequence reads less like a survey and more like a weather diary with architecture in the margins. Carrying one focal length forced a consistent distance from the scene. Prints from this set are available on request in a single size. Contacts were first grouped by atmosphere, then reordered by directional light so neighboring images answer one another through shadow depth and surface grain. Repetition of certain motifs is deliberate and used to establish tempo before small departures in perspective. The goal was not coverage of the site but a stable viewing pulse that makes each interruption noticeable. Final prints were proofed with reduced contrast to preserve low-value transitions in overcast passages. A few frames that were technically stronger were cut because they collapsed the ambiguity that the surrounding images had carefully sustained.",
+  "Made without assistants or added light, the set relies on patience and repetition. What repeats is not the subject but the distance between glances; the gallery is arranged so neighboring images argue quietly rather than illustrate a thesis. Several frames were discarded when they explained too much. The title arrived only after the edit felt stable. The remaining images are spaced to alternate dense and open structures, producing a steady cadence that can hold across both small screens and physical walls. Exposure decisions were intentionally conservative to protect highlights and leave room for subtle tonal separation in print. During editing, pairs were tested for disagreement rather than similarity, so transitions create friction before resolving into quieter passages. This balance between insistence and restraint defines the series more than any single location. The quietest frame sits near the middle, where the sequence briefly yields before the tension returns in the second half.",
+  "A loose archive of corners, thresholds, and temporary barriers. The order is not chronological: it follows contrast and scale so the viewer can move through the room without a single dominant vantage point. Some negatives never left the contact sheet. The series name refers to a walk repeated until the route felt unfamiliar again. Over time, the archive developed into clusters that return to the same construction details under different conditions, making duration readable without explicit dates. Distance is kept relatively constant to let material changes carry the variation, while occasional wider frames reset spatial orientation. The edit favors transitions that feel slightly unresolved, inviting a second pass through the sequence before relations fully settle. What appears peripheral in one image often becomes structural in the next, which is central to how the work is meant to be read. Even the discarded sheets remain in the studio as a reminder of what the sequence refused to simplify.",
 ];
 
 function pickRandom(arr) {
   if (!arr || !arr.length) return "";
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+let projectsDataCache = null;
+let projectsDataInflight = null;
+
+function loadProjectsData() {
+  if (projectsDataCache) {
+    return Promise.resolve(projectsDataCache);
+  }
+  if (projectsDataInflight) {
+    return projectsDataInflight;
+  }
+  projectsDataInflight = fetch("data/projects.json")
+    .then((r) => {
+      if (!r.ok) {
+        throw new Error(`projects.json ${r.status}`);
+      }
+      return r.json();
+    })
+    .then((json) => {
+      projectsDataCache = json;
+      projectsDataInflight = null;
+      return json;
+    })
+    .catch((err) => {
+      projectsDataInflight = null;
+      throw err;
+    });
+  return projectsDataInflight;
+}
+
+async function loadProjectsDataOrNull() {
+  try {
+    return await loadProjectsData();
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+function getPublishedProjectsSorted(data) {
+  if (!data || !Array.isArray(data.projects)) return [];
+  return data.projects
+    .filter((p) => p && p.isPublished === true)
+    .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;");
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/"/g, "&quot;");
+}
+
+function coverSrcFromProject(project) {
+  if (!project) return "";
+  const idRaw = project.coverImageId;
+  const id =
+    idRaw != null && String(idRaw).trim() !== "" ? String(idRaw).trim() : "";
+  if (id && /^[A-Za-z0-9_-]+$/.test(id)) {
+    return `assets/${id}.jpg`;
+  }
+  const imgs = Array.isArray(project.images) ? project.images.filter(Boolean) : [];
+  if (imgs.length) {
+    return imgs[Math.floor(Math.random() * imgs.length)];
+  }
+  return "";
+}
+
+function buildIndexSlideHtml(project) {
+  const title = escapeHtml(project.title || "");
+  const desc = escapeHtml(project.description || "");
+  const coverSrc = escapeAttr(coverSrcFromProject(project));
+  const imgs = Array.isArray(project.images) ? project.images : [];
+  const dataImages = JSON.stringify(imgs).replace(/</g, "\\u003c");
+  return (
+    `<div class="swiper-slide swiper-slide--work" data-project-images='${dataImages}'>` +
+    '<div x-data="{ show: false }" class="slide-card" @click.away="show = false">' +
+    '<div class="slide-top-spacer" aria-hidden="true"></div>' +
+    '<div class="slide-bottom">' +
+    '<div class="slide-hit">' +
+    `<h1 class="slide-title">${title}<a class="link-underline" href="#" @click.prevent="show = !show" x-text="show ? 'Images' : 'View Gallery'">View Gallery</a></h1>` +
+    '<div class="slide-main">' +
+    '<div x-show="show" x-cloak class="slide-overlay" x-transition>' +
+    `<div class="slide-overlay-inner"><p>${desc}</p></div></div>` +
+    '<div class="slide-visual" :class="show ? \'is-hidden\' : \'\'">' +
+    `<div class="cover-square"><img src="${coverSrc}" alt="" width="800" height="800" loading="lazy" /></div></div>` +
+    "</div></div></div></div></div>"
+  );
+}
+
+function applyIndexSiteMeta(data) {
+  if (!data) return;
+  if (data.siteTitle) {
+    document.title = data.siteTitle;
+  }
+  const ig = document.getElementById("navInstagram");
+  const ct = document.getElementById("navContact");
+  if (ig && data.instagramUrl) {
+    ig.href = data.instagramUrl;
+  }
+  if (ct && data.contactUrl) {
+    ct.href = data.contactUrl;
+  }
+  if (data.siteDescription) {
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "description";
+      document.head.appendChild(meta);
+    }
+    meta.content = data.siteDescription;
+  }
+}
+
+function initAlpineOnIndexSlides(wrapper) {
+  if (typeof window.Alpine !== "undefined" && typeof window.Alpine.initTree === "function") {
+    window.Alpine.initTree(wrapper);
+  }
+}
+
+const isIosSafariUi =
+  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+/**
+ * Safari macOS: <meta name="theme-color"> tends to add a full-width tab row (even after removal in code,
+ * cached metas or one injection is enough). Yango-style sites avoid it on desktop.
+ * theme-color + status-bar meta only on iOS; macOS relies on the black overlay only.
+ */
+function setProjectFullscreenBrowserChrome(dark) {
+  document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+
+  const appleId = "meta-apple-status-bar";
+  document.getElementById(appleId)?.remove();
+
+  if (dark && isIosSafariUi) {
+    const t = document.createElement("meta");
+    t.name = "theme-color";
+    t.id = "meta-theme-color";
+    t.content = "#000000";
+    const charset = document.querySelector("meta[charset]");
+    if (charset?.parentNode) {
+      charset.parentNode.insertBefore(t, charset.nextSibling);
+    } else {
+      document.head.prepend(t);
+    }
+    const a = document.createElement("meta");
+    a.id = appleId;
+    a.name = "apple-mobile-web-app-status-bar-style";
+    a.content = "black";
+    document.head.appendChild(a);
+  }
 }
 
 function updateIntroPanelMaxHeight(panel, anchorEl) {
@@ -157,6 +314,143 @@ function imagesForProject(projectIndex, count = 10) {
   return images;
 }
 
+function seededRandom(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function hasMirrorRhythm(scales) {
+  const n = scales.length;
+  /* Contiguous palindrome (length ≥3) with not all elements identical — “mirror” rhythm */
+  for (let len = 3; len <= n; len += 1) {
+    for (let i = 0; i + len <= n; i += 1) {
+      let pal = true;
+      for (let k = 0; k < len; k += 1) {
+        if (scales[i + k] !== scales[i + len - 1 - k]) {
+          pal = false;
+          break;
+        }
+      }
+      if (!pal) continue;
+      const first = scales[i];
+      const allSame = scales.slice(i, i + len).every((v) => v === first);
+      if (!allSame) return true;
+    }
+  }
+  /* Symmetric valley: a > b < c with a === c */
+  for (let i = 1; i < n - 1; i += 1) {
+    const a = scales[i - 1];
+    const b = scales[i];
+    const c = scales[i + 1];
+    if (a > b && b < c && a === c) return true;
+  }
+  /* Five-point symmetric “W”: a > b > c < d < e with a === e and b === d */
+  for (let i = 0; i <= n - 5; i += 1) {
+    const a = scales[i];
+    const b = scales[i + 1];
+    const c = scales[i + 2];
+    const d = scales[i + 3];
+    const e = scales[i + 4];
+    if (a > b && b > c && c < d && d < e && a === e && b === d) return true;
+  }
+  return false;
+}
+
+function repairAdjacentHalfPairs(scales) {
+  const adjacentHalfPairs = () => {
+    let pairs = 0;
+    for (let i = 1; i < scales.length; i += 1) {
+      if (scales[i] === 0.5 && scales[i - 1] === 0.5) {
+        pairs += 1;
+      }
+    }
+    return pairs;
+  };
+
+  let guard = 80;
+  while (adjacentHalfPairs() > 1 && guard > 0) {
+    guard -= 1;
+    for (let i = 1; i < scales.length; i += 1) {
+      if (scales[i] === 0.5 && scales[i - 1] === 0.5) {
+        const swapWith = scales.findIndex((v, idx) => idx > i && v !== 0.5);
+        if (swapWith > i) {
+          [scales[i], scales[swapWith]] = [scales[swapWith], scales[i]];
+        }
+      }
+    }
+  }
+}
+
+function repairMirrorRhythm(scales, rand) {
+  let guard = 160;
+  while (hasMirrorRhythm(scales) && guard > 0) {
+    guard -= 1;
+    const i = Math.floor(rand() * scales.length);
+    let j = Math.floor(rand() * scales.length);
+    if (j === i) j = (i + 1) % scales.length;
+    [scales[i], scales[j]] = [scales[j], scales[i]];
+  }
+}
+
+function initIndexCoverScales() {
+  const slides = document.querySelectorAll(".swiper-slide--work");
+  const n = slides.length;
+  if (!n) return;
+  const seedBase = Math.floor(Math.random() * 2147483646) + 1;
+  const scales = buildProjectSizeSequence(n, seedBase);
+  slides.forEach((slide, i) => {
+    slide.style.setProperty("--cover-scale", String(scales[i]));
+  });
+}
+
+function buildProjectSizeSequence(count, seedBase = 1) {
+  const rand = seededRandom((seedBase + 1) * 2654435761);
+  const restScales = [0.875, 0.75, 0.625, 0.5];
+  const scales = [];
+  const bigCount = Math.max(3, Math.min(count, 3 + (rand() < 0.5 ? 1 : 0)));
+
+  for (let i = 0; i < bigCount; i += 1) {
+    scales.push(1);
+  }
+  while (scales.length < count) {
+    const pick = restScales[Math.floor(rand() * restScales.length)];
+    scales.push(pick);
+  }
+
+  // Shuffle for variety, then repair the "only one adjacent 4/8 pair" constraint.
+  for (let i = scales.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rand() * (i + 1));
+    [scales[i], scales[j]] = [scales[j], scales[i]];
+  }
+
+  repairAdjacentHalfPairs(scales);
+  repairMirrorRhythm(scales, rand);
+  repairAdjacentHalfPairs(scales);
+
+  return scales;
+}
+
+const VALID_PROJECT_SCALES = [1, 0.875, 0.75, 0.625, 0.5];
+
+function getProjectImageScales(project, projectIdx) {
+  const n = project?.images?.length ?? 0;
+  if (!n) return [];
+  const fallback = buildProjectSizeSequence(n, projectIdx + 17);
+  const stored = project?.imageScales;
+  if (!Array.isArray(stored) || stored.length !== n) return fallback;
+  return project.images.map((_, i) => {
+    const s = Number(stored[i]);
+    return VALID_PROJECT_SCALES.includes(s) ? s : fallback[i];
+  });
+}
+
+window.__dsGetProjectImageScales = getProjectImageScales;
+
 function initProjectCovers() {
   const slides = document.querySelectorAll(".swiper-slide--work");
   slides.forEach((slide, index) => {
@@ -164,8 +458,20 @@ function initProjectCovers() {
     const img = slide.querySelector(".cover-square img");
     if (!cover || !img) return;
 
-    const gallery = imagesForProject(index, 10);
-    let current = 0;
+    let gallery;
+    const raw = slide.getAttribute("data-project-images");
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        gallery = Array.isArray(parsed) && parsed.length ? parsed : null;
+      } catch {
+        gallery = null;
+      }
+    }
+    if (!gallery) {
+      gallery = imagesForProject(index, 10);
+    }
+    let current = Math.floor(Math.random() * gallery.length);
     img.src = gallery[current];
 
     const nextImage = () => {
@@ -188,8 +494,12 @@ function initProjectCovers() {
 
 function setupProjectLinks() {
   const links = document.querySelectorAll(".slide-title a.link-underline");
+  const published = projectsDataCache ? getPublishedProjectsSorted(projectsDataCache) : [];
   links.forEach((link, index) => {
-    const href = `project.html?project=${index}`;
+    const p = published[index];
+    const href = p?.slug
+      ? `project.html?slug=${encodeURIComponent(p.slug)}`
+      : `project.html?project=${index}`;
     link.setAttribute("href", href);
     link.textContent = "View Gallery";
     link.addEventListener("click", (event) => {
@@ -204,6 +514,31 @@ function readProjectIndex() {
   const raw = Number(params.get("project") || 0);
   if (Number.isNaN(raw)) return 0;
   return Math.max(0, raw);
+}
+
+/**
+ * Prefer ?slug=… from URL; otherwise ?project= index among published (legacy).
+ */
+function resolvePublishedProject(published) {
+  const params = new URLSearchParams(window.location.search);
+  const slugRaw = params.get("slug");
+  if (slugRaw != null && String(slugRaw).trim() !== "" && published.length) {
+    const slug = String(slugRaw).trim();
+    const i = published.findIndex((p) => p && p.slug === slug);
+    if (i >= 0) {
+      return { project: published[i], index: i };
+    }
+    console.warn("Unknown project slug:", slug);
+    return { project: published[0], index: 0 };
+  }
+  const rawIdx = readProjectIndex();
+  if (published.length === 0) {
+    const maxLegacy = Math.max(0, PROJECT_TITLES.length - 1);
+    const projectIdx = Math.min(Math.max(0, rawIdx), maxLegacy);
+    return { project: null, index: projectIdx };
+  }
+  const projectIdx = Math.min(Math.max(0, rawIdx), published.length - 1);
+  return { project: published[projectIdx], index: projectIdx };
 }
 
 function initProjectSiteIntroPanel() {
@@ -227,7 +562,7 @@ function initProjectSiteIntroPanel() {
   setTimeout(layout, 600);
 }
 
-function initProjectPage() {
+async function initProjectPage() {
   const swiperEl = document.querySelector(".project-swiper");
   const wrapper = document.querySelector("#projectWrapper");
   const titleEl = document.querySelector("#projectTitle");
@@ -235,27 +570,68 @@ function initProjectPage() {
   const seriesDesc = document.getElementById("projectSeriesDesc");
   if (!swiperEl || !wrapper || typeof Swiper === "undefined") return;
 
+  document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+
   initProjectSiteIntroPanel();
 
-  const projectIndex = readProjectIndex();
-  if (titleEl) {
-    titleEl.textContent = PROJECT_TITLES[projectIndex] || PROJECT_TITLES[0];
+  const data = await loadProjectsDataOrNull();
+  const published = data ? getPublishedProjectsSorted(data) : [];
+  if (data) {
+    applyIndexSiteMeta(data);
   }
-  if (seriesDesc) {
-    seriesDesc.textContent = pickRandom(PROJECT_SERIES_TEXTS);
+  const { project, index: projectIdx } = resolvePublishedProject(published);
+
+  if (project?.title && data?.siteTitle) {
+    document.title = `${project.title} | ${data.siteTitle}`;
   }
 
-  const images = imagesForProject(projectIndex, 12);
+  if (titleEl) {
+    titleEl.textContent =
+      project?.title ?? PROJECT_TITLES[projectIdx] ?? PROJECT_TITLES[0] ?? "";
+  }
+  if (seriesDesc) {
+    seriesDesc.textContent =
+      project?.description && String(project.description).trim()
+        ? project.description
+        : pickRandom(PROJECT_SERIES_TEXTS);
+  }
+
+  if (new URLSearchParams(window.location.search).get("edit") === "1") {
+    if (typeof window.initProjectGalleryEdit === "function") {
+      await window.initProjectGalleryEdit({
+        data,
+        published,
+        project,
+        projectIdx,
+        wrapper,
+        swiperEl,
+        titleEl,
+        seriesDesc,
+        titleBlock,
+      });
+    }
+    return;
+  }
+
+  const images =
+    project && Array.isArray(project.images) && project.images.length
+      ? project.images.slice()
+      : imagesForProject(projectIdx, 10);
+  const projectSlideCount = images.length;
+  const sizeScales =
+    project && Array.isArray(project.images) && project.images.length
+      ? getProjectImageScales(project, projectIdx)
+      : buildProjectSizeSequence(projectSlideCount, projectIdx + 17);
 
   const html = images
     .map(
-      (src) => `
-      <div class="swiper-slide swiper-slide--project">
+      (src, idx) => `
+      <div class="swiper-slide swiper-slide--project" style="--project-scale: ${sizeScales[idx]};">
         <div class="project-slide-card">
           <div class="slide-top-spacer" aria-hidden="true"></div>
           <div class="project-bottom">
             <div class="project-image-wrap">
-              <img src="${src}" alt="" width="1200" height="1200" loading="lazy" />
+              <img src="${escapeAttr(src)}" alt="" width="1200" height="1200" loading="lazy" />
             </div>
           </div>
         </div>
@@ -267,6 +643,7 @@ function initProjectPage() {
 
   const swiper = new Swiper(swiperEl, {
     loop: false,
+    rewind: true,
     centeredSlides: false,
     freeMode: false,
     mousewheel: {
@@ -274,10 +651,6 @@ function initProjectPage() {
     },
     slidesPerView: 1,
     spaceBetween: 0,
-    navigation: {
-      nextEl: "#swiperNext",
-      prevEl: "#swiperPrev",
-    },
     breakpoints: {
       768: {
         slidesPerView: "auto",
@@ -292,6 +665,98 @@ function initProjectPage() {
       },
     },
   });
+
+  /* Logical index (0..n-1): do not rely on swiper.activeIndex with slidesPerView "auto" — it can stick early. */
+  let projectSlideI = swiper.activeIndex;
+
+  function syncFullscreenFromProjectIndex() {
+    const img = document.getElementById("projectFullscreenImg");
+    const ctr = document.getElementById("projectFullscreenCounter");
+    if (!img || !ctr) return;
+    const url = images[projectSlideI];
+    if (url) img.src = url;
+    img.alt = "";
+    ctr.textContent = `${projectSlideI + 1}/${projectSlideCount}`;
+  }
+
+  function forceSwiperToProjectSlide(i) {
+    const slide = swiper.slides[i];
+    if (!slide) return;
+    let offset;
+    const grid = swiper.slidesGrid && swiper.slidesGrid[i];
+    if (typeof grid === "number" && !Number.isNaN(grid)) {
+      offset = grid;
+    } else if (typeof slide.swiperSlideOffset === "number" && !Number.isNaN(slide.swiperSlideOffset)) {
+      offset = slide.swiperSlideOffset;
+    } else {
+      offset = 0;
+      for (let j = 0; j < i; j += 1) {
+        const s = swiper.slides[j];
+        if (s) offset += s.offsetWidth + (swiper.params.spaceBetween || 0);
+      }
+    }
+    swiper.setTransition(0);
+    swiper.setTranslate(-offset);
+    if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
+    if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
+  }
+
+  function applyProjectSlideIndex(i) {
+    const n = projectSlideCount;
+    const next = ((i % n) + n) % n;
+    projectSlideI = next;
+    const fsOpen = document.body.classList.contains("project-fullscreen-on");
+    if (fsOpen) syncFullscreenFromProjectIndex();
+    swiper.update();
+    swiper.slideTo(next, 0, true);
+    requestAnimationFrame(() => {
+      if (swiper.activeIndex !== next) {
+        forceSwiperToProjectSlide(next);
+      }
+      requestAnimationFrame(() => {
+        if (swiper.activeIndex !== next) {
+          forceSwiperToProjectSlide(next);
+        }
+        if (document.body.classList.contains("project-fullscreen-on")) {
+          syncFullscreenFromProjectIndex();
+        }
+        scheduleAlignTitle();
+      });
+    });
+  }
+
+  function projectGoNextCircular() {
+    applyProjectSlideIndex(projectSlideI + 1);
+  }
+
+  function projectGoPrevCircular() {
+    applyProjectSlideIndex(projectSlideI - 1);
+  }
+
+  const prevHit = document.getElementById("swiperPrev");
+  const nextHit = document.getElementById("swiperNext");
+  if (prevHit) {
+    prevHit.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        projectGoPrevCircular();
+      },
+      true
+    );
+  }
+  if (nextHit) {
+    nextHit.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        projectGoNextCircular();
+      },
+      true
+    );
+  }
 
   const activeProjectImage = () =>
     wrapper.querySelector(".swiper-slide-active .project-image-wrap") ||
@@ -356,6 +821,95 @@ function initProjectPage() {
     requestAnimationFrame(() => requestAnimationFrame(alignTitle));
   };
 
+  const fsRoot = document.getElementById("projectFullscreen");
+  const fsImg = document.getElementById("projectFullscreenImg");
+  const fsCounter = document.getElementById("projectFullscreenCounter");
+  const fsBackdrop = document.getElementById("projectFullscreenBackdrop");
+  const fsPrev = document.getElementById("projectFullscreenPrev");
+  const fsNext = document.getElementById("projectFullscreenNext");
+  const navRootEl = document.querySelector(".nav-root");
+  let seriesDescOpenBeforeFullscreen = false;
+
+  const openProjectFullscreen = () => {
+    if (!fsRoot || document.body.classList.contains("project-fullscreen-on")) return;
+    setProjectFullscreenBrowserChrome(true);
+    seriesDescOpenBeforeFullscreen = Boolean(seriesDesc && !seriesDesc.hasAttribute("hidden"));
+    if (seriesDescOpenBeforeFullscreen && seriesDesc) {
+      seriesDesc.setAttribute("hidden", "");
+      if (titleEl) titleEl.setAttribute("aria-expanded", "false");
+    }
+    syncFullscreenFromProjectIndex();
+    fsCounter?.removeAttribute("hidden");
+    document.body.classList.add("project-fullscreen-on");
+    fsRoot.removeAttribute("hidden");
+    fsRoot.setAttribute("aria-hidden", "false");
+    if (navRootEl) navRootEl.setAttribute("aria-hidden", "true");
+    scheduleAlignTitle();
+  };
+
+  const closeProjectFullscreen = () => {
+    if (!fsRoot || !document.body.classList.contains("project-fullscreen-on")) return;
+    document.body.classList.remove("project-fullscreen-on");
+    fsRoot.setAttribute("hidden", "");
+    fsRoot.setAttribute("aria-hidden", "true");
+    if (navRootEl) navRootEl.removeAttribute("aria-hidden");
+    fsCounter?.setAttribute("hidden", "");
+    if (seriesDescOpenBeforeFullscreen && seriesDesc) {
+      seriesDesc.removeAttribute("hidden");
+      if (titleEl) titleEl.setAttribute("aria-expanded", "true");
+    }
+    seriesDescOpenBeforeFullscreen = false;
+    applyProjectSlideIndex(projectSlideI);
+    setProjectFullscreenBrowserChrome(false);
+    scheduleAlignTitle();
+  };
+
+  if (fsBackdrop) {
+    fsBackdrop.addEventListener("click", () => closeProjectFullscreen());
+  }
+  if (fsPrev) {
+    fsPrev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      projectGoPrevCircular();
+    });
+  }
+  if (fsNext) {
+    fsNext.addEventListener("click", (e) => {
+      e.stopPropagation();
+      projectGoNextCircular();
+    });
+  }
+
+  wrapper.addEventListener("click", (e) => {
+    const img = e.target.closest?.(".project-image-wrap img");
+    if (!img || !wrapper.contains(img)) return;
+    const slide = img.closest(".swiper-slide");
+    if (!slide) return;
+    const slides = [...wrapper.querySelectorAll(".swiper-slide")];
+    const idx = slides.indexOf(slide);
+    if (idx < 0) return;
+    applyProjectSlideIndex(idx);
+    requestAnimationFrame(() => openProjectFullscreen());
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!document.body.classList.contains("project-fullscreen-on")) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeProjectFullscreen();
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      projectGoPrevCircular();
+      return;
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      projectGoNextCircular();
+    }
+  });
+
   const toggleSeriesDesc = () => {
     if (!seriesDesc || !titleEl) return;
     const isClosed = seriesDesc.hasAttribute("hidden");
@@ -371,10 +925,12 @@ function initProjectPage() {
 
   if (titleEl) {
     titleEl.addEventListener("click", (e) => {
+      if (document.body.classList.contains("project-fullscreen-on")) return;
       e.preventDefault();
       toggleSeriesDesc();
     });
     titleEl.addEventListener("keydown", (e) => {
+      if (document.body.classList.contains("project-fullscreen-on")) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         toggleSeriesDesc();
@@ -386,17 +942,43 @@ function initProjectPage() {
   setTimeout(scheduleAlignTitle, 60);
   window.addEventListener("resize", scheduleAlignTitle);
   swiper.on("resize", scheduleAlignTitle);
-  swiper.on("slideChange", scheduleAlignTitle);
+  swiper.on("slideChange", () => {
+    if (!document.body.classList.contains("project-fullscreen-on")) {
+      projectSlideI = swiper.activeIndex;
+    }
+    scheduleAlignTitle();
+    if (document.body.classList.contains("project-fullscreen-on")) {
+      syncFullscreenFromProjectIndex();
+    }
+  });
 }
 
 function carousel() {
   return {
     swiper: null,
-    initSwiper() {
-      setTimeout(() => {
-        const el = this.$refs.swiper;
-        if (!el || typeof Swiper === "undefined") return;
+    async initSwiper() {
+      let data;
+      try {
+        data = await loadProjectsData();
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+      applyIndexSiteMeta(data);
+      const el = this.$refs.swiper;
+      if (!el || typeof Swiper === "undefined") return;
+      const wrapper = el.querySelector(".swiper-wrapper");
+      if (!wrapper) return;
 
+      const published = getPublishedProjectsSorted(data);
+      wrapper.innerHTML = published.map(buildIndexSlideHtml).join("");
+      initAlpineOnIndexSlides(wrapper);
+
+      if (published.length === 0) {
+        return;
+      }
+
+      setTimeout(() => {
         this.swiper = new Swiper(el, {
           loop: false,
           centeredSlides: false,
@@ -427,6 +1009,8 @@ function carousel() {
 
         initProjectCovers();
         setupProjectLinks();
+        initIndexCoverScales();
+        this.swiper.update();
       }, 0);
     },
   };
@@ -434,7 +1018,7 @@ function carousel() {
 
 document.addEventListener("DOMContentLoaded", () => {
   if (document.body.dataset.page === "project") {
-    initProjectPage();
+    void initProjectPage();
   }
   if (document.body.dataset.page === "index") {
     initIndexIntro();
