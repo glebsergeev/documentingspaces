@@ -245,8 +245,12 @@
                 <span class="index-edit-title-frame">
                   <input type="text" class="index-edit-title-input" value="${escapeAttr(title)}" placeholder="Project title" />
                 </span>
-                <button type="button" class="index-edit-inline-btn" data-action="publish">${publishLabel}</button>
-                <button type="button" class="index-edit-inline-btn" data-action="open">${editLabel}</button>
+                <span class="index-edit-btn-pill">
+                  <button type="button" class="index-edit-inline-btn" data-action="publish">${publishLabel}</button>
+                </span>
+                <span class="index-edit-btn-pill">
+                  <button type="button" class="index-edit-inline-btn" data-action="open">${editLabel}</button>
+                </span>
                 <span class="index-edit-slug">/${slug}</span>
               </h1>
               <div class="slide-main">

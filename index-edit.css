@@ -6,7 +6,10 @@ body.index-gallery-edit .nav-hit--next {
 
 body.index-gallery-edit {
   --edit-control-h: 2.1rem;
+  --edit-pill-track-h: calc(var(--edit-control-h) + 4px);
   --edit-pill-bg: rgba(255, 255, 255, 0.94);
+  --edit-pill-border: rgba(0, 0, 0, 0.09);
+  --edit-pill-shadow: 0 2px 10px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
   --edit-pill-hover: rgba(0, 0, 0, 0.05);
 }
 
@@ -77,6 +80,21 @@ body.index-gallery-edit .index-edit-title-row {
   align-items: center;
   justify-content: flex-start;
   gap: 0.42rem;
+}
+
+body.index-gallery-edit .index-edit-btn-pill {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+  border: 0.5px solid var(--edit-pill-border);
+  box-shadow: var(--edit-pill-shadow);
 }
 
 body.index-gallery-edit .index-edit-inline-btn {
