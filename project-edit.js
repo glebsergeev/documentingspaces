@@ -138,6 +138,8 @@
       <div class="project-edit-toolbar-pill" role="group" aria-label="File">
         <button type="button" class="project-edit-toolbar-primary" data-action="save" title="Download projects.json — replace data/projects.json; copy new files into assets/">Save</button>
         <span class="project-edit-pill-divider" aria-hidden="true"></span>
+        <button type="button" class="project-edit-toolbar-secondary" data-action="index-edit" title="Open index editor">Index edit</button>
+        <span class="project-edit-pill-divider" aria-hidden="true"></span>
         <button type="button" class="project-edit-toolbar-secondary" data-action="exit" title="Leave editor">Exit</button>
       </div>
     `;
@@ -722,11 +724,20 @@
       window.location.href = u.toString();
     }
 
+    function openIndexEdit() {
+      const u = new URL(window.location.href);
+      u.pathname = u.pathname.replace(/project\.html$/i, "index.html");
+      u.search = "";
+      u.searchParams.set("edit", "1");
+      window.location.href = u.toString();
+    }
+
     toolbar.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
       const act = btn.getAttribute("data-action");
       if (act === "save") saveJson();
+      if (act === "index-edit") openIndexEdit();
       if (act === "exit") exitEdit();
     });
 

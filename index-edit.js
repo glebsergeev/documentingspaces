@@ -36,6 +36,11 @@
     return imgs[0] || "";
   }
 
+  function stemFromPath(path) {
+    const base = String(path || "").split("/").pop() || "";
+    return base.replace(/\.[^.]+$/i, "");
+  }
+
   function downloadJson(data, projectsOrdered) {
     const out = JSON.parse(JSON.stringify(data || {}));
     out.projects = projectsOrdered.map((p, i) => ({
@@ -64,13 +69,13 @@
     let projectsOrdered = [...all].sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
     let dragFrom = null;
     let dragInsertIndex = null;
+    const coverPreviewUrls = new Map();
 
     const toolbar = document.createElement("div");
     toolbar.className = "index-edit-toolbar";
     toolbar.innerHTML = `
+      <button type="button" class="index-edit-toolbar-new" data-action="new">New project</button>
       <div class="index-edit-toolbar-pill" role="group" aria-label="Index editor actions">
-        <button type="button" data-action="new">New project</button>
-        <span class="index-edit-pill-divider" aria-hidden="true"></span>
         <button type="button" data-action="save">Save</button>
         <span class="index-edit-pill-divider" aria-hidden="true"></span>
         <button type="button" data-action="exit">Exit</button>
@@ -134,6 +139,13 @@
       render();
     }
 
+    function projectCoverSrc(p) {
+      if (!p) return "";
+      const preview = coverPreviewUrls.get(p.id);
+      if (preview) return preview;
+      return coverSrcFromProject(p);
+    }
+
     function togglePublishedAt(i) {
       const p = projectsOrdered[i];
       if (!p) return;
@@ -148,7 +160,6 @@
       if (!String(p.slug || "").trim()) {
         p.slug = slugify(val);
       }
-      render();
     }
 
     function editProjectAt(i) {
@@ -161,6 +172,24 @@
       u.searchParams.set("slug", slug);
       u.searchParams.set("edit", "1");
       window.location.href = u.toString();
+    }
+
+    function setCoverFileAt(i, file) {
+      const p = projectsOrdered[i];
+      if (!p || !file || !file.type.startsWith("image/")) return;
+      const path = `assets/${file.name}`;
+      const stem = stemFromPath(path);
+      p.coverImageId = stem;
+      if (!Array.isArray(p.images)) p.images = [];
+      if (!p.images.includes(path)) {
+        p.images.unshift(path);
+      }
+      const prev = coverPreviewUrls.get(p.id);
+      if (prev && prev.startsWith("blob:")) {
+        URL.revokeObjectURL(prev);
+      }
+      coverPreviewUrls.set(p.id, URL.createObjectURL(file));
+      render();
     }
 
     function buildInsertGap(insertIndex) {
@@ -202,29 +231,32 @@
         slide.classList.add("index-edit-slide--draft");
       }
 
-      const title = escapeHtml(p.title || "(untitled)");
+      const title = p.title || "";
       const slug = escapeHtml(p.slug || "");
-      const cover = escapeAttr(coverSrcFromProject(p));
+      const cover = escapeAttr(projectCoverSrc(p));
+      const publishLabel = p.isPublished ? "Unpublish" : "Publish";
+      const editLabel = p.isPublished ? "Edit" : "Edit Draft";
       slide.innerHTML = `
         <div class="slide-card">
           <div class="slide-top-spacer" aria-hidden="true"></div>
           <div class="slide-bottom">
             <div class="slide-hit">
-              <div class="index-edit-meta-row">
-                <button type="button" class="index-edit-toggle ${p.isPublished ? "is-on" : "is-off"}" data-action="publish">
-                  ${p.isPublished ? "Published" : "Draft"}
-                </button>
-                <button type="button" class="index-edit-open-btn" data-action="open">Edit project</button>
-              </div>
-              <h1 class="slide-title index-edit-title">${title}<span class="index-edit-slug">/${slug}</span></h1>
+              <h1 class="slide-title index-edit-title-row">
+                <span class="index-edit-title-frame">
+                  <input type="text" class="index-edit-title-input" value="${escapeAttr(title)}" placeholder="Project title" />
+                </span>
+                <button type="button" class="index-edit-inline-btn" data-action="publish">${publishLabel}</button>
+                <button type="button" class="index-edit-inline-btn" data-action="open">${editLabel}</button>
+                <span class="index-edit-slug">/${slug}</span>
+              </h1>
               <div class="slide-main">
                 <div class="slide-visual">
-                  <div class="cover-square"><img src="${cover}" alt="" width="800" height="800" loading="lazy" /></div>
+                  <div class="cover-square index-edit-cover" role="button" tabindex="0" aria-label="Choose cover image">
+                    <img src="${cover}" alt="" width="800" height="800" loading="lazy" />
+                  </div>
                 </div>
               </div>
-              <div class="index-edit-title-input-row">
-                <input type="text" class="index-edit-title-input" value="${escapeAttr(p.title || "")}" placeholder="Project title" />
-              </div>
+              <input type="file" class="index-edit-cover-input" accept="image/*" hidden />
             </div>
           </div>
         </div>
@@ -261,10 +293,51 @@
         clearInsertIndicator();
       });
 
-      slide.querySelector('[data-action="publish"]')?.addEventListener("click", () => togglePublishedAt(i));
-      slide.querySelector('[data-action="open"]')?.addEventListener("click", () => editProjectAt(i));
-      slide.querySelector(".index-edit-title-input")?.addEventListener("change", (e) => {
+      const titleInput = slide.querySelector(".index-edit-title-input");
+      const publishBtn = slide.querySelector('[data-action="publish"]');
+      const openBtn = slide.querySelector('[data-action="open"]');
+      const cover = slide.querySelector(".index-edit-cover");
+      const coverInput = slide.querySelector(".index-edit-cover-input");
+
+      function syncTitleWidth() {
+        if (!titleInput) return;
+        const len = Math.max(6, (titleInput.value || "").trim().length + 1);
+        titleInput.style.width = `${Math.min(42, len)}ch`;
+      }
+
+      syncTitleWidth();
+      titleInput?.addEventListener("input", (e) => {
         updateTitleAt(i, e.target.value);
+        syncTitleWidth();
+      });
+      titleInput?.addEventListener("change", () => {
+        render();
+      });
+      titleInput?.addEventListener("click", (e) => e.stopPropagation());
+      titleInput?.addEventListener("keydown", (e) => {
+        e.stopPropagation();
+      });
+
+      publishBtn?.addEventListener("click", () => togglePublishedAt(i));
+      openBtn?.addEventListener("click", () => editProjectAt(i));
+
+      function openCoverPicker() {
+        coverInput?.click();
+      }
+      cover?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openCoverPicker();
+      });
+      cover?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openCoverPicker();
+        }
+      });
+      coverInput?.addEventListener("change", () => {
+        const file = coverInput.files?.[0];
+        coverInput.value = "";
+        if (file) setCoverFileAt(i, file);
       });
       return slide;
     }
@@ -316,6 +389,22 @@
       if (action === "save") downloadJson(data, projectsOrdered);
       if (action === "exit") exitEdit();
     });
+
+    window.addEventListener(
+      "beforeunload",
+      () => {
+        coverPreviewUrls.forEach((u) => {
+          if (u && u.startsWith("blob:")) {
+            try {
+              URL.revokeObjectURL(u);
+            } catch {
+              /* ignore */
+            }
+          }
+        });
+      },
+      { once: true }
+    );
 
     render();
   };

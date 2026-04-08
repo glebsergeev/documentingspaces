@@ -19,6 +19,30 @@ body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip {
   padding-bottom: 14px;
 }
 
+body.index-gallery-edit {
+  --index-edit-ui-lift: calc(2.1rem - var(--line-height));
+}
+
+@media (min-width: 768px) {
+  body.index-gallery-edit .slide-card {
+    padding-top: max(
+      0px,
+      calc(25vh + var(--g) / 2 - var(--index-content-top) - var(--line-height) - var(--g) - var(--index-edit-ui-lift))
+    );
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 768px) {
+    body.index-gallery-edit .slide-card {
+      padding-top: max(
+        0px,
+        calc(25dvh + var(--g) / 2 - var(--index-content-top) - var(--line-height) - var(--g) - var(--index-edit-ui-lift))
+      );
+    }
+  }
+}
+
 body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip::-webkit-scrollbar {
   height: 8px;
 }
@@ -41,67 +65,83 @@ body.index-gallery-edit .index-edit-slide .slide-hit {
   position: relative;
 }
 
-body.index-gallery-edit .index-edit-slide .index-edit-meta-row {
+body.index-gallery-edit .index-edit-title-row {
   display: flex;
-  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.45rem;
-  margin-bottom: 0.4rem;
+  gap: 0.42rem;
 }
 
-body.index-gallery-edit .index-edit-toggle,
-body.index-gallery-edit .index-edit-open-btn {
+body.index-gallery-edit .index-edit-inline-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.1rem;
-  padding: 0 0.75rem;
+  margin: 0;
+  height: var(--edit-control-h, 2.1rem);
+  padding: 0 0.66rem;
   border-radius: 999px;
-  border: 1px solid #000;
-  background: color-mix(in srgb, Canvas 72%, transparent);
-  color: #000;
+  border: none;
+  background: transparent;
+  color: color-mix(in srgb, CanvasText 82%, transparent);
   font: inherit;
   font-size: 0.94rem;
+  font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.01em;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
-body.index-gallery-edit .index-edit-toggle.is-on {
-  background: #000;
-  color: #fff;
+body.index-gallery-edit .index-edit-inline-btn:hover {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
 }
 
-body.index-gallery-edit .index-edit-title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.42rem;
-}
-
-body.index-gallery-edit .index-edit-slug {
-  opacity: 0.6;
-}
-
-body.index-gallery-edit .index-edit-title-input-row {
-  margin-top: 0.55rem;
-}
-
-body.index-gallery-edit .index-edit-title-input {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: 2.1rem;
-  padding: 0 0.75rem;
+body.index-gallery-edit .index-edit-title-frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--edit-control-h, 2.1rem);
+  min-width: 8ch;
+  max-width: 42ch;
+  padding: 2px 0.45rem;
+  box-sizing: border-box;
   border: 1px solid #000;
   border-radius: 999px;
   background: color-mix(in srgb, Canvas 72%, transparent);
+  flex: 0 0 auto;
+}
+
+body.index-gallery-edit .index-edit-slug {
+  flex: 0 0 auto;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+body.index-gallery-edit .index-edit-title-input {
+  display: inline-block;
+  min-width: 6ch;
+  width: 10ch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   color: #000;
   font: inherit;
   font-size: 0.94rem;
+  font-weight: 500;
   letter-spacing: -0.01em;
+  line-height: var(--edit-control-h, 2.1rem);
+  text-align: left;
+}
+
+body.index-gallery-edit .index-edit-title-input:focus {
+  outline: none;
+}
+
+body.index-gallery-edit .index-edit-cover {
+  cursor: pointer;
 }
 
 body.index-gallery-edit .index-edit-slide--draft .cover-square img {
@@ -213,6 +253,28 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
   right: var(--g);
   bottom: var(--g);
   z-index: 200001;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.index-edit-toolbar-new {
+  height: 2.1rem;
+  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, Canvas 92%, transparent);
+  color: #000;
+  font: inherit;
+  font-size: 0.94rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  padding: 0 0.72rem;
+  cursor: pointer;
+}
+
+.index-edit-toolbar-new:hover {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
 }
 
 .index-edit-toolbar-pill {
