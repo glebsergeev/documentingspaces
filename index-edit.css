@@ -4,6 +4,12 @@ body.index-gallery-edit .nav-hit--next {
   pointer-events: none;
 }
 
+body.index-gallery-edit {
+  --edit-control-h: 2.1rem;
+  --edit-pill-bg: rgba(255, 255, 255, 0.94);
+  --edit-pill-hover: rgba(0, 0, 0, 0.05);
+}
+
 body.index-gallery-edit .index-swiper--edit .swiper-wrapper.index-edit-strip {
   display: flex;
   flex-direction: row;
@@ -78,7 +84,7 @@ body.index-gallery-edit .index-edit-inline-btn {
   align-items: center;
   justify-content: center;
   margin: 0;
-  height: var(--edit-control-h, 2.1rem);
+  height: var(--edit-control-h);
   padding: 0 0.66rem;
   border-radius: 999px;
   border: none;
@@ -87,29 +93,32 @@ body.index-gallery-edit .index-edit-inline-btn {
   font: inherit;
   font-size: 0.94rem;
   font-weight: 500;
-  line-height: 1.15;
+  line-height: var(--edit-control-h);
   letter-spacing: -0.01em;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 body.index-gallery-edit .index-edit-inline-btn:hover {
-  background: color-mix(in srgb, CanvasText 8%, transparent);
+  background: var(--edit-pill-hover);
 }
 
 body.index-gallery-edit .index-edit-title-frame {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  height: var(--edit-control-h, 2.1rem);
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  width: fit-content;
+  min-width: 0;
+  overflow: hidden;
+  height: var(--edit-control-h);
   min-width: 8ch;
   max-width: 42ch;
   padding: 2px 0.45rem;
-  box-sizing: border-box;
   border: 1px solid #000;
   border-radius: 999px;
-  background: color-mix(in srgb, Canvas 72%, transparent);
-  flex: 0 0 auto;
+  background: var(--edit-pill-bg);
 }
 
 body.index-gallery-edit .index-edit-slug {
@@ -119,21 +128,24 @@ body.index-gallery-edit .index-edit-slug {
 }
 
 body.index-gallery-edit .index-edit-title-input {
-  display: inline-block;
+  display: block;
   min-width: 6ch;
   width: 10ch;
   margin: 0;
-  padding: 0;
+  padding: 0 0.3em;
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #000;
+  color: inherit;
   font: inherit;
   font-size: 0.94rem;
   font-weight: 500;
   letter-spacing: -0.01em;
-  line-height: var(--edit-control-h, 2.1rem);
+  line-height: var(--edit-control-h);
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body.index-gallery-edit .index-edit-title-input:focus {
