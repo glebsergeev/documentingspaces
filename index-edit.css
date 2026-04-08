@@ -5,6 +5,7 @@ body.index-gallery-edit .nav-hit--next {
 }
 
 body.index-gallery-edit {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --edit-control-h: 2.1rem;
   --edit-pill-track-h: calc(var(--edit-control-h) + 4px);
   --edit-pill-bg: rgba(255, 255, 255, 0.94);
@@ -130,7 +131,7 @@ body.index-gallery-edit .index-edit-title-frame {
   width: fit-content;
   min-width: 0;
   overflow: hidden;
-  height: var(--edit-control-h);
+  min-height: var(--edit-pill-track-h);
   min-width: 8ch;
   max-width: 42ch;
   padding: 2px 0.45rem;
@@ -164,6 +165,8 @@ body.index-gallery-edit .index-edit-title-input {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 body.index-gallery-edit .index-edit-title-input:focus {
@@ -290,16 +293,21 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
 }
 
 .index-edit-toolbar-new {
-  height: var(--edit-control-h);
-  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 7px;
+  border: 0.5px solid color-mix(in srgb, CanvasText 18%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, Canvas 92%, transparent);
+  box-shadow: var(--edit-pill-shadow);
   color: #000;
   font: inherit;
   font-size: 0.94rem;
+  font-weight: 500;
   line-height: var(--edit-control-h);
   letter-spacing: -0.01em;
-  padding: 0 0.66rem;
   cursor: pointer;
 }
 
@@ -311,11 +319,12 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+  min-height: var(--edit-pill-track-h);
   padding: 2px 7px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  border: 0.5px solid color-mix(in srgb, CanvasText 18%, transparent);
   background: color-mix(in srgb, Canvas 92%, transparent);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--edit-pill-shadow);
 }
 
 .index-edit-toolbar-pill > button {
