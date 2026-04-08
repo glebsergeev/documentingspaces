@@ -296,7 +296,7 @@
       const titleInput = slide.querySelector(".index-edit-title-input");
       const publishBtn = slide.querySelector('[data-action="publish"]');
       const openBtn = slide.querySelector('[data-action="open"]');
-      const cover = slide.querySelector(".index-edit-cover");
+      const coverEl = slide.querySelector(".index-edit-cover");
       const coverInput = slide.querySelector(".index-edit-cover-input");
 
       function syncTitleWidth() {
@@ -324,11 +324,11 @@
       function openCoverPicker() {
         coverInput?.click();
       }
-      cover?.addEventListener("click", (e) => {
+      coverEl?.addEventListener("click", (e) => {
         e.stopPropagation();
         openCoverPicker();
       });
-      cover?.addEventListener("keydown", (e) => {
+      coverEl?.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           openCoverPicker();
