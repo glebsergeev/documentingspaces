@@ -168,7 +168,10 @@
       const slug = String(p.slug || "").trim() || slugify(p.title || `project-${i + 1}`);
       p.slug = slug;
       const u = new URL(window.location.href);
-      u.pathname = u.pathname.replace(/index\.html$/i, "project.html");
+      const baseDir = u.pathname.endsWith("/")
+        ? u.pathname
+        : u.pathname.replace(/[^/]+$/, "");
+      u.pathname = `${baseDir}project.html`;
       u.searchParams.set("slug", slug);
       u.searchParams.set("edit", "1");
       window.location.href = u.toString();

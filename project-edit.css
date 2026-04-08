@@ -628,9 +628,13 @@ body.project-gallery-edit .project-edit-slide .project-slide-card {
 }
 
 .project-edit-toolbar button {
-  padding: 0.42rem 0.9rem;
-  font-size: 1.008rem;
+  margin: 0;
+  height: var(--edit-control-h);
+  padding: 0 0.66rem;
+  box-sizing: border-box;
+  font-size: 0.94rem;
   font-weight: 500;
+  line-height: var(--edit-control-h);
   border: none;
   border-radius: 0;
   background: transparent;

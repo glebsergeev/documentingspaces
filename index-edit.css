@@ -290,16 +290,16 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
 }
 
 .index-edit-toolbar-new {
-  height: 2.1rem;
+  height: var(--edit-control-h);
   border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, Canvas 92%, transparent);
   color: #000;
   font: inherit;
   font-size: 0.94rem;
-  line-height: 1.15;
+  line-height: var(--edit-control-h);
   letter-spacing: -0.01em;
-  padding: 0 0.72rem;
+  padding: 0 0.66rem;
   cursor: pointer;
 }
 
@@ -319,15 +319,15 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
 }
 
 .index-edit-toolbar-pill > button {
-  height: 2.1rem;
+  height: var(--edit-control-h);
   border: none;
   background: transparent;
   color: #000;
   font: inherit;
   font-size: 0.94rem;
-  line-height: 1.15;
+  line-height: var(--edit-control-h);
   letter-spacing: -0.01em;
-  padding: 0 0.65rem;
+  padding: 0 0.66rem;
   border-radius: 999px;
   cursor: pointer;
 }
