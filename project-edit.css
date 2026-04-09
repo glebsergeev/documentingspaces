@@ -623,8 +623,7 @@ body.project-gallery-edit .nav-bar--project .nav-center {
   background: var(--edit-pill-hover);
 }
 
-.project-edit-nav-btn--save,
-.project-edit-nav-btn--exit {
+.project-edit-nav-btn--save {
   margin-left: 0.45rem;
 }
 
