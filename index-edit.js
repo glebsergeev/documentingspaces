@@ -3,6 +3,9 @@
  * Keeps public look and adds lightweight controls.
  */
 (function () {
+  const textMeasureCanvas = document.createElement("canvas");
+  const textMeasureCtx = textMeasureCanvas.getContext("2d");
+
   function slugify(text) {
     return (
       String(text || "")
@@ -307,9 +310,14 @@
       const coverInput = slide.querySelector(".index-edit-cover-input");
 
       function syncTitleWidth() {
-        if (!titleInput) return;
-        const len = Math.max(1, (titleInput.value || "").trim().length);
-        titleInput.style.width = `${Math.min(42, len)}ch`;
+        if (!titleInput || !textMeasureCtx) return;
+        const cs = window.getComputedStyle(titleInput);
+        textMeasureCtx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const text = (titleInput.value || titleInput.placeholder || "").trim() || " ";
+        const textPx = textMeasureCtx.measureText(text).width;
+        const minPx = textMeasureCtx.measureText("W").width;
+        const widthPx = Math.max(minPx, Math.ceil(textPx));
+        titleInput.style.width = `${widthPx}px`;
       }
 
       syncTitleWidth();
