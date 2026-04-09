@@ -579,9 +579,34 @@ async function initProjectPage() {
   if (data) {
     applyIndexSiteMeta(data);
   }
-  const inEditMode = new URLSearchParams(window.location.search).get("edit") === "1";
+  const params = new URLSearchParams(window.location.search);
+  const inEditMode = params.get("edit") === "1";
+  const shouldCreateNewProject = inEditMode && params.get("new") === "1";
   const sourceProjects = inEditMode ? allSorted : published;
-  const { project, index: projectIdx } = resolveProjectFromList(sourceProjects);
+  let project;
+  let projectIdx;
+  if (shouldCreateNewProject) {
+    const id =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `id-${Date.now()}`;
+    projectIdx = allSorted.length;
+    project = {
+      id,
+      title: "New project",
+      slug: `new-project-${String(id).slice(0, 8)}`,
+      description: "",
+      isPublished: false,
+      orderIndex: allSorted.length,
+      coverImageId: "",
+      images: [],
+      imageScales: [],
+    };
+  } else {
+    const resolved = resolveProjectFromList(sourceProjects);
+    project = resolved.project;
+    projectIdx = resolved.index;
+  }
 
   if (project?.title && data?.siteTitle) {
     document.title = `${project.title} | ${data.siteTitle}`;
@@ -593,7 +618,9 @@ async function initProjectPage() {
   }
   if (seriesDesc) {
     seriesDesc.textContent =
-      project?.description && String(project.description).trim()
+      shouldCreateNewProject
+        ? ""
+        : project?.description && String(project.description).trim()
         ? project.description
         : pickRandom(PROJECT_SERIES_TEXTS);
   }

@@ -696,12 +696,28 @@
       const clone = JSON.parse(JSON.stringify(data));
       const list = Array.isArray(clone.projects) ? clone.projects : [];
       const target = list.find((p) => p.id === project.id || p.slug === project.slug);
-      if (!target) {
-        alert("Could not find this project in JSON to update.");
-        return;
+      let editableTarget = target;
+      if (!editableTarget) {
+        const id =
+          project.id ||
+          (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : `id-${Date.now()}`);
+        editableTarget = {
+          id,
+          title: project.title || "New project",
+          slug: project.slug || `new-project-${String(id).slice(0, 8)}`,
+          description: project.description || "",
+          isPublished: Boolean(project.isPublished),
+          orderIndex: Number.isFinite(project.orderIndex) ? project.orderIndex : list.length,
+          coverImageId: project.coverImageId || "",
+          images: [],
+          imageScales: [],
+        };
+        list.push(editableTarget);
       }
-      target.images = [...images];
-      target.imageScales = scales.map((s) => s);
+      editableTarget.images = [...images];
+      editableTarget.imageScales = scales.map((s) => s);
       const body = {
         siteTitle: clone.siteTitle,
         siteDescription: clone.siteDescription,
@@ -724,7 +740,7 @@
       window.location.href = u.toString();
     }
 
-    function openIndexEdit(createNew = false) {
+    function openIndexEdit() {
       const u = new URL(window.location.href);
       const baseDir = u.pathname.endsWith("/")
         ? u.pathname
@@ -732,9 +748,18 @@
       u.pathname = `${baseDir}index.html`;
       u.search = "";
       u.searchParams.set("edit", "1");
-      if (createNew) {
-        u.searchParams.set("new", "1");
-      }
+      window.location.href = u.toString();
+    }
+
+    function openNewProjectEdit() {
+      const u = new URL(window.location.href);
+      const baseDir = u.pathname.endsWith("/")
+        ? u.pathname
+        : u.pathname.replace(/[^/]+$/, "");
+      u.pathname = `${baseDir}project.html`;
+      u.search = "";
+      u.searchParams.set("edit", "1");
+      u.searchParams.set("new", "1");
       window.location.href = u.toString();
     }
 
@@ -743,8 +768,8 @@
       if (!btn) return;
       const act = btn.getAttribute("data-action");
       if (act === "save") saveJson();
-      if (act === "index-edit") openIndexEdit(false);
-      if (act === "new-project") openIndexEdit(true);
+      if (act === "index-edit") openIndexEdit();
+      if (act === "new-project") openNewProjectEdit();
       if (act === "exit") exitEdit();
     });
 
