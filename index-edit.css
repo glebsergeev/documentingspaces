@@ -320,7 +320,7 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
 }
 
 .index-edit-add-tile-top-spacer {
-  height: var(--edit-pill-track-h);
+  height: var(--index-edit-head-space, var(--edit-pill-track-h));
   flex: 0 0 auto;
   margin-bottom: var(--g);
 }

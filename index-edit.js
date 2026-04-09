@@ -474,6 +474,13 @@
       return wrap;
     }
 
+    function syncAddTileAlignment() {
+      const sampleTitleRow = wrapper.querySelector(".index-edit-slide .index-edit-title-row");
+      if (!sampleTitleRow) return;
+      const h = sampleTitleRow.getBoundingClientRect().height;
+      wrapper.style.setProperty("--index-edit-head-space", `${Math.ceil(h + 0.5)}px`);
+    }
+
     function render() {
       clearInsertIndicator();
       syncOrderIndices();
@@ -487,6 +494,7 @@
       }
       wrapper.appendChild(buildInsertGap(projectsOrdered.length));
       wrapper.appendChild(buildAddTile());
+      syncAddTileAlignment();
     }
 
     function onKeyDown(e) {
@@ -516,6 +524,7 @@
       if (action === "exit") exitEdit();
     });
     document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", syncAddTileAlignment);
 
     if (shouldCreateNew) {
       addProject();
