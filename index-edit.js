@@ -427,6 +427,9 @@
                 <span class="index-edit-title-frame">
                   <input type="text" class="index-edit-title-input" value="${escapeAttr(title)}" placeholder="Project title" />
                 </span>
+                <span class="index-edit-btn-pill">
+                  <button type="button" class="index-edit-inline-btn" data-action="description">Description</button>
+                </span>
                 <span class="index-edit-order-frame">
                   <input type="text" class="index-edit-order-input" value="${i + 1}" inputmode="numeric" autocomplete="off" aria-label="Project position (1–${projectsOrdered.length}), press Enter to apply" />
                 </span>
@@ -484,6 +487,7 @@
       const titleInput = slide.querySelector(".index-edit-title-input");
       const orderInput = slide.querySelector(".index-edit-order-input");
       const publishBtn = slide.querySelector('[data-action="publish"]');
+      const descBtn = slide.querySelector('[data-action="description"]');
       const openBtn = slide.querySelector('[data-action="open"]');
       const slugEl = slide.querySelector(".index-edit-slug");
       const coverEl = slide.querySelector(".index-edit-cover");
@@ -544,6 +548,32 @@
       orderInput?.addEventListener("click", (e) => e.stopPropagation());
 
       publishBtn?.addEventListener("click", () => togglePublishedAt(i));
+      descBtn?.addEventListener("click", () => {
+        openSystemPopup({
+          title: "Edit project",
+          fields: [
+            {
+              id: "title",
+              value: p.title || "",
+              placeholder: "Project title",
+            },
+            {
+              id: "description",
+              value: p.description || "",
+              placeholder: "Project description",
+              multiline: true,
+            },
+          ],
+          onSave: ({ title, description }) => {
+            const nextTitle = String(title || "").trim();
+            const nextDescription = String(description || "").trim();
+            p.title = nextTitle;
+            p.slug = slugify(nextTitle);
+            p.description = nextDescription;
+            render();
+          },
+        });
+      });
       openBtn?.addEventListener("click", () => editProjectAt(i));
 
       coverEl?.addEventListener("click", (e) => {

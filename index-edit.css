@@ -555,5 +555,6 @@ textarea.edit-system-modal-input {
 }
 
 .edit-system-modal-btn:hover {
-  background: var(--edit-pill-hover);
+  background: var(--edit-pill-bg);
+  opacity: 1;
 }

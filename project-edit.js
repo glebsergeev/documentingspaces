@@ -906,6 +906,9 @@
       }
       editableTarget.images = [...images];
       editableTarget.imageScales = scales.map((s) => s);
+      editableTarget.title = project.title || editableTarget.title || "";
+      editableTarget.description = project.description || "";
+      editableTarget.slug = project.slug || editableTarget.slug || "";
       const body = {
         siteTitle: clone.siteTitle,
         siteDescription: clone.siteDescription,
