@@ -122,11 +122,10 @@
       overlay.className = "edit-system-modal-overlay";
       overlay.innerHTML = `
         <div class="edit-system-modal" role="dialog" aria-modal="true" aria-label="${escapeAttr(title || "Edit")}">
-          <div class="edit-system-modal-title">${escapeHtml(title || "Edit")}</div>
           <form class="edit-system-modal-form"></form>
           <div class="edit-system-modal-actions">
-            <button type="button" class="edit-system-modal-btn edit-system-modal-btn--cancel">Cancel</button>
             <button type="button" class="edit-system-modal-btn edit-system-modal-btn--save">Save</button>
+            <button type="button" class="edit-system-modal-btn edit-system-modal-btn--cancel">Cancel</button>
           </div>
         </div>
       `;
@@ -137,11 +136,8 @@
       const inputs = {};
 
       (fields || []).forEach((f) => {
-        const row = document.createElement("label");
+        const row = document.createElement("div");
         row.className = "edit-system-modal-field";
-        const cap = document.createElement("span");
-        cap.className = "edit-system-modal-label";
-        cap.textContent = f.label || "";
         let input;
         if (f.multiline) {
           input = document.createElement("textarea");
@@ -153,7 +149,6 @@
         input.className = "edit-system-modal-input";
         input.value = f.value || "";
         input.placeholder = f.placeholder || "";
-        row.appendChild(cap);
         row.appendChild(input);
         form.appendChild(row);
         if (f.id) inputs[f.id] = input;
