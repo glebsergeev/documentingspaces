@@ -735,10 +735,15 @@ body[data-page="index"] {
   width: calc(var(--project-cover) * var(--project-scale, 1));
   max-width: calc(100vw - 2 * var(--g));
   margin-top: auto;
-  margin-left: var(--g);
+  margin-left: 0;
   margin-right: auto;
-  margin-bottom: var(--g);
+  margin-bottom: 0;
   flex-shrink: 0;
+}
+
+body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
+  margin-left: var(--g);
+  margin-bottom: var(--g);
 }
 
 @media (min-width: 768px) {
