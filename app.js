@@ -193,6 +193,16 @@ function applyIndexSiteMeta(data) {
   }
   const ig = document.getElementById("navInstagram");
   const ct = document.getElementById("navContact");
+  const siteNameLinks = document.querySelectorAll(".nav-site-name, .nav-trigger");
+  const siteOwnerName = data.siteOwnerName && String(data.siteOwnerName).trim() ? data.siteOwnerName : "";
+  if (siteOwnerName) {
+    siteNameLinks.forEach((el) => {
+      el.textContent = siteOwnerName;
+    });
+  }
+  if (ig && data.instagramText && String(data.instagramText).trim()) {
+    ig.textContent = data.instagramText;
+  }
   if (ig && data.instagramUrl) {
     ig.href = data.instagramUrl;
   }
@@ -266,11 +276,14 @@ function updateIntroPanelMaxHeight(panel, anchorEl) {
   panel.style.maxHeight = `${Math.floor(maxH)}px`;
 }
 
-function initIndexIntro() {
+function initIndexIntro(data) {
   const textEl = document.getElementById("siteIntroText");
   const panel = document.getElementById("siteIntroPanel");
   if (textEl) {
-    textEl.textContent = pickRandom(SITE_INTRO_TEXTS);
+    textEl.textContent =
+      data?.siteIntroText && String(data.siteIntroText).trim()
+        ? data.siteIntroText
+        : pickRandom(SITE_INTRO_TEXTS);
   }
 
   const anchorForLayout = () =>
@@ -538,12 +551,15 @@ function resolveProjectFromList(list) {
   return { project: list[projectIdx], index: projectIdx };
 }
 
-function initProjectSiteIntroPanel() {
+function initProjectSiteIntroPanel(data) {
   const textEl = document.getElementById("siteIntroTextProject");
   const panel = document.getElementById("siteIntroPanelProject");
   const titleAnchor = document.getElementById("projectTitle");
   if (textEl) {
-    textEl.textContent = pickRandom(SITE_INTRO_TEXTS);
+    textEl.textContent =
+      data?.siteIntroText && String(data.siteIntroText).trim()
+        ? data.siteIntroText
+        : pickRandom(SITE_INTRO_TEXTS);
   }
 
   const layout = () => {
@@ -569,9 +585,8 @@ async function initProjectPage() {
 
   document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
 
-  initProjectSiteIntroPanel();
-
   const data = await loadProjectsDataOrNull();
+  initProjectSiteIntroPanel(data);
   const published = data ? getPublishedProjectsSorted(data) : [];
   const allSorted = data?.projects
     ? [...data.projects].sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
@@ -1065,6 +1080,6 @@ document.addEventListener("DOMContentLoaded", () => {
     void initProjectPage();
   }
   if (document.body.dataset.page === "index") {
-    initIndexIntro();
+    void loadProjectsDataOrNull().then((data) => initIndexIntro(data));
   }
 });

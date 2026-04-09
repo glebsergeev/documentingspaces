@@ -131,6 +131,11 @@
     wrapper.innerHTML = "";
 
     const navCenter = document.querySelector(".nav-bar--project .nav-center");
+    const navSiteName = document.querySelector(".nav-site-name");
+    const navInstagram = document.getElementById("navInstagram");
+    const siteIntroTextEl = document.getElementById("siteIntroTextProject");
+    const projectTitleEl = document.getElementById("projectTitle");
+    const projectSeriesDescEl = document.getElementById("projectSeriesDesc");
     const navActions = document.createElement("div");
     navActions.className = "project-edit-nav-actions";
     navActions.setAttribute("role", "group");
@@ -144,6 +149,194 @@
     if (navCenter) {
       navCenter.replaceChildren(navActions);
     }
+
+    if (data.siteOwnerName && String(data.siteOwnerName).trim() && navSiteName) {
+      navSiteName.textContent = data.siteOwnerName;
+    }
+    if (data.instagramText && String(data.instagramText).trim() && navInstagram) {
+      navInstagram.textContent = data.instagramText;
+    }
+    if (data.siteIntroText && String(data.siteIntroText).trim() && siteIntroTextEl) {
+      siteIntroTextEl.textContent = data.siteIntroText;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/"/g, "&quot;");
+    }
+    function escapeAttr(str) {
+      return String(str).replace(/"/g, "&quot;");
+    }
+
+    function openSystemPopup(opts) {
+      const { title, fields, onSave } = opts || {};
+      const overlay = document.createElement("div");
+      overlay.className = "edit-system-modal-overlay";
+      overlay.innerHTML = `
+        <div class="edit-system-modal" role="dialog" aria-modal="true" aria-label="${escapeAttr(title || "Edit")}">
+          <div class="edit-system-modal-title">${escapeHtml(title || "Edit")}</div>
+          <form class="edit-system-modal-form"></form>
+          <div class="edit-system-modal-actions">
+            <button type="button" class="edit-system-modal-btn edit-system-modal-btn--cancel">Cancel</button>
+            <button type="button" class="edit-system-modal-btn edit-system-modal-btn--save">Save</button>
+          </div>
+        </div>
+      `;
+      const modal = overlay.querySelector(".edit-system-modal");
+      const form = overlay.querySelector(".edit-system-modal-form");
+      const cancelBtn = overlay.querySelector(".edit-system-modal-btn--cancel");
+      const saveBtn = overlay.querySelector(".edit-system-modal-btn--save");
+      const inputs = {};
+
+      (fields || []).forEach((f) => {
+        const row = document.createElement("label");
+        row.className = "edit-system-modal-field";
+        const cap = document.createElement("span");
+        cap.className = "edit-system-modal-label";
+        cap.textContent = f.label || "";
+        let input;
+        if (f.multiline) {
+          input = document.createElement("textarea");
+          input.rows = 4;
+        } else {
+          input = document.createElement("input");
+          input.type = f.type || "text";
+        }
+        input.className = "edit-system-modal-input";
+        input.value = f.value || "";
+        input.placeholder = f.placeholder || "";
+        row.appendChild(cap);
+        row.appendChild(input);
+        form.appendChild(row);
+        if (f.id) inputs[f.id] = input;
+      });
+
+      function close() {
+        overlay.remove();
+      }
+
+      cancelBtn?.addEventListener("click", close);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) close();
+      });
+      document.body.appendChild(overlay);
+      const firstInput = form.querySelector(".edit-system-modal-input");
+      firstInput?.focus();
+
+      saveBtn?.addEventListener("click", () => {
+        const values = {};
+        Object.keys(inputs).forEach((k) => {
+          values[k] = inputs[k].value;
+        });
+        onSave?.(values);
+        close();
+      });
+
+      overlay.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close();
+        }
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "enter") {
+          e.preventDefault();
+          saveBtn?.click();
+        }
+      });
+      modal?.addEventListener("click", (e) => e.stopPropagation());
+    }
+
+    navSiteName?.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openSystemPopup({
+          title: "Edit site title",
+          fields: [
+            {
+              id: "title",
+              label: "Title text",
+              value: data.siteOwnerName || navSiteName.textContent || "",
+            },
+            {
+              id: "intro",
+              label: "Text shown on title click",
+              value: data.siteIntroText || siteIntroTextEl?.textContent || "",
+              multiline: true,
+            },
+          ],
+          onSave: ({ title, intro }) => {
+            const nextTitle = String(title || "").trim();
+            const nextIntro = String(intro || "").trim();
+            data.siteOwnerName = nextTitle;
+            data.siteIntroText = nextIntro;
+            navSiteName.textContent = nextTitle || "Gleb Sergeev";
+            if (siteIntroTextEl) siteIntroTextEl.textContent = nextIntro;
+          },
+        });
+      },
+      true
+    );
+
+    navInstagram?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openSystemPopup({
+        title: "Edit Instagram",
+        fields: [
+          {
+            id: "label",
+            label: "Link text",
+            value: data.instagramText || navInstagram.textContent || "Instagram",
+          },
+          {
+            id: "url",
+            label: "Link URL",
+            value: data.instagramUrl || navInstagram.getAttribute("href") || "",
+            type: "url",
+          },
+        ],
+        onSave: ({ label, url }) => {
+          const nextLabel = String(label || "").trim();
+          const nextUrl = String(url || "").trim();
+          data.instagramText = nextLabel || "Instagram";
+          data.instagramUrl = nextUrl;
+          navInstagram.textContent = data.instagramText;
+          navInstagram.href = nextUrl || "#";
+        },
+      });
+    });
+
+    projectTitleEl?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openSystemPopup({
+        title: "Edit project title",
+        fields: [
+          {
+            id: "title",
+            label: "Title text",
+            value: project.title || projectTitleEl.textContent || "",
+          },
+          {
+            id: "description",
+            label: "Text shown on title click",
+            value: project.description || projectSeriesDescEl?.textContent || "",
+            multiline: true,
+          },
+        ],
+        onSave: ({ title, description }) => {
+          const nextTitle = String(title || "").trim();
+          const nextDescription = String(description || "").trim();
+          project.title = nextTitle;
+          project.description = nextDescription;
+          projectTitleEl.textContent = nextTitle;
+          if (projectSeriesDescEl) projectSeriesDescEl.textContent = nextDescription;
+        },
+      });
+    });
 
     function syncScalesLength() {
       while (scales.length < images.length) {
@@ -721,6 +914,9 @@
       const body = {
         siteTitle: clone.siteTitle,
         siteDescription: clone.siteDescription,
+        siteOwnerName: clone.siteOwnerName ?? data.siteOwnerName ?? "",
+        siteIntroText: clone.siteIntroText ?? data.siteIntroText ?? "",
+        instagramText: clone.instagramText ?? data.instagramText ?? "",
         instagramUrl: clone.instagramUrl,
         contactUrl: clone.contactUrl,
         projects: list,
