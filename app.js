@@ -623,13 +623,17 @@ async function initProjectPage() {
     projectIdx = resolved.index;
   }
 
-  if (project?.title && data?.siteTitle) {
-    document.title = `${project.title} | ${data.siteTitle}`;
+  const resolvedProjectTitle =
+    project?.title && String(project.title).trim()
+      ? String(project.title).trim()
+      : PROJECT_TITLES[projectIdx] ?? PROJECT_TITLES[0] ?? "Project";
+
+  if (resolvedProjectTitle && data?.siteTitle) {
+    document.title = `${resolvedProjectTitle} | ${data.siteTitle}`;
   }
 
   if (titleEl) {
-    titleEl.textContent =
-      project?.title ?? PROJECT_TITLES[projectIdx] ?? PROJECT_TITLES[0] ?? "";
+    titleEl.textContent = resolvedProjectTitle;
   }
   if (seriesDesc) {
     seriesDesc.textContent =

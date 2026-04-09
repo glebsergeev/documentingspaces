@@ -100,7 +100,7 @@
   }
 
   window.initProjectGalleryEdit = async function initProjectGalleryEdit(ctx) {
-    const { data, project, projectIdx, wrapper, swiperEl } = ctx;
+    const { data, project, projectIdx, wrapper, swiperEl, titleEl, titleBlock } = ctx;
     document.body.classList.add("project-gallery-edit");
 
     if (!data || !project || !wrapper || !swiperEl) {
@@ -134,7 +134,7 @@
     const navSiteName = document.querySelector(".nav-site-name");
     const navInstagram = document.getElementById("navInstagram");
     const siteIntroTextEl = document.getElementById("siteIntroTextProject");
-    const projectTitleEl = document.getElementById("projectTitle");
+    const projectTitleEl = titleEl || document.getElementById("projectTitle");
     const projectSeriesDescEl = document.getElementById("projectSeriesDesc");
     const navActions = document.createElement("div");
     navActions.className = "project-edit-nav-actions";
@@ -159,6 +159,22 @@
     if (data.siteIntroText && String(data.siteIntroText).trim() && siteIntroTextEl) {
       siteIntroTextEl.textContent = data.siteIntroText;
     }
+    if (projectTitleEl) {
+      const titleText = String(project.title || "").trim() || `Project ${projectIdx + 1}`;
+      projectTitleEl.textContent = titleText;
+    }
+
+    function positionEditProjectTitle() {
+      if (!titleBlock) return;
+      const navRoot = document.querySelector(".nav-root");
+      const navBottom = navRoot ? navRoot.getBoundingClientRect().bottom : 0;
+      const g =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--g")) || 12;
+      titleBlock.style.top = `${Math.round(navBottom + g)}px`;
+      titleBlock.style.bottom = "auto";
+    }
+    positionEditProjectTitle();
+    window.addEventListener("resize", positionEditProjectTitle);
 
     function escapeHtml(str) {
       return String(str)

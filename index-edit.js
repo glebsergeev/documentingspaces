@@ -430,14 +430,14 @@
                 <span class="index-edit-btn-pill">
                   <button type="button" class="index-edit-inline-btn" data-action="description">Description</button>
                 </span>
-                <span class="index-edit-order-frame">
-                  <input type="text" class="index-edit-order-input" value="${i + 1}" inputmode="numeric" autocomplete="off" aria-label="Project position (1–${projectsOrdered.length}), press Enter to apply" />
-                </span>
                 <span class="index-edit-btn-pill">
                   <button type="button" class="index-edit-inline-btn" data-action="publish">${publishLabel}</button>
                 </span>
                 <span class="index-edit-btn-pill">
                   <button type="button" class="index-edit-inline-btn" data-action="open">${editLabel}</button>
+                </span>
+                <span class="index-edit-order-frame">
+                  <input type="text" class="index-edit-order-input" value="${i + 1}" inputmode="numeric" autocomplete="off" aria-label="Project position (1–${projectsOrdered.length}), press Enter to apply" />
                 </span>
                 <span class="index-edit-slug">/${slug}</span>
               </h1>
