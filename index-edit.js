@@ -212,23 +212,14 @@
       window.location.href = u.toString();
     }
 
-    function cycleCoverAt(i, delta) {
-      const p = projectsOrdered[i];
-      if (!p) return;
-      const imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
-      if (!imgs.length) return;
-      const idRaw = p.coverImageId;
-      const id = idRaw != null && String(idRaw).trim() !== "" ? String(idRaw).trim() : "";
-      let current = -1;
-      if (id) {
-        current = imgs.findIndex((src) => stemFromPath(src) === id);
-      }
-      if (current < 0) {
-        current = getRandomCoverIndex(p);
-      }
-      const next = (current + delta + imgs.length) % imgs.length;
-      p.coverImageId = stemFromPath(imgs[next]);
-      randomCoverIdxByProjectId.set(p.id, next);
+    function moveProjectByArrow(i, delta) {
+      if (i < 0 || i >= projectsOrdered.length) return;
+      const j = i + delta;
+      if (j < 0 || j >= projectsOrdered.length) return;
+      const item = projectsOrdered.splice(i, 1)[0];
+      projectsOrdered.splice(j, 0, item);
+      selectedCoverIndex = j;
+      syncOrderIndices();
       render();
     }
 
@@ -301,7 +292,7 @@
               </h1>
               <div class="slide-main">
                 <div class="slide-visual">
-                  <div class="cover-square index-edit-cover" role="button" tabindex="0" aria-label="Select cover. Use left and right arrows to change project cover">
+                  <div class="cover-square index-edit-cover" role="button" tabindex="0" aria-label="Select project. Use left and right arrows to move it in sequence">
                     <img src="${cover}" alt="" width="800" height="800" loading="lazy" />
                   </div>
                 </div>
@@ -463,10 +454,10 @@
       if (selectedCoverIndex < 0 || selectedCoverIndex >= projectsOrdered.length) return;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        cycleCoverAt(selectedCoverIndex, -1);
+        moveProjectByArrow(selectedCoverIndex, -1);
       } else if (e.key === "ArrowRight") {
         e.preventDefault();
-        cycleCoverAt(selectedCoverIndex, 1);
+        moveProjectByArrow(selectedCoverIndex, 1);
       }
     }
 
