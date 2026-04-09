@@ -362,8 +362,8 @@
         const textPx = textMeasureEl.getBoundingClientRect().width;
         textMeasureEl.textContent = "W";
         const minPx = textMeasureEl.getBoundingClientRect().width;
-        /* Small reserve for caret/subpixel glyph rendering to avoid clipping. */
-        const widthPx = Math.max(minPx, Math.ceil(textPx) + 4);
+        /* Wider reserve so browser never enters internal horizontal scroll. */
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 14);
         titleInput.style.width = `${widthPx}px`;
         titleInput.scrollLeft = 0;
         requestAnimationFrame(() => {
