@@ -822,9 +822,11 @@ async function initProjectPage() {
     const imgTop = firstImage.getBoundingClientRect().top;
     const gutterUpper = imgTop - g;
     const descTop = seriesDesc.getBoundingClientRect().top;
-    const maxH = Math.max(32, gutterUpper - descTop);
-    seriesDesc.style.overflowY = "auto";
-    seriesDesc.style.maxHeight = `${Math.floor(maxH)}px`;
+    /* Keep small headroom to avoid subpixel "false overflow" scrollbars. */
+    const maxH = Math.max(32, Math.ceil(gutterUpper - descTop) + 6);
+    seriesDesc.style.maxHeight = `${maxH}px`;
+    const hasRealOverflow = seriesDesc.scrollHeight > maxH + 4;
+    seriesDesc.style.overflowY = hasRealOverflow ? "auto" : "hidden";
   };
 
   /* Bottom of the primary nav row only (Gleb / Index / external links). Site intro under the name

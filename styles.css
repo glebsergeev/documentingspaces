@@ -454,10 +454,10 @@ body[data-page="project"] .carousel-section.project-carousel {
 
 body[data-page="index"] .slide-bottom {
   position: relative;
-  width: calc(var(--project-cover) * var(--cover-scale, 1) + 6px);
-  padding: 3px;
-  margin-left: calc(var(--g) - 3px);
-  margin-bottom: calc(var(--g) - 3px);
+  width: calc(var(--project-cover) * var(--cover-scale, 1));
+  padding: 0;
+  margin-left: 0;
+  margin-bottom: 0;
 }
 
 body[data-page="index"] .slide-hit {
