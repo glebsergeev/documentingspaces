@@ -72,7 +72,8 @@
     let projectsOrdered = [...all].sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
     let dragFrom = null;
     let dragInsertIndex = null;
-    const coverPreviewUrls = new Map();
+    let selectedCoverIndex = -1;
+    const randomCoverIdxByProjectId = new Map();
 
     const toolbar = document.createElement("div");
     toolbar.className = "index-edit-toolbar";
@@ -121,6 +122,18 @@
       render();
     }
 
+    function moveProjectToPosition(fromIndex, oneBasedPos) {
+      if (fromIndex < 0 || fromIndex >= projectsOrdered.length) return;
+      const n = parseInt(String(oneBasedPos), 10);
+      if (!Number.isFinite(n)) return;
+      const target = Math.max(0, Math.min(n - 1, projectsOrdered.length - 1));
+      if (target === fromIndex) return;
+      const item = projectsOrdered.splice(fromIndex, 1)[0];
+      projectsOrdered.splice(target, 0, item);
+      syncOrderIndices();
+      render();
+    }
+
     function addProject() {
       const id =
         typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
@@ -142,11 +155,26 @@
       render();
     }
 
+    function getRandomCoverIndex(p) {
+      if (!p) return 0;
+      const imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+      if (!imgs.length) return 0;
+      if (randomCoverIdxByProjectId.has(p.id)) return randomCoverIdxByProjectId.get(p.id);
+      const idx = Math.floor(Math.random() * imgs.length);
+      randomCoverIdxByProjectId.set(p.id, idx);
+      return idx;
+    }
+
     function projectCoverSrc(p) {
       if (!p) return "";
-      const preview = coverPreviewUrls.get(p.id);
-      if (preview) return preview;
-      return coverSrcFromProject(p);
+      const idRaw = p.coverImageId;
+      const id = idRaw != null && String(idRaw).trim() !== "" ? String(idRaw).trim() : "";
+      if (id && /^[A-Za-z0-9_-]+$/.test(id)) {
+        return `assets/${id}.jpg`;
+      }
+      const imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+      if (!imgs.length) return "";
+      return imgs[getRandomCoverIndex(p)];
     }
 
     function togglePublishedAt(i) {
@@ -180,21 +208,23 @@
       window.location.href = u.toString();
     }
 
-    function setCoverFileAt(i, file) {
+    function cycleCoverAt(i, delta) {
       const p = projectsOrdered[i];
-      if (!p || !file || !file.type.startsWith("image/")) return;
-      const path = `assets/${file.name}`;
-      const stem = stemFromPath(path);
-      p.coverImageId = stem;
-      if (!Array.isArray(p.images)) p.images = [];
-      if (!p.images.includes(path)) {
-        p.images.unshift(path);
+      if (!p) return;
+      const imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+      if (!imgs.length) return;
+      const idRaw = p.coverImageId;
+      const id = idRaw != null && String(idRaw).trim() !== "" ? String(idRaw).trim() : "";
+      let current = -1;
+      if (id) {
+        current = imgs.findIndex((src) => stemFromPath(src) === id);
       }
-      const prev = coverPreviewUrls.get(p.id);
-      if (prev && prev.startsWith("blob:")) {
-        URL.revokeObjectURL(prev);
+      if (current < 0) {
+        current = getRandomCoverIndex(p);
       }
-      coverPreviewUrls.set(p.id, URL.createObjectURL(file));
+      const next = (current + delta + imgs.length) % imgs.length;
+      p.coverImageId = stemFromPath(imgs[next]);
+      randomCoverIdxByProjectId.set(p.id, next);
       render();
     }
 
@@ -233,6 +263,9 @@
       slide.className = "swiper-slide swiper-slide--work index-edit-slide";
       slide.draggable = true;
       slide.dataset.index = String(i);
+      if (i === selectedCoverIndex) {
+        slide.classList.add("index-edit-slide--cover-selected");
+      }
       if (!p.isPublished) {
         slide.classList.add("index-edit-slide--draft");
       }
@@ -251,6 +284,9 @@
                 <span class="index-edit-title-frame">
                   <input type="text" class="index-edit-title-input" value="${escapeAttr(title)}" placeholder="Project title" />
                 </span>
+                <span class="index-edit-order-frame">
+                  <input type="text" class="index-edit-order-input" value="${i + 1}" inputmode="numeric" autocomplete="off" aria-label="Project position (1–${projectsOrdered.length}), press Enter to apply" />
+                </span>
                 <span class="index-edit-btn-pill">
                   <button type="button" class="index-edit-inline-btn" data-action="publish">${publishLabel}</button>
                 </span>
@@ -261,12 +297,11 @@
               </h1>
               <div class="slide-main">
                 <div class="slide-visual">
-                  <div class="cover-square index-edit-cover" role="button" tabindex="0" aria-label="Choose cover image">
+                  <div class="cover-square index-edit-cover" role="button" tabindex="0" aria-label="Select cover. Use left and right arrows to change project cover">
                     <img src="${cover}" alt="" width="800" height="800" loading="lazy" />
                   </div>
                 </div>
               </div>
-              <input type="file" class="index-edit-cover-input" accept="image/*" hidden />
             </div>
           </div>
         </div>
@@ -304,19 +339,19 @@
       });
 
       const titleInput = slide.querySelector(".index-edit-title-input");
+      const orderInput = slide.querySelector(".index-edit-order-input");
       const publishBtn = slide.querySelector('[data-action="publish"]');
       const openBtn = slide.querySelector('[data-action="open"]');
       const coverEl = slide.querySelector(".index-edit-cover");
-      const coverInput = slide.querySelector(".index-edit-cover-input");
 
       function syncTitleWidth() {
         if (!titleInput || !textMeasureCtx) return;
         const cs = window.getComputedStyle(titleInput);
         textMeasureCtx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-        const text = (titleInput.value || titleInput.placeholder || "").trim() || " ";
+        const text = titleInput.value || titleInput.placeholder || " ";
         const textPx = textMeasureCtx.measureText(text).width;
         const minPx = textMeasureCtx.measureText("W").width;
-        const widthPx = Math.max(minPx, Math.ceil(textPx));
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 2);
         titleInput.style.width = `${widthPx}px`;
       }
 
@@ -333,26 +368,37 @@
         e.stopPropagation();
       });
 
+      function commitOrderInput() {
+        if (!orderInput) return;
+        const raw = orderInput.value.trim();
+        moveProjectToPosition(i, raw);
+      }
+      orderInput?.addEventListener("keydown", (e) => {
+        e.stopPropagation();
+        if (e.key === "Enter") {
+          e.preventDefault();
+          commitOrderInput();
+        }
+      });
+      orderInput?.addEventListener("blur", () => {
+        if (orderInput) orderInput.value = String(i + 1);
+      });
+      orderInput?.addEventListener("click", (e) => e.stopPropagation());
+
       publishBtn?.addEventListener("click", () => togglePublishedAt(i));
       openBtn?.addEventListener("click", () => editProjectAt(i));
 
-      function openCoverPicker() {
-        coverInput?.click();
-      }
       coverEl?.addEventListener("click", (e) => {
         e.stopPropagation();
-        openCoverPicker();
+        selectedCoverIndex = i;
+        render();
       });
       coverEl?.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openCoverPicker();
+          selectedCoverIndex = i;
+          render();
         }
-      });
-      coverInput?.addEventListener("change", () => {
-        const file = coverInput.files?.[0];
-        coverInput.value = "";
-        if (file) setCoverFileAt(i, file);
       });
       return slide;
     }
@@ -381,6 +427,9 @@
     function render() {
       clearInsertIndicator();
       syncOrderIndices();
+      if (selectedCoverIndex >= projectsOrdered.length) {
+        selectedCoverIndex = projectsOrdered.length - 1;
+      }
       wrapper.replaceChildren();
       for (let i = 0; i < projectsOrdered.length; i += 1) {
         wrapper.appendChild(buildInsertGap(i));
@@ -388,6 +437,18 @@
       }
       wrapper.appendChild(buildInsertGap(projectsOrdered.length));
       wrapper.appendChild(buildAddTile());
+    }
+
+    function onKeyDown(e) {
+      if (e.target.closest("input, textarea, select, button")) return;
+      if (selectedCoverIndex < 0 || selectedCoverIndex >= projectsOrdered.length) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        cycleCoverAt(selectedCoverIndex, -1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        cycleCoverAt(selectedCoverIndex, 1);
+      }
     }
 
     function exitEdit() {
@@ -404,22 +465,7 @@
       if (action === "save") downloadJson(data, projectsOrdered);
       if (action === "exit") exitEdit();
     });
-
-    window.addEventListener(
-      "beforeunload",
-      () => {
-        coverPreviewUrls.forEach((u) => {
-          if (u && u.startsWith("blob:")) {
-            try {
-              URL.revokeObjectURL(u);
-            } catch {
-              /* ignore */
-            }
-          }
-        });
-      },
-      { once: true }
-    );
+    document.addEventListener("keydown", onKeyDown);
 
     render();
   };

@@ -130,10 +130,9 @@ body.index-gallery-edit .index-edit-title-frame {
   flex: 0 1 auto;
   width: fit-content;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   min-height: var(--edit-pill-track-h);
   min-width: 8ch;
-  max-width: 42ch;
   padding: 2px 0.45rem;
   border: 1px solid #000;
   border-radius: 999px;
@@ -144,6 +143,52 @@ body.index-gallery-edit .index-edit-slug {
   flex: 0 0 auto;
   opacity: 0.6;
   white-space: nowrap;
+}
+
+body.index-gallery-edit .index-edit-order-frame {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 0.45rem;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+}
+
+body.index-gallery-edit .index-edit-order-input {
+  display: block;
+  width: 2.75ch;
+  min-width: 2ch;
+  max-width: 4ch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--edit-control-h);
+  text-align: center;
+  color: #000;
+  box-sizing: content-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+body.index-gallery-edit .index-edit-order-input:focus {
+  outline: none;
+}
+
+body.index-gallery-edit .index-edit-order-input:focus-visible {
+  outline: 2px solid color-mix(in srgb, #007aff 70%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 body.index-gallery-edit .index-edit-title-input {
@@ -162,9 +207,9 @@ body.index-gallery-edit .index-edit-title-input {
   letter-spacing: -0.01em;
   line-height: var(--edit-control-h);
   text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre;
+  overflow: visible;
+  text-overflow: clip;
   -webkit-appearance: none;
   appearance: none;
 }
@@ -175,6 +220,11 @@ body.index-gallery-edit .index-edit-title-input:focus {
 
 body.index-gallery-edit .index-edit-cover {
   cursor: pointer;
+}
+
+body.index-gallery-edit .index-edit-slide--cover-selected .index-edit-cover {
+  outline: 1px solid #000;
+  outline-offset: -1px;
 }
 
 body.index-gallery-edit .index-edit-slide--draft .cover-square img {
