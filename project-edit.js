@@ -175,7 +175,7 @@
       const overlay = document.createElement("div");
       overlay.className = "edit-system-modal-overlay";
       overlay.innerHTML = `
-        <div class="edit-system-modal" role="dialog" aria-modal="true" aria-label="${escapeAttr(title || "Edit")}">
+        <div class="edit-system-modal" style="background:transparent;border:0;box-shadow:none;padding:0;" role="dialog" aria-modal="true" aria-label="${escapeAttr(title || "Edit")}">
           <form class="edit-system-modal-form"></form>
           <div class="edit-system-modal-actions">
             <button type="button" class="edit-system-modal-btn edit-system-modal-btn--save">Save</button>
