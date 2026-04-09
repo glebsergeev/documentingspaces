@@ -3,8 +3,14 @@
  * Keeps public look and adds lightweight controls.
  */
 (function () {
-  const textMeasureCanvas = document.createElement("canvas");
-  const textMeasureCtx = textMeasureCanvas.getContext("2d");
+  const textMeasureEl = document.createElement("span");
+  textMeasureEl.style.position = "absolute";
+  textMeasureEl.style.visibility = "hidden";
+  textMeasureEl.style.pointerEvents = "none";
+  textMeasureEl.style.whiteSpace = "pre";
+  textMeasureEl.style.left = "-99999px";
+  textMeasureEl.style.top = "-99999px";
+  document.body.appendChild(textMeasureEl);
 
   function slugify(text) {
     return (
@@ -345,14 +351,20 @@
       const coverEl = slide.querySelector(".index-edit-cover");
 
       function syncTitleWidth() {
-        if (!titleInput || !textMeasureCtx) return;
+        if (!titleInput) return;
         const cs = window.getComputedStyle(titleInput);
-        textMeasureCtx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        textMeasureEl.style.font = cs.font;
+        textMeasureEl.style.fontWeight = cs.fontWeight;
+        textMeasureEl.style.fontSize = cs.fontSize;
+        textMeasureEl.style.fontFamily = cs.fontFamily;
+        textMeasureEl.style.letterSpacing = cs.letterSpacing;
         const text = titleInput.value || titleInput.placeholder || " ";
-        const textPx = textMeasureCtx.measureText(text).width;
-        const minPx = textMeasureCtx.measureText("W").width;
-        /* Keep a small reserve so caret rendering never clips first glyph. */
-        const widthPx = Math.max(minPx, Math.ceil(textPx) + 10);
+        textMeasureEl.textContent = text;
+        const textPx = textMeasureEl.getBoundingClientRect().width;
+        textMeasureEl.textContent = "W";
+        const minPx = textMeasureEl.getBoundingClientRect().width;
+        /* Keep a small reserve so caret rendering never clips glyphs. */
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 12);
         titleInput.style.width = `${widthPx}px`;
       }
 
