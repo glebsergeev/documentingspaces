@@ -597,13 +597,17 @@ body.project-gallery-edit .nav-bar--project .nav-center {
 }
 
 .project-edit-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
-  height: var(--edit-control-h);
-  padding: 0 0.66rem;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 7px;
   box-sizing: border-box;
-  border: none;
+  border: 0.5px solid var(--edit-pill-border);
   border-radius: 999px;
-  background: transparent;
+  background: var(--edit-pill-bg);
+  box-shadow: var(--edit-pill-shadow);
   color: color-mix(in srgb, CanvasText 82%, transparent);
   font: inherit;
   font-size: 0.94rem;
@@ -621,17 +625,6 @@ body.project-gallery-edit .nav-bar--project .nav-center {
 .project-edit-nav-btn--save,
 .project-edit-nav-btn--exit {
   margin-left: 0.45rem;
-}
-
-.project-edit-nav-btn--save {
-  color: #007aff;
-  font-weight: 600;
-}
-
-@media (prefers-color-scheme: dark) {
-  .project-edit-nav-btn--save {
-    color: #0a84ff;
-  }
 }
 
 /* Compact floating actions — overlay, no full-width bar */
