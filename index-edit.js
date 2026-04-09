@@ -308,7 +308,7 @@
 
       function syncTitleWidth() {
         if (!titleInput) return;
-        const len = Math.max(6, (titleInput.value || "").trim().length + 1);
+        const len = Math.max(1, (titleInput.value || "").trim().length);
         titleInput.style.width = `${Math.min(42, len)}ch`;
       }
 
