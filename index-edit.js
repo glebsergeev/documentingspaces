@@ -366,6 +366,9 @@
         const widthPx = Math.max(minPx, Math.ceil(textPx) + 4);
         titleInput.style.width = `${widthPx}px`;
         titleInput.scrollLeft = 0;
+        requestAnimationFrame(() => {
+          titleInput.scrollLeft = 0;
+        });
       }
 
       syncTitleWidth();
