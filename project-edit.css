@@ -602,7 +602,7 @@ body.project-gallery-edit .nav-bar--project .nav-center {
   justify-content: center;
   margin: 0;
   min-height: var(--edit-pill-track-h);
-  padding: 2px 7px;
+  padding: 2px 0.66rem;
   box-sizing: border-box;
   border: 0.5px solid var(--edit-pill-border);
   border-radius: 999px;

@@ -83,17 +83,25 @@
     let selectedCoverIndex = -1;
     const randomCoverIdxByProjectId = new Map();
 
-    const toolbar = document.createElement("div");
-    toolbar.className = "index-edit-toolbar";
-    toolbar.innerHTML = `
-      <button type="button" class="index-edit-toolbar-new" data-action="new">New project</button>
-      <div class="index-edit-toolbar-pill" role="group" aria-label="Index editor actions">
-        <button type="button" data-action="save">Save</button>
-        <span class="index-edit-pill-divider" aria-hidden="true"></span>
-        <button type="button" data-action="exit">Exit</button>
-      </div>
+    const navBar = document.querySelector(".nav-bar");
+    const navRight = document.querySelector(".nav-external-links");
+    const navCenter = document.createElement("li");
+    navCenter.className = "nav-center nav-center--index-edit";
+    const navActions = document.createElement("div");
+    navActions.className = "index-edit-nav-actions";
+    navActions.setAttribute("role", "group");
+    navActions.setAttribute("aria-label", "Index editor actions");
+    navActions.innerHTML = `
+      <button type="button" class="index-edit-nav-btn" data-action="new">New Project</button>
+      <button type="button" class="index-edit-nav-btn index-edit-nav-btn--save" data-action="save">Save</button>
+      <button type="button" class="index-edit-nav-btn index-edit-nav-btn--exit" data-action="exit">Exit</button>
     `;
-    document.body.appendChild(toolbar);
+    navCenter.appendChild(navActions);
+    if (navBar && navRight && navRight.parentNode === navBar) {
+      navBar.insertBefore(navCenter, navRight);
+    } else if (navBar) {
+      navBar.appendChild(navCenter);
+    }
 
     function syncOrderIndices() {
       projectsOrdered.forEach((p, i) => {
@@ -469,7 +477,7 @@
       window.location.href = u.toString();
     }
 
-    toolbar.addEventListener("click", (e) => {
+    navActions.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-action]");
       if (!btn) return;
       const action = btn.getAttribute("data-action");

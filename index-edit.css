@@ -4,6 +4,17 @@ body.index-gallery-edit .nav-hit--next {
   pointer-events: none;
 }
 
+body.index-gallery-edit .nav-bar {
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.index-gallery-edit .nav-center--index-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 body.index-gallery-edit {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --edit-control-h: 2.1rem;
@@ -400,4 +411,43 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
   height: 1.25rem;
   background: color-mix(in srgb, CanvasText 22%, transparent);
   margin: 0 2px;
+}
+
+/* Top nav actions in index edit mode */
+body.index-gallery-edit .index-edit-nav-actions {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+body.index-gallery-edit .index-edit-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  min-height: var(--edit-pill-track-h);
+  padding: 2px 0.66rem;
+  box-sizing: border-box;
+  border: 0.5px solid var(--edit-pill-border);
+  border-radius: 999px;
+  background: var(--edit-pill-bg);
+  box-shadow: var(--edit-pill-shadow);
+  color: color-mix(in srgb, CanvasText 82%, transparent);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: var(--edit-control-h);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.index-gallery-edit .index-edit-nav-btn:hover {
+  background: var(--edit-pill-hover);
+}
+
+body.index-gallery-edit .index-edit-nav-btn--save,
+body.index-gallery-edit .index-edit-nav-btn--exit {
+  margin-left: 0.45rem;
 }
