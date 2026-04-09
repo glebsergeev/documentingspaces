@@ -363,8 +363,8 @@
         const textPx = textMeasureEl.getBoundingClientRect().width;
         textMeasureEl.textContent = "W";
         const minPx = textMeasureEl.getBoundingClientRect().width;
-        /* Keep a small reserve so caret rendering never clips glyphs. */
-        const widthPx = Math.max(minPx, Math.ceil(textPx) + 12);
+        /* Tiny reserve for caret, without adding visible extra right padding. */
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 2);
         titleInput.style.width = `${widthPx}px`;
       }
 
