@@ -307,11 +307,27 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
 
 .index-edit-add-tile-inner {
   width: var(--project-cover);
-  height: var(--project-cover);
+  height: calc(var(--project-cover) + var(--edit-pill-track-h) + var(--g));
   max-width: var(--project-cover);
   margin-left: auto;
   margin-right: auto;
   margin-bottom: var(--g);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.index-edit-add-tile-top-spacer {
+  height: var(--edit-pill-track-h);
+  flex: 0 0 auto;
+  margin-bottom: var(--g);
+}
+
+.index-edit-add-tile-frame {
+  width: 100%;
+  height: var(--project-cover);
   border-radius: 12px;
   border: 1px dashed #000;
   background: color-mix(in srgb, Canvas 55%, transparent);
@@ -320,7 +336,11 @@ body.index-gallery-edit .index-edit-insert-gap.index-edit-insert-gap--drag-inser
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.index-edit-add-tile-inner.index-edit-drop-active .index-edit-add-tile-frame {
+  background: color-mix(in srgb, Canvas 70%, transparent);
 }
 
 .index-edit-add-btn {

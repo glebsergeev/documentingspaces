@@ -150,11 +150,18 @@
       render();
     }
 
-    function addProject() {
+    function addProject(fileList) {
       const id =
         typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
           ? crypto.randomUUID()
           : `id-${Date.now()}`;
+      const images = [];
+      if (fileList?.length) {
+        for (const file of fileList) {
+          if (!file || !file.type || !file.type.startsWith("image/")) continue;
+          images.push(`assets/${file.name}`);
+        }
+      }
       const p = {
         id,
         title: "New project",
@@ -163,7 +170,7 @@
         isPublished: false,
         orderIndex: projectsOrdered.length,
         coverImageId: "",
-        images: [],
+        images,
         imageScales: [],
       };
       projectsOrdered.push(p);
@@ -428,8 +435,11 @@
       wrap.className = "index-edit-add-tile";
       wrap.innerHTML = `
         <div class="index-edit-add-tile-inner" role="button" tabindex="0" aria-label="Create new project">
+          <div class="index-edit-add-tile-top-spacer" aria-hidden="true"></div>
+          <div class="index-edit-add-tile-frame">
           <button type="button" class="index-edit-add-btn" aria-hidden="true">+</button>
           <div class="index-edit-add-hint">New project</div>
+          </div>
         </div>
       `;
       const hit = wrap.querySelector(".index-edit-add-tile-inner");
@@ -439,6 +449,26 @@
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onAct();
+        }
+      });
+
+      ["dragenter", "dragover"].forEach((ev) => {
+        hit?.addEventListener(ev, (e) => {
+          if (!e.dataTransfer?.files?.length) return;
+          e.preventDefault();
+          e.stopPropagation();
+          hit.classList.add("index-edit-drop-active");
+        });
+      });
+      hit?.addEventListener("dragleave", () => {
+        hit.classList.remove("index-edit-drop-active");
+      });
+      hit?.addEventListener("drop", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hit.classList.remove("index-edit-drop-active");
+        if (e.dataTransfer?.files?.length) {
+          addProject(e.dataTransfer.files);
         }
       });
       return wrap;
