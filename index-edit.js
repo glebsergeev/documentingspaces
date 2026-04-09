@@ -76,6 +76,8 @@
 
     const all = Array.isArray(data.projects) ? data.projects : [];
     let projectsOrdered = [...all].sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0));
+    const params = new URLSearchParams(window.location.search);
+    const shouldCreateNew = params.get("new") === "1";
     let dragFrom = null;
     let dragInsertIndex = null;
     let selectedCoverIndex = -1;
@@ -477,6 +479,14 @@
     });
     document.addEventListener("keydown", onKeyDown);
 
-    render();
+    if (shouldCreateNew) {
+      addProject();
+      params.delete("new");
+      const nextSearch = params.toString();
+      const nextUrl = `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ""}${window.location.hash}`;
+      window.history.replaceState({}, "", nextUrl);
+    } else {
+      render();
+    }
   };
 })();

@@ -130,20 +130,20 @@
     wrapper.classList.add("project-edit-strip");
     wrapper.innerHTML = "";
 
-    const toolbar = document.createElement("div");
-    toolbar.className = "project-edit-toolbar";
-    toolbar.setAttribute("role", "toolbar");
-    toolbar.setAttribute("aria-label", "Editor actions");
-    toolbar.innerHTML = `
-      <div class="project-edit-toolbar-pill" role="group" aria-label="File">
-        <button type="button" class="project-edit-toolbar-primary" data-action="save" title="Download projects.json — replace data/projects.json; copy new files into assets/">Save</button>
-        <span class="project-edit-pill-divider" aria-hidden="true"></span>
-        <button type="button" class="project-edit-toolbar-secondary" data-action="index-edit" title="Open index editor">Index edit</button>
-        <span class="project-edit-pill-divider" aria-hidden="true"></span>
-        <button type="button" class="project-edit-toolbar-secondary" data-action="exit" title="Leave editor">Exit</button>
-      </div>
+    const navCenter = document.querySelector(".nav-bar--project .nav-center");
+    const navActions = document.createElement("div");
+    navActions.className = "project-edit-nav-actions";
+    navActions.setAttribute("role", "group");
+    navActions.setAttribute("aria-label", "Editor actions");
+    navActions.innerHTML = `
+      <button type="button" class="project-edit-nav-btn" data-action="index-edit">Edit Index</button>
+      <button type="button" class="project-edit-nav-btn" data-action="new-project">New Project</button>
+      <button type="button" class="project-edit-nav-btn project-edit-nav-btn--save" data-action="save" title="Download projects.json — replace data/projects.json; copy new files into assets/">Save</button>
+      <button type="button" class="project-edit-nav-btn project-edit-nav-btn--exit" data-action="exit" title="Leave editor">Exit</button>
     `;
-    document.body.appendChild(toolbar);
+    if (navCenter) {
+      navCenter.replaceChildren(navActions);
+    }
 
     function syncScalesLength() {
       while (scales.length < images.length) {
@@ -724,20 +724,27 @@
       window.location.href = u.toString();
     }
 
-    function openIndexEdit() {
+    function openIndexEdit(createNew = false) {
       const u = new URL(window.location.href);
-      u.pathname = u.pathname.replace(/project\.html$/i, "index.html");
+      const baseDir = u.pathname.endsWith("/")
+        ? u.pathname
+        : u.pathname.replace(/[^/]+$/, "");
+      u.pathname = `${baseDir}index.html`;
       u.search = "";
       u.searchParams.set("edit", "1");
+      if (createNew) {
+        u.searchParams.set("new", "1");
+      }
       window.location.href = u.toString();
     }
 
-    toolbar.addEventListener("click", (e) => {
+    navActions.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
       const act = btn.getAttribute("data-action");
       if (act === "save") saveJson();
-      if (act === "index-edit") openIndexEdit();
+      if (act === "index-edit") openIndexEdit(false);
+      if (act === "new-project") openIndexEdit(true);
       if (act === "exit") exitEdit();
     });
 

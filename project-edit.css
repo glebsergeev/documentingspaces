@@ -582,6 +582,58 @@ body.project-gallery-edit .project-edit-slide .project-slide-card {
   background: var(--edit-pill-hover);
 }
 
+/* Top nav actions in edit mode (replace Index link). */
+body.project-gallery-edit .nav-bar--project .nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-edit-nav-actions {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.project-edit-nav-btn {
+  margin: 0;
+  height: var(--edit-control-h);
+  padding: 0 0.66rem;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in srgb, CanvasText 82%, transparent);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: var(--edit-control-h);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-edit-nav-btn:hover {
+  background: var(--edit-pill-hover);
+}
+
+.project-edit-nav-btn--save,
+.project-edit-nav-btn--exit {
+  margin-left: 0.45rem;
+}
+
+.project-edit-nav-btn--save {
+  color: #007aff;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .project-edit-nav-btn--save {
+    color: #0a84ff;
+  }
+}
+
 /* Compact floating actions — overlay, no full-width bar */
 .project-edit-toolbar {
   position: fixed;
