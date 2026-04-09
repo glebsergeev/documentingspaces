@@ -351,7 +351,8 @@
         const text = titleInput.value || titleInput.placeholder || " ";
         const textPx = textMeasureCtx.measureText(text).width;
         const minPx = textMeasureCtx.measureText("W").width;
-        const widthPx = Math.max(minPx, Math.ceil(textPx) + 2);
+        /* Keep a small reserve so caret rendering never clips first glyph. */
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 10);
         titleInput.style.width = `${widthPx}px`;
       }
 

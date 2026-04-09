@@ -141,6 +141,7 @@ body.index-gallery-edit .index-edit-title-frame {
 
 body.index-gallery-edit .index-edit-slug {
   flex: 0 0 auto;
+  margin-left: 0.42rem;
   opacity: 0.6;
   white-space: nowrap;
 }
@@ -186,9 +187,7 @@ body.index-gallery-edit .index-edit-order-input:focus {
 }
 
 body.index-gallery-edit .index-edit-order-input:focus-visible {
-  outline: 2px solid color-mix(in srgb, #007aff 70%, transparent);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
 }
 
 body.index-gallery-edit .index-edit-title-input {
