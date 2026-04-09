@@ -560,7 +560,7 @@ body.project-gallery-edit .project-edit-slide .project-slide-card {
 }
 
 .project-edit-scale:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, #007aff 45%, transparent);
+  box-shadow: none;
 }
 
 .project-edit-remove-btn {
