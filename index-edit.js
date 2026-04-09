@@ -194,9 +194,7 @@
       const p = projectsOrdered[i];
       if (!p) return;
       p.title = val;
-      if (!String(p.slug || "").trim()) {
-        p.slug = slugify(val);
-      }
+      p.slug = slugify(val);
     }
 
     function editProjectAt(i) {
@@ -348,6 +346,7 @@
       const orderInput = slide.querySelector(".index-edit-order-input");
       const publishBtn = slide.querySelector('[data-action="publish"]');
       const openBtn = slide.querySelector('[data-action="open"]');
+      const slugEl = slide.querySelector(".index-edit-slug");
       const coverEl = slide.querySelector(".index-edit-cover");
 
       function syncTitleWidth() {
@@ -363,15 +362,19 @@
         const textPx = textMeasureEl.getBoundingClientRect().width;
         textMeasureEl.textContent = "W";
         const minPx = textMeasureEl.getBoundingClientRect().width;
-        /* Tiny reserve for caret, without adding visible extra right padding. */
-        const widthPx = Math.max(minPx, Math.ceil(textPx) + 2);
+        /* Small reserve for caret/subpixel glyph rendering to avoid clipping. */
+        const widthPx = Math.max(minPx, Math.ceil(textPx) + 4);
         titleInput.style.width = `${widthPx}px`;
+        titleInput.scrollLeft = 0;
       }
 
       syncTitleWidth();
       titleInput?.addEventListener("input", (e) => {
         updateTitleAt(i, e.target.value);
         syncTitleWidth();
+        if (slugEl) {
+          slugEl.textContent = `/${p.slug || ""}`;
+        }
       });
       titleInput?.addEventListener("change", () => {
         render();
