@@ -465,7 +465,7 @@ body[data-page="index"]:not(.index-gallery-edit) .slide-bottom {
   position: relative;
   width: calc(var(--project-cover) * var(--cover-scale, 1));
   padding: 0;
-  margin-top: 0;
+  margin-top: auto;
   margin-left: var(--g);
   margin-bottom: var(--g);
 }
@@ -761,9 +761,19 @@ body[data-page="project"]:not(.project-gallery-edit) .swiper-slide--project:last
 }
 
 body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
-  margin-top: 0;
+  margin-top: auto;
   margin-left: var(--g);
   margin-bottom: var(--g);
+}
+
+@media (max-width: 767px) {
+  body[data-page="index"]:not(.index-gallery-edit) .slide-bottom {
+    margin-top: max(0px, calc(100% - var(--project-cover) - var(--g)));
+  }
+
+  body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
+    margin-top: max(0px, calc(100% - var(--project-cover) - var(--g)));
+  }
 }
 
 @media (min-width: 768px) {
