@@ -218,6 +218,13 @@ body[data-page="project"] .nav-bar--project {
   justify-self: end;
 }
 
+.mobile-project-index-pin {
+  position: fixed;
+  z-index: 120000;
+  margin: 0;
+  white-space: nowrap;
+}
+
 .nav-bar a.nav-trigger {
   display: block;
 }

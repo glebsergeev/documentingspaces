@@ -913,18 +913,32 @@ async function initProjectPage() {
   const fsNext = document.getElementById("projectFullscreenNext");
   const navRootEl = document.querySelector(".nav-root");
   const navCenterEl = document.querySelector(".nav-bar--project .nav-center");
+  const navCenterLinkEl = navCenterEl?.querySelector("a") || null;
   const navInstagramEl = document.getElementById("navInstagram");
+  let mobileIndexPinEl = null;
   let seriesDescOpenBeforeFullscreen = false;
 
+  function ensureMobileIndexPin() {
+    if (mobileIndexPinEl) return mobileIndexPinEl;
+    mobileIndexPinEl = document.createElement("a");
+    mobileIndexPinEl.id = "mobileProjectIndexPin";
+    mobileIndexPinEl.className = "link-underline mobile-project-index-pin";
+    mobileIndexPinEl.setAttribute("aria-label", "Index");
+    mobileIndexPinEl.hidden = true;
+    document.body.appendChild(mobileIndexPinEl);
+    return mobileIndexPinEl;
+  }
+
   function resetMobileIndexPlacement() {
-    if (!navCenterEl) return;
-    navCenterEl.style.position = "";
-    navCenterEl.style.top = "";
-    navCenterEl.style.left = "";
-    navCenterEl.style.right = "";
-    navCenterEl.style.transform = "";
-    navCenterEl.style.zIndex = "";
-    navCenterEl.style.margin = "";
+    if (navCenterEl) {
+      navCenterEl.style.visibility = "";
+    }
+    if (titleEl) {
+      titleEl.style.maxWidth = "";
+    }
+    if (mobileIndexPinEl) {
+      mobileIndexPinEl.hidden = true;
+    }
   }
 
   function syncMobileIndexPlacement() {
@@ -933,18 +947,20 @@ async function initProjectPage() {
       resetMobileIndexPlacement();
       return;
     }
-    if (!navCenterEl || !navInstagramEl || !titleEl) return;
-    const navCenterLink = navCenterEl.querySelector("a");
-    if (!navCenterLink) return;
+    if (!navCenterEl || !navCenterLinkEl || !navInstagramEl || !titleEl) return;
+    const pin = ensureMobileIndexPin();
     const titleTop = titleEl.getBoundingClientRect().top;
     const instagramLeft = navInstagramEl.getBoundingClientRect().left;
-    navCenterEl.style.position = "fixed";
-    navCenterEl.style.top = `${Math.round(titleTop)}px`;
-    navCenterEl.style.left = `${Math.round(instagramLeft)}px`;
-    navCenterEl.style.right = "auto";
-    navCenterEl.style.transform = "none";
-    navCenterEl.style.zIndex = "120000";
-    navCenterEl.style.margin = "0";
+    const g =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--g")) || 12;
+    navCenterEl.style.visibility = "hidden";
+    pin.textContent = navCenterLinkEl.textContent || "Index";
+    pin.href = navCenterLinkEl.getAttribute("href") || "index.html";
+    pin.style.top = `${Math.round(titleTop)}px`;
+    pin.style.left = `${Math.round(instagramLeft)}px`;
+    pin.hidden = false;
+    const titleMax = Math.max(48, Math.floor(instagramLeft - g - 8));
+    titleEl.style.maxWidth = `${titleMax}px`;
   }
 
   const openProjectFullscreen = () => {
