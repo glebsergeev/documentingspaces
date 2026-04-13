@@ -768,11 +768,11 @@ body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
 
 @media (max-width: 767px) {
   body[data-page="index"]:not(.index-gallery-edit) .slide-bottom {
-    margin-top: max(0px, calc(100% - var(--project-cover) - var(--g)));
+    margin-bottom: calc(var(--g) + var(--project-cover) * (1 - var(--cover-scale, 1)));
   }
 
   body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
-    margin-top: max(0px, calc(100% - var(--project-cover) - var(--g)));
+    margin-bottom: calc(var(--g) + var(--project-cover) * (1 - var(--project-scale, 1)));
   }
 }
 

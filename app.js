@@ -456,6 +456,9 @@ function withMobileLeadingFullScale(scales) {
   if (!Array.isArray(scales) || scales.length === 0) return [];
   const out = scales.slice();
   if (isMobileViewport()) {
+    for (let i = 0; i < out.length; i += 1) {
+      if (Number(out[i]) <= 0.5) out[i] = 0.625;
+    }
     out[0] = 1;
   }
   return out;
