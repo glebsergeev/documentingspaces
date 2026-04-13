@@ -858,6 +858,21 @@ async function initProjectPage() {
 
   const alignTitle = () => {
     if (!titleEl || !titleBlock) return;
+    if (
+      document.body.classList.contains("project-fullscreen-on") &&
+      window.matchMedia("(max-width: 767px)").matches
+    ) {
+      const g =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--g")) || 12;
+      const navPadY =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-pad-y")) ||
+        8;
+      const top = g + navPadY + (window.visualViewport?.offsetTop || 0);
+      titleBlock.style.top = `${Math.round(top)}px`;
+      titleBlock.style.bottom = "auto";
+      titleBlock.style.left = `${Math.round(g)}px`;
+      return;
+    }
     const firstImage = activeProjectImage();
     if (!firstImage) return;
 
@@ -895,6 +910,7 @@ async function initProjectPage() {
     setProjectFullscreenBrowserChrome(true);
     document.documentElement.classList.add("project-fullscreen-on");
     document.documentElement.style.backgroundColor = "#000";
+    document.documentElement.style.colorScheme = "dark";
     document.body.style.backgroundColor = "#000";
     seriesDescOpenBeforeFullscreen = Boolean(seriesDesc && !seriesDesc.hasAttribute("hidden"));
     if (seriesDescOpenBeforeFullscreen && seriesDesc) {
@@ -915,6 +931,7 @@ async function initProjectPage() {
     document.body.classList.remove("project-fullscreen-on");
     document.documentElement.classList.remove("project-fullscreen-on");
     document.documentElement.style.backgroundColor = "";
+    document.documentElement.style.colorScheme = "";
     document.body.style.backgroundColor = "";
     fsRoot.setAttribute("hidden", "");
     fsRoot.setAttribute("aria-hidden", "true");
