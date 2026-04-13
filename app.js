@@ -893,6 +893,9 @@ async function initProjectPage() {
   const openProjectFullscreen = () => {
     if (!fsRoot || document.body.classList.contains("project-fullscreen-on")) return;
     setProjectFullscreenBrowserChrome(true);
+    document.documentElement.classList.add("project-fullscreen-on");
+    document.documentElement.style.backgroundColor = "#000";
+    document.body.style.backgroundColor = "#000";
     seriesDescOpenBeforeFullscreen = Boolean(seriesDesc && !seriesDesc.hasAttribute("hidden"));
     if (seriesDescOpenBeforeFullscreen && seriesDesc) {
       seriesDesc.setAttribute("hidden", "");
@@ -910,6 +913,9 @@ async function initProjectPage() {
   const closeProjectFullscreen = () => {
     if (!fsRoot || !document.body.classList.contains("project-fullscreen-on")) return;
     document.body.classList.remove("project-fullscreen-on");
+    document.documentElement.classList.remove("project-fullscreen-on");
+    document.documentElement.style.backgroundColor = "";
+    document.body.style.backgroundColor = "";
     fsRoot.setAttribute("hidden", "");
     fsRoot.setAttribute("aria-hidden", "true");
     if (navRootEl) navRootEl.removeAttribute("aria-hidden");

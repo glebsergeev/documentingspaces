@@ -822,6 +822,10 @@ html:has(body.project-fullscreen-on) {
   background-color: #000;
 }
 
+html.project-fullscreen-on {
+  background-color: #000;
+}
+
 body.page-body.project-fullscreen-on {
   background: #000;
   --bg: #000;
@@ -865,7 +869,7 @@ body.project-fullscreen-on .project-series-desc {
 
   body.project-fullscreen-on .project-fixed-block {
     left: var(--g);
-    top: calc(env(safe-area-inset-top, 0px) + var(--g));
+    top: calc(env(safe-area-inset-top, 0px) + var(--g) + var(--nav-pad-y));
     width: calc(100vw - 2 * var(--g));
     max-width: calc(100vw - 2 * var(--g));
     display: flex;
@@ -884,6 +888,21 @@ body.project-fullscreen-on .project-series-desc {
     margin: 0;
     white-space: nowrap;
     flex: 0 0 auto;
+  }
+
+  body.project-fullscreen-on .project-fullscreen__stage {
+    top: calc(env(safe-area-inset-top, 0px) + var(--index-content-top));
+    left: var(--g);
+    right: var(--g);
+    bottom: var(--g);
+    width: auto;
+    height: auto;
+  }
+
+  body.project-fullscreen-on .project-fullscreen__img {
+    max-width: calc(100vw - 2 * var(--g));
+    max-height: calc(100vh - var(--index-content-top) - var(--g));
+    max-height: calc(100dvh - var(--index-content-top) - var(--g));
   }
 }
 
