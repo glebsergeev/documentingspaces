@@ -862,6 +862,29 @@ body.project-fullscreen-on .project-series-desc {
   body.project-fullscreen-on.page-body {
     overflow: hidden;
   }
+
+  body.project-fullscreen-on .project-fixed-block {
+    left: var(--g);
+    top: calc(env(safe-area-inset-top, 0px) + var(--g));
+    width: calc(100vw - 2 * var(--g));
+    max-width: calc(100vw - 2 * var(--g));
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: calc(var(--g) * 0.75);
+  }
+
+  body.project-fullscreen-on .project-fixed-title {
+    width: auto;
+    max-width: calc(100vw - 2 * var(--g));
+    flex: 0 1 auto;
+  }
+
+  body.project-fullscreen-on .project-fs-counter {
+    margin: 0;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
 }
 
 .project-fullscreen {

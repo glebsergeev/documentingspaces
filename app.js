@@ -241,7 +241,8 @@ function setProjectFullscreenBrowserChrome(dark) {
   const appleId = "meta-apple-status-bar";
   document.getElementById(appleId)?.remove();
 
-  if (dark && isIosSafariUi) {
+  const mobileViewport = window.matchMedia("(max-width: 767px)").matches;
+  if (dark && (isIosSafariUi || mobileViewport)) {
     const t = document.createElement("meta");
     t.name = "theme-color";
     t.id = "meta-theme-color";
@@ -252,11 +253,13 @@ function setProjectFullscreenBrowserChrome(dark) {
     } else {
       document.head.prepend(t);
     }
-    const a = document.createElement("meta");
-    a.id = appleId;
-    a.name = "apple-mobile-web-app-status-bar-style";
-    a.content = "black";
-    document.head.appendChild(a);
+    if (isIosSafariUi) {
+      const a = document.createElement("meta");
+      a.id = appleId;
+      a.name = "apple-mobile-web-app-status-bar-style";
+      a.content = "black";
+      document.head.appendChild(a);
+    }
   }
 }
 
@@ -935,6 +938,38 @@ async function initProjectPage() {
       e.stopPropagation();
       projectGoNextCircular();
     });
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  if (fsRoot) {
+    fsRoot.addEventListener(
+      "touchstart",
+      (e) => {
+        const t = e.changedTouches?.[0];
+        if (!t) return;
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+      },
+      { passive: true }
+    );
+    fsRoot.addEventListener(
+      "touchend",
+      (e) => {
+        if (!document.body.classList.contains("project-fullscreen-on")) return;
+        const t = e.changedTouches?.[0];
+        if (!t) return;
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy) * 1.1) return;
+        if (dx > 0) {
+          projectGoPrevCircular();
+        } else {
+          projectGoNextCircular();
+        }
+      },
+      { passive: true }
+    );
   }
 
   wrapper.addEventListener("click", (e) => {
