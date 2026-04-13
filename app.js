@@ -247,11 +247,19 @@ function setProjectFullscreenBrowserChrome(dark) {
     t.name = "theme-color";
     t.id = "meta-theme-color";
     t.content = "#000000";
+    t.setAttribute("media", "(prefers-color-scheme: light)");
+    const tDark = document.createElement("meta");
+    tDark.name = "theme-color";
+    tDark.id = "meta-theme-color-dark";
+    tDark.content = "#000000";
+    tDark.setAttribute("media", "(prefers-color-scheme: dark)");
     const charset = document.querySelector("meta[charset]");
     if (charset?.parentNode) {
       charset.parentNode.insertBefore(t, charset.nextSibling);
+      charset.parentNode.insertBefore(tDark, t.nextSibling);
     } else {
       document.head.prepend(t);
+      document.head.prepend(tDark);
     }
     if (isIosSafariUi) {
       const a = document.createElement("meta");
@@ -890,6 +898,7 @@ async function initProjectPage() {
     if (seriesDesc && !seriesDesc.hasAttribute("hidden")) {
       requestAnimationFrame(() => requestAnimationFrame(setSeriesDescBounds));
     }
+    syncMobileIndexPlacement();
   };
 
   const scheduleAlignTitle = () => {
@@ -903,7 +912,40 @@ async function initProjectPage() {
   const fsPrev = document.getElementById("projectFullscreenPrev");
   const fsNext = document.getElementById("projectFullscreenNext");
   const navRootEl = document.querySelector(".nav-root");
+  const navCenterEl = document.querySelector(".nav-bar--project .nav-center");
+  const navInstagramEl = document.getElementById("navInstagram");
   let seriesDescOpenBeforeFullscreen = false;
+
+  function resetMobileIndexPlacement() {
+    if (!navCenterEl) return;
+    navCenterEl.style.position = "";
+    navCenterEl.style.top = "";
+    navCenterEl.style.left = "";
+    navCenterEl.style.right = "";
+    navCenterEl.style.transform = "";
+    navCenterEl.style.zIndex = "";
+    navCenterEl.style.margin = "";
+  }
+
+  function syncMobileIndexPlacement() {
+    const mobileViewport = window.matchMedia("(max-width: 767px)").matches;
+    if (!mobileViewport || inEditMode || document.body.classList.contains("project-fullscreen-on")) {
+      resetMobileIndexPlacement();
+      return;
+    }
+    if (!navCenterEl || !navInstagramEl || !titleEl) return;
+    const navCenterLink = navCenterEl.querySelector("a");
+    if (!navCenterLink) return;
+    const titleTop = titleEl.getBoundingClientRect().top;
+    const instagramLeft = navInstagramEl.getBoundingClientRect().left;
+    navCenterEl.style.position = "fixed";
+    navCenterEl.style.top = `${Math.round(titleTop)}px`;
+    navCenterEl.style.left = `${Math.round(instagramLeft)}px`;
+    navCenterEl.style.right = "auto";
+    navCenterEl.style.transform = "none";
+    navCenterEl.style.zIndex = "120000";
+    navCenterEl.style.margin = "0";
+  }
 
   const openProjectFullscreen = () => {
     if (!fsRoot || document.body.classList.contains("project-fullscreen-on")) return;
@@ -923,6 +965,7 @@ async function initProjectPage() {
     fsRoot.removeAttribute("hidden");
     fsRoot.setAttribute("aria-hidden", "false");
     if (navRootEl) navRootEl.setAttribute("aria-hidden", "true");
+    resetMobileIndexPlacement();
     scheduleAlignTitle();
   };
 
@@ -945,6 +988,7 @@ async function initProjectPage() {
     applyProjectSlideIndex(projectSlideI);
     setProjectFullscreenBrowserChrome(false);
     scheduleAlignTitle();
+    syncMobileIndexPlacement();
   };
 
   if (fsBackdrop) {
@@ -1054,8 +1098,11 @@ async function initProjectPage() {
   }
 
   scheduleAlignTitle();
+  syncMobileIndexPlacement();
   setTimeout(scheduleAlignTitle, 60);
+  setTimeout(syncMobileIndexPlacement, 60);
   window.addEventListener("resize", scheduleAlignTitle);
+  window.addEventListener("resize", syncMobileIndexPlacement);
   swiper.on("resize", scheduleAlignTitle);
   swiper.on("slideChange", () => {
     if (!document.body.classList.contains("project-fullscreen-on")) {
@@ -1065,6 +1112,7 @@ async function initProjectPage() {
     if (document.body.classList.contains("project-fullscreen-on")) {
       syncFullscreenFromProjectIndex();
     }
+    syncMobileIndexPlacement();
   });
 }
 
