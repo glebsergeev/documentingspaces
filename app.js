@@ -415,7 +415,7 @@ function initIndexCoverScales() {
   const n = slides.length;
   if (!n) return;
   const seedBase = Math.floor(Math.random() * 2147483646) + 1;
-  const scales = buildProjectSizeSequence(n, seedBase);
+  const scales = withMobileLeadingFullScale(buildProjectSizeSequence(n, seedBase));
   slides.forEach((slide, i) => {
     slide.style.setProperty("--cover-scale", String(scales[i]));
   });
@@ -446,6 +446,19 @@ function buildProjectSizeSequence(count, seedBase = 1) {
   repairAdjacentHalfPairs(scales);
 
   return scales;
+}
+
+function isMobileViewport() {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
+function withMobileLeadingFullScale(scales) {
+  if (!Array.isArray(scales) || scales.length === 0) return [];
+  const out = scales.slice();
+  if (isMobileViewport()) {
+    out[0] = 1;
+  }
+  return out;
 }
 
 const VALID_PROJECT_SCALES = [1, 0.875, 0.75, 0.625, 0.5];
@@ -670,11 +683,12 @@ async function initProjectPage() {
     project && Array.isArray(project.images) && project.images.length
       ? getProjectImageScales(project, projectIdx)
       : buildProjectSizeSequence(projectSlideCount, projectIdx + 17);
+  const renderScales = withMobileLeadingFullScale(sizeScales);
 
   const html = images
     .map(
       (src, idx) => `
-      <div class="swiper-slide swiper-slide--project" style="--project-scale: ${sizeScales[idx]};">
+      <div class="swiper-slide swiper-slide--project" style="--project-scale: ${renderScales[idx]};">
         <div class="project-slide-card">
           <div class="slide-top-spacer" aria-hidden="true"></div>
           <div class="project-bottom">
@@ -691,27 +705,17 @@ async function initProjectPage() {
 
   const swiper = new Swiper(swiperEl, {
     loop: false,
-    rewind: true,
+    rewind: false,
     centeredSlides: false,
-    freeMode: false,
+    freeMode: {
+      enabled: true,
+      sticky: false,
+    },
     mousewheel: {
-      forceToAxis: true,
+      forceToAxis: false,
     },
-    slidesPerView: 1,
+    slidesPerView: "auto",
     spaceBetween: 0,
-    breakpoints: {
-      768: {
-        slidesPerView: "auto",
-        spaceBetween: 0,
-        freeMode: {
-          enabled: true,
-          sticky: false,
-        },
-        mousewheel: {
-          forceToAxis: false,
-        },
-      },
-    },
   });
 
   /* Logical index (0..n-1): do not rely on swiper.activeIndex with slidesPerView "auto" — it can stick early. */
@@ -1047,28 +1051,18 @@ function carousel() {
         this.swiper = new Swiper(el, {
           loop: false,
           centeredSlides: false,
-          freeMode: false,
-          mousewheel: {
-            forceToAxis: true,
+          freeMode: {
+            enabled: true,
+            sticky: false,
           },
-          slidesPerView: 1,
+          mousewheel: {
+            forceToAxis: false,
+          },
+          slidesPerView: "auto",
           spaceBetween: 0,
           navigation: {
             nextEl: "#swiperNext",
             prevEl: "#swiperPrev",
-          },
-          breakpoints: {
-            768: {
-              slidesPerView: "auto",
-              spaceBetween: 0,
-              freeMode: {
-                enabled: true,
-                sticky: false,
-              },
-              mousewheel: {
-                forceToAxis: false,
-              },
-            },
           },
         });
 
