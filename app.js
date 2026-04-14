@@ -786,14 +786,14 @@ async function initProjectPage() {
     if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
   }
 
-  function applyProjectSlideIndex(i) {
+  function applyProjectSlideIndex(i, transitionMs = 260) {
     const n = projectSlideCount;
-    const next = ((i % n) + n) % n;
+    const next = Math.max(0, Math.min(i, n - 1));
     projectSlideI = next;
     const fsOpen = document.body.classList.contains("project-fullscreen-on");
     if (fsOpen) syncFullscreenFromProjectIndex();
     swiper.update();
-    swiper.slideTo(next, 0, true);
+    swiper.slideTo(next, transitionMs, true);
     requestAnimationFrame(() => {
       if (swiper.activeIndex !== next) {
         forceSwiperToProjectSlide(next);
@@ -810,20 +810,14 @@ async function initProjectPage() {
     });
   }
 
-  function projectGoNextCircular() {
+  function projectGoNext() {
+    if (projectSlideI >= projectSlideCount - 1) return;
     applyProjectSlideIndex(projectSlideI + 1);
   }
 
-  function projectGoPrevCircular() {
+  function projectGoPrev() {
+    if (projectSlideI <= 0) return;
     applyProjectSlideIndex(projectSlideI - 1);
-  }
-
-  function projectGoNextBounded() {
-    applyProjectSlideIndex(Math.min(projectSlideI + 1, projectSlideCount - 1));
-  }
-
-  function projectGoPrevBounded() {
-    applyProjectSlideIndex(Math.max(projectSlideI - 1, 0));
   }
 
   const prevHit = document.getElementById("swiperPrev");
@@ -834,7 +828,7 @@ async function initProjectPage() {
       (e) => {
         e.preventDefault();
         e.stopPropagation();
-        projectGoPrevCircular();
+        projectGoPrev();
       },
       true
     );
@@ -845,7 +839,7 @@ async function initProjectPage() {
       (e) => {
         e.preventDefault();
         e.stopPropagation();
-        projectGoNextCircular();
+        projectGoNext();
       },
       true
     );
@@ -1046,13 +1040,13 @@ async function initProjectPage() {
   if (fsPrev) {
     fsPrev.addEventListener("click", (e) => {
       e.stopPropagation();
-      projectGoPrevCircular();
+      projectGoPrev();
     });
   }
   if (fsNext) {
     fsNext.addEventListener("click", (e) => {
       e.stopPropagation();
-      projectGoNextCircular();
+      projectGoNext();
     });
   }
 
@@ -1096,9 +1090,9 @@ async function initProjectPage() {
         lastTouchEndTs = now;
         if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy) * 1.1) return;
         if (dx > 0) {
-          projectGoPrevCircular();
+          projectGoPrev();
         } else {
-          projectGoNextCircular();
+          projectGoNext();
         }
       },
       { passive: false }
@@ -1128,12 +1122,12 @@ async function initProjectPage() {
     }
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      projectGoPrevBounded();
+      projectGoPrev();
       return;
     }
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      projectGoNextBounded();
+      projectGoNext();
     }
   });
 
