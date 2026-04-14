@@ -885,6 +885,12 @@ body.project-fullscreen-on .project-series-desc {
     visibility: hidden;
   }
 
+  body[data-page="project"]:not(.project-gallery-edit):not(.project-fullscreen-on):not(.project-mobile-layout-ready)
+    .nav-bar--project
+    .nav-center {
+    visibility: hidden;
+  }
+
   body.project-fullscreen-on.page-body {
     overflow: hidden;
   }

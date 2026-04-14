@@ -619,6 +619,9 @@ async function initProjectPage() {
   const titleBlock = document.getElementById("projectTitleBlock");
   const seriesDesc = document.getElementById("projectSeriesDesc");
   if (!swiperEl || !wrapper || typeof Swiper === "undefined") return;
+  if (window.matchMedia("(max-width: 767px)").matches) {
+    document.body.classList.remove("project-mobile-layout-ready");
+  }
 
   document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
 
