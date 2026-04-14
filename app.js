@@ -521,7 +521,7 @@ function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
       }
       e.preventDefault();
       const { low, high } = getSwiperTranslateBounds(swiper);
-      const next = Math.max(low, Math.min(high, startTranslate - dy));
+      const next = Math.max(low, Math.min(high, startTranslate + dy));
       swiper.setTransition(0);
       swiper.setTranslate(next);
       if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
