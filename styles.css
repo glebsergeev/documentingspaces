@@ -875,6 +875,16 @@ body.project-fullscreen-on .project-series-desc {
 }
 
 @media (max-width: 767px) {
+  body[data-page="project"]:not(.project-gallery-edit):not(.project-fullscreen-on):not(.project-mobile-layout-ready)
+    .project-fixed-block {
+    visibility: hidden;
+  }
+
+  body[data-page="project"]:not(.project-gallery-edit):not(.project-fullscreen-on):not(.project-mobile-layout-ready)
+    .mobile-project-index-pin {
+    visibility: hidden;
+  }
+
   body.project-fullscreen-on.page-body {
     overflow: hidden;
   }
@@ -924,6 +934,7 @@ body.project-fullscreen-on .project-series-desc {
   z-index: 200000;
   box-sizing: border-box;
   background: #000;
+  touch-action: manipulation;
 }
 
 .project-fullscreen[hidden] {
@@ -975,6 +986,7 @@ body.project-fullscreen-on .project-series-desc {
   min-width: 0;
   min-height: 0;
   pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .project-fullscreen__img {

@@ -731,6 +731,7 @@ async function initProjectPage() {
     loop: false,
     rewind: false,
     centeredSlides: false,
+    touchAngle: 90,
     freeMode: {
       enabled: true,
       sticky: false,
@@ -948,6 +949,7 @@ async function initProjectPage() {
   }
 
   function resetMobileIndexPlacement() {
+    document.body.classList.remove("project-mobile-layout-ready");
     if (navCenterEl) {
       navCenterEl.style.visibility = "";
     }
@@ -979,6 +981,7 @@ async function initProjectPage() {
     pin.hidden = false;
     const titleMax = Math.max(48, Math.floor(instagramLeft - g - 8));
     titleEl.style.maxWidth = `${titleMax}px`;
+    document.body.classList.add("project-mobile-layout-ready");
   }
 
   const openProjectFullscreen = () => {
@@ -1023,6 +1026,10 @@ async function initProjectPage() {
     setProjectFullscreenBrowserChrome(false);
     scheduleAlignTitle();
     syncMobileIndexPlacement();
+    setTimeout(() => {
+      scheduleAlignTitle();
+      syncMobileIndexPlacement();
+    }, 120);
   };
 
   if (fsBackdrop) {
@@ -1043,7 +1050,17 @@ async function initProjectPage() {
 
   let touchStartX = 0;
   let touchStartY = 0;
+  let lastTouchEndTs = 0;
   if (fsRoot) {
+    fsRoot.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+    });
+    fsRoot.addEventListener("gesturestart", (e) => {
+      e.preventDefault();
+    });
+    fsRoot.addEventListener("gesturechange", (e) => {
+      e.preventDefault();
+    });
     fsRoot.addEventListener(
       "touchstart",
       (e) => {
@@ -1062,6 +1079,13 @@ async function initProjectPage() {
         if (!t) return;
         const dx = t.clientX - touchStartX;
         const dy = t.clientY - touchStartY;
+        const now = Date.now();
+        if (Math.abs(dx) < 14 && Math.abs(dy) < 14 && now - lastTouchEndTs < 320) {
+          e.preventDefault();
+          lastTouchEndTs = 0;
+          return;
+        }
+        lastTouchEndTs = now;
         if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy) * 1.1) return;
         if (dx > 0) {
           projectGoPrevCircular();
@@ -1069,7 +1093,7 @@ async function initProjectPage() {
           projectGoNextCircular();
         }
       },
-      { passive: true }
+      { passive: false }
     );
   }
 
@@ -1086,8 +1110,10 @@ async function initProjectPage() {
   });
 
   document.addEventListener("keydown", (e) => {
-    if (!document.body.classList.contains("project-fullscreen-on")) return;
+    if (e.target.closest("input, textarea, select, button, [contenteditable='true']")) return;
+    if (inEditMode) return;
     if (e.key === "Escape") {
+      if (!document.body.classList.contains("project-fullscreen-on")) return;
       e.preventDefault();
       closeProjectFullscreen();
       return;
@@ -1194,6 +1220,7 @@ function carousel() {
         this.swiper = new Swiper(el, {
           loop: false,
           centeredSlides: false,
+          touchAngle: 90,
           freeMode: {
             enabled: true,
             sticky: false,
@@ -1213,6 +1240,27 @@ function carousel() {
         setupProjectLinks();
         initIndexCoverScales();
         this.swiper.update();
+
+        if (!window.__dsIndexArrowNavBound) {
+          window.__dsIndexArrowNavBound = true;
+          document.addEventListener("keydown", (e) => {
+            if (document.body.dataset.page !== "index") return;
+            if (isIndexEditMode()) return;
+            if (e.target.closest("input, textarea, select, button, [contenteditable='true']")) {
+              return;
+            }
+            if (!this.swiper) return;
+            if (e.key === "ArrowLeft") {
+              e.preventDefault();
+              this.swiper.slidePrev(0);
+              return;
+            }
+            if (e.key === "ArrowRight") {
+              e.preventDefault();
+              this.swiper.slideNext(0);
+            }
+          });
+        }
       }, 0);
     },
   };
