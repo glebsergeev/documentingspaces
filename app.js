@@ -772,7 +772,15 @@ async function initProjectPage() {
       }
     }
     swiper.setTransition(0);
-    swiper.setTranslate(-offset);
+    let nextTranslate = -offset;
+    const minT =
+      typeof swiper.minTranslate === "function" ? swiper.minTranslate() : swiper.minTranslate;
+    const maxT =
+      typeof swiper.maxTranslate === "function" ? swiper.maxTranslate() : swiper.maxTranslate;
+    if (typeof minT === "number" && typeof maxT === "number") {
+      nextTranslate = Math.max(minT, Math.min(maxT, nextTranslate));
+    }
+    swiper.setTranslate(nextTranslate);
     if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
     if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
   }
