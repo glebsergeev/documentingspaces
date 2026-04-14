@@ -1081,10 +1081,8 @@ async function initProjectPage() {
     applyProjectSlideIndex(projectSlideI);
     setProjectFullscreenBrowserChrome(false);
     scheduleAlignTitle();
-    syncMobileIndexPlacement();
     setTimeout(() => {
       scheduleAlignTitle();
-      syncMobileIndexPlacement();
     }, 120);
   };
 
@@ -1224,11 +1222,8 @@ async function initProjectPage() {
   }
 
   scheduleAlignTitle();
-  syncMobileIndexPlacement();
   setTimeout(scheduleAlignTitle, 60);
-  setTimeout(syncMobileIndexPlacement, 60);
   window.addEventListener("resize", scheduleAlignTitle);
-  window.addEventListener("resize", syncMobileIndexPlacement);
   swiper.on("resize", scheduleAlignTitle);
   swiper.on("slideChange", () => {
     if (!document.body.classList.contains("project-fullscreen-on")) {
@@ -1242,7 +1237,6 @@ async function initProjectPage() {
     if (document.body.classList.contains("project-fullscreen-on")) {
       syncFullscreenFromProjectIndex();
     }
-    syncMobileIndexPlacement();
   });
 }
 
