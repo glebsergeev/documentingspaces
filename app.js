@@ -832,10 +832,16 @@ async function initProjectPage() {
   /* Logical index (0..n-1): do not rely on swiper.activeIndex with slidesPerView "auto" — it can stick early. */
   let projectSlideI = swiper.activeIndex;
 
+  function normalizeFullscreenProjectIndex(index) {
+    if (projectSlideCount <= 0) return 0;
+    return ((index % projectSlideCount) + projectSlideCount) % projectSlideCount;
+  }
+
   function syncFullscreenFromProjectIndex() {
     const img = document.getElementById("projectFullscreenImg");
     const ctr = document.getElementById("projectFullscreenCounter");
     if (!img || !ctr) return;
+    projectSlideI = normalizeFullscreenProjectIndex(projectSlideI);
     const url = images[projectSlideI];
     if (url) img.src = url;
     img.alt = "";
@@ -960,14 +966,15 @@ async function initProjectPage() {
   }
 
   function projectGoNextFullscreen() {
-    const next = projectSlideCount > 0 ? (projectSlideI + 1) % projectSlideCount : 0;
-    applyProjectSlideIndex(next);
+    if (projectSlideCount <= 0) return;
+    projectSlideI = normalizeFullscreenProjectIndex(projectSlideI + 1);
+    syncFullscreenFromProjectIndex();
   }
 
   function projectGoPrevFullscreen() {
-    const n = projectSlideCount;
-    const next = n > 0 ? (projectSlideI - 1 + n) % n : 0;
-    applyProjectSlideIndex(next);
+    if (projectSlideCount <= 0) return;
+    projectSlideI = normalizeFullscreenProjectIndex(projectSlideI - 1);
+    syncFullscreenFromProjectIndex();
   }
 
   const prevHit = document.getElementById("swiperPrev");
@@ -1037,6 +1044,12 @@ async function initProjectPage() {
 
   const alignTitle = () => {
     if (!titleEl || !titleBlock) return;
+    const mobileLockedHeader =
+      isMobileViewport() &&
+      !inEditMode &&
+      !document.body.classList.contains("project-fullscreen-on") &&
+      document.body.classList.contains("project-mobile-layout-ready");
+    if (mobileLockedHeader) return;
     if (
       document.body.classList.contains("project-fullscreen-on") &&
       window.matchMedia("(max-width: 767px)").matches
