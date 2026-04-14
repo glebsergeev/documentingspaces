@@ -490,8 +490,6 @@ function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
   if (!swiperEl || !swiper || !isMobileViewport()) return;
   let startX = 0;
   let startY = 0;
-  let startTranslate = 0;
-  let verticalDrag = false;
 
   swiperEl.addEventListener(
     "touchstart",
@@ -500,42 +498,31 @@ function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
       if (!t) return;
       startX = t.clientX;
       startY = t.clientY;
-      startTranslate =
-        typeof swiper.getTranslate === "function" ? swiper.getTranslate() : Number(swiper.translate) || 0;
-      verticalDrag = false;
     },
     { passive: true }
   );
 
   swiperEl.addEventListener(
-    "touchmove",
+    "touchend",
     (e) => {
-      const t = e.touches?.[0];
+      const t = e.changedTouches?.[0];
       if (!t) return;
       const dx = t.clientX - startX;
       const dy = t.clientY - startY;
-      if (!verticalDrag) {
-        if (Math.abs(dy) < 8) return;
-        if (Math.abs(dy) <= Math.abs(dx) * 1.05) return;
-        verticalDrag = true;
-      }
-      e.preventDefault();
+      if (Math.abs(dy) < 26) return;
+      if (Math.abs(dy) <= Math.abs(dx) * 1.08) return;
+      const current =
+        typeof swiper.getTranslate === "function" ? swiper.getTranslate() : Number(swiper.translate) || 0;
       const { low, high } = getSwiperTranslateBounds(swiper);
-      const next = Math.max(low, Math.min(high, startTranslate + dy));
-      swiper.setTransition(0);
+      const step = Math.max(120, Math.min((swiper.width || window.innerWidth) * 0.42, 300));
+      /* up => right, down => left */
+      const delta = dy < 0 ? -step : step;
+      const next = Math.max(low, Math.min(high, current + delta));
+      if (Math.abs(next - current) < 0.5) return;
+      swiper.setTransition(260);
       swiper.setTranslate(next);
       if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
       if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
-    },
-    { passive: false }
-  );
-
-  swiperEl.addEventListener(
-    "touchend",
-    () => {
-      if (!verticalDrag) return;
-      verticalDrag = false;
-      swiper.setTransition(220);
     },
     { passive: true }
   );
@@ -800,7 +787,7 @@ async function initProjectPage() {
     loop: false,
     rewind: false,
     centeredSlides: false,
-    touchAngle: 90,
+    touchAngle: 45,
     freeMode: {
       enabled: true,
       sticky: false,
@@ -1351,7 +1338,7 @@ function carousel() {
         this.swiper = new Swiper(el, {
           loop: false,
           centeredSlides: false,
-          touchAngle: 90,
+          touchAngle: 45,
           freeMode: {
             enabled: true,
             sticky: false,
