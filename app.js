@@ -812,6 +812,21 @@ async function initProjectPage() {
     .join("");
   wrapper.innerHTML = html;
 
+  function initProjectImageFadeIns(root) {
+    if (!root) return;
+    root.querySelectorAll(".project-image-wrap img").forEach((imgEl) => {
+      const reveal = () => imgEl.classList.add("is-loaded");
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        reveal();
+        return;
+      }
+      imgEl.addEventListener("load", reveal, { once: true });
+      imgEl.addEventListener("error", reveal, { once: true });
+    });
+  }
+
+  initProjectImageFadeIns(wrapper);
+
   const swiper = new Swiper(swiperEl, {
     loop: false,
     rewind: false,
@@ -831,21 +846,80 @@ async function initProjectPage() {
 
   /* Logical index (0..n-1): do not rely on swiper.activeIndex with slidesPerView "auto" — it can stick early. */
   let projectSlideI = swiper.activeIndex;
+  const FULLSCREEN_FADE_MS = 200;
+  let fullscreenSwapToken = 0;
+  let fullscreenSwapTimer = null;
+
+  function clearFullscreenSwapTimer() {
+    if (fullscreenSwapTimer != null) {
+      clearTimeout(fullscreenSwapTimer);
+      fullscreenSwapTimer = null;
+    }
+  }
 
   function normalizeFullscreenProjectIndex(index) {
     if (projectSlideCount <= 0) return 0;
     return ((index % projectSlideCount) + projectSlideCount) % projectSlideCount;
   }
 
-  function syncFullscreenFromProjectIndex() {
+  function syncFullscreenFromProjectIndex({ animate = false } = {}) {
     const img = document.getElementById("projectFullscreenImg");
     const ctr = document.getElementById("projectFullscreenCounter");
     if (!img || !ctr) return;
     projectSlideI = normalizeFullscreenProjectIndex(projectSlideI);
-    const url = images[projectSlideI];
-    if (url) img.src = url;
-    img.alt = "";
     ctr.textContent = `${projectSlideI + 1}/${projectSlideCount}`;
+    const url = images[projectSlideI];
+    if (!url) return;
+
+    const currentUrl = img.currentSrc || img.getAttribute("src") || "";
+    const sameUrl = currentUrl === url;
+    const shouldAnimate = Boolean(animate && currentUrl && !sameUrl);
+    const token = ++fullscreenSwapToken;
+    clearFullscreenSwapTimer();
+
+    const applyUrlWithFadeIn = () => {
+      const preload = new Image();
+      preload.decoding = "async";
+      const done = () => {
+        if (token !== fullscreenSwapToken) return;
+        img.classList.remove("project-fullscreen__img--fading-out");
+        img.classList.remove("project-fullscreen__img--loading");
+        img.src = url;
+        img.alt = "";
+        requestAnimationFrame(() => {
+          if (token !== fullscreenSwapToken) return;
+          img.classList.add("project-fullscreen__img--fading-in");
+          fullscreenSwapTimer = setTimeout(() => {
+            if (token !== fullscreenSwapToken) return;
+            img.classList.remove("project-fullscreen__img--fading-in");
+          }, FULLSCREEN_FADE_MS);
+        });
+      };
+      preload.onload = done;
+      preload.onerror = done;
+      preload.src = url;
+    };
+
+    if (sameUrl && img.complete && img.naturalWidth > 0) {
+      img.classList.remove("project-fullscreen__img--fading-out");
+      img.classList.remove("project-fullscreen__img--loading");
+      img.classList.remove("project-fullscreen__img--fading-in");
+      return;
+    }
+
+    img.classList.remove("project-fullscreen__img--fading-in");
+    if (shouldAnimate) {
+      img.classList.add("project-fullscreen__img--fading-out");
+      fullscreenSwapTimer = setTimeout(() => {
+        if (token !== fullscreenSwapToken) return;
+        img.classList.add("project-fullscreen__img--loading");
+        applyUrlWithFadeIn();
+      }, FULLSCREEN_FADE_MS);
+      return;
+    }
+
+    img.classList.add("project-fullscreen__img--loading");
+    applyUrlWithFadeIn();
   }
 
   function forceSwiperToProjectSlide(i) {
@@ -968,13 +1042,13 @@ async function initProjectPage() {
   function projectGoNextFullscreen() {
     if (projectSlideCount <= 0) return;
     projectSlideI = normalizeFullscreenProjectIndex(projectSlideI + 1);
-    syncFullscreenFromProjectIndex();
+    syncFullscreenFromProjectIndex({ animate: true });
   }
 
   function projectGoPrevFullscreen() {
     if (projectSlideCount <= 0) return;
     projectSlideI = normalizeFullscreenProjectIndex(projectSlideI - 1);
-    syncFullscreenFromProjectIndex();
+    syncFullscreenFromProjectIndex({ animate: true });
   }
 
   const prevHit = document.getElementById("swiperPrev");
@@ -1102,6 +1176,29 @@ async function initProjectPage() {
   let mobileIndexPinEl = null;
   let seriesDescOpenBeforeFullscreen = false;
 
+  function syncDesktopFullscreenCounterPosition() {
+    if (!fsCounter) return;
+    const desktopFullscreen =
+      document.body.classList.contains("project-fullscreen-on") &&
+      window.matchMedia("(min-width: 768px)").matches;
+    if (!desktopFullscreen) {
+      fsCounter.style.position = "";
+      fsCounter.style.left = "";
+      fsCounter.style.top = "";
+      fsCounter.style.whiteSpace = "";
+      return;
+    }
+    const rect = fsImg?.getBoundingClientRect?.();
+    if (!rect || rect.height < 2) return;
+    const g = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--g")) || 12;
+    const counterHeight = fsCounter.getBoundingClientRect().height || 0;
+    const top = Math.max(g, rect.bottom - counterHeight);
+    fsCounter.style.position = "fixed";
+    fsCounter.style.left = `${Math.round(g)}px`;
+    fsCounter.style.top = `${Math.round(top)}px`;
+    fsCounter.style.whiteSpace = "nowrap";
+  }
+
   function ensureMobileIndexPin() {
     if (mobileIndexPinEl) return mobileIndexPinEl;
     mobileIndexPinEl = document.createElement("a");
@@ -1169,6 +1266,7 @@ async function initProjectPage() {
     if (navRootEl) navRootEl.setAttribute("aria-hidden", "true");
     resetMobileIndexPlacement();
     scheduleAlignTitle();
+    requestAnimationFrame(() => requestAnimationFrame(syncDesktopFullscreenCounterPosition));
   };
 
   const closeProjectFullscreen = () => {
@@ -1186,10 +1284,16 @@ async function initProjectPage() {
       seriesDesc.removeAttribute("hidden");
       if (titleEl) titleEl.setAttribute("aria-expanded", "true");
     }
+    clearFullscreenSwapTimer();
+    fullscreenSwapToken += 1;
+    fsImg?.classList.remove("project-fullscreen__img--fading-out");
+    fsImg?.classList.remove("project-fullscreen__img--loading");
+    fsImg?.classList.remove("project-fullscreen__img--fading-in");
     seriesDescOpenBeforeFullscreen = false;
     applyProjectSlideIndex(projectSlideI);
     setProjectFullscreenBrowserChrome(false);
     scheduleAlignTitle();
+    syncDesktopFullscreenCounterPosition();
     setTimeout(() => {
       scheduleAlignTitle();
     }, 120);
@@ -1215,6 +1319,9 @@ async function initProjectPage() {
   let touchStartY = 0;
   let lastTouchEndTs = 0;
   if (fsRoot) {
+    fsImg?.addEventListener("load", () => {
+      syncDesktopFullscreenCounterPosition();
+    });
     fsRoot.addEventListener("dblclick", (e) => {
       e.preventDefault();
     });
@@ -1333,6 +1440,7 @@ async function initProjectPage() {
   scheduleAlignTitle();
   setTimeout(scheduleAlignTitle, 60);
   window.addEventListener("resize", scheduleAlignTitle);
+  window.addEventListener("resize", syncDesktopFullscreenCounterPosition);
   swiper.on("resize", scheduleAlignTitle);
   swiper.on("slideChange", () => {
     const mobileNonFullscreen =
@@ -1349,6 +1457,7 @@ async function initProjectPage() {
     }
     if (document.body.classList.contains("project-fullscreen-on")) {
       syncFullscreenFromProjectIndex();
+      requestAnimationFrame(syncDesktopFullscreenCounterPosition);
     }
     if (!mobileNonFullscreen) {
       syncMobileIndexPlacement();

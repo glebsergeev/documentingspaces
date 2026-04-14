@@ -827,6 +827,12 @@ body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
   object-fit: cover;
   object-position: center;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.project-image-wrap img.is-loaded {
+  opacity: 1;
 }
 
 /* Dark chrome: black canvas for Safari tint; avoid color-scheme: dark here (extra tab row in Safari) */
@@ -1009,6 +1015,17 @@ body.project-fullscreen-on .project-series-desc {
   width: auto;
   height: auto;
   object-fit: contain;
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+.project-fullscreen__img--fading-out,
+.project-fullscreen__img--loading {
+  opacity: 0;
+}
+
+.project-fullscreen__img--fading-in {
+  opacity: 1;
 }
 
 .project-fullscreen__zones {
