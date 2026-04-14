@@ -475,6 +475,72 @@ function withMobileLeadingFullScale(scales) {
   return out;
 }
 
+function getSwiperTranslateBounds(swiper) {
+  const minT =
+    typeof swiper.minTranslate === "function" ? swiper.minTranslate() : swiper.minTranslate;
+  const maxT =
+    typeof swiper.maxTranslate === "function" ? swiper.maxTranslate() : swiper.maxTranslate;
+  const low = typeof minT === "number" && typeof maxT === "number" ? Math.min(minT, maxT) : -Infinity;
+  const high =
+    typeof minT === "number" && typeof maxT === "number" ? Math.max(minT, maxT) : Infinity;
+  return { low, high };
+}
+
+function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
+  if (!swiperEl || !swiper || !isMobileViewport()) return;
+  let startX = 0;
+  let startY = 0;
+  let startTranslate = 0;
+  let verticalDrag = false;
+
+  swiperEl.addEventListener(
+    "touchstart",
+    (e) => {
+      const t = e.touches?.[0];
+      if (!t) return;
+      startX = t.clientX;
+      startY = t.clientY;
+      startTranslate =
+        typeof swiper.getTranslate === "function" ? swiper.getTranslate() : Number(swiper.translate) || 0;
+      verticalDrag = false;
+    },
+    { passive: true }
+  );
+
+  swiperEl.addEventListener(
+    "touchmove",
+    (e) => {
+      const t = e.touches?.[0];
+      if (!t) return;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (!verticalDrag) {
+        if (Math.abs(dy) < 8) return;
+        if (Math.abs(dy) <= Math.abs(dx) * 1.05) return;
+        verticalDrag = true;
+      }
+      e.preventDefault();
+      const { low, high } = getSwiperTranslateBounds(swiper);
+      const next = Math.max(low, Math.min(high, startTranslate - dy));
+      swiper.setTransition(0);
+      swiper.setTranslate(next);
+      if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
+      if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
+    },
+    { passive: false }
+  );
+
+  swiperEl.addEventListener(
+    "touchend",
+    () => {
+      if (!verticalDrag) return;
+      verticalDrag = false;
+      swiper.setTransition(220);
+    },
+    { passive: true }
+  );
+}
+
 const VALID_PROJECT_SCALES = [1, 0.875, 0.75, 0.625, 0.5];
 
 function getProjectImageScales(project, projectIdx) {
@@ -745,6 +811,7 @@ async function initProjectPage() {
     slidesPerView: "auto",
     spaceBetween: 0,
   });
+  enableVerticalSwipeToHorizontal(swiperEl, swiper);
 
   /* Logical index (0..n-1): do not rely on swiper.activeIndex with slidesPerView "auto" — it can stick early. */
   let projectSlideI = swiper.activeIndex;
@@ -1299,6 +1366,7 @@ function carousel() {
             prevEl: "#swiperPrev",
           },
         });
+        enableVerticalSwipeToHorizontal(el, this.swiper);
 
         initProjectCovers();
         setupProjectLinks();
