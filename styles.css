@@ -417,7 +417,7 @@ body[data-page="index"]:not(.index-gallery-edit) .swiper-slide--work:last-child 
     );
   }
 
-  body[data-page="index"] .slide-bottom {
+  body[data-page="index"]:not(.index-gallery-edit) .slide-bottom {
     gap: 0;
     margin-top: 0;
     height: auto;
@@ -789,7 +789,7 @@ body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
     padding-top: max(0px, calc(25vh + var(--g) / 2 - var(--index-content-top)));
   }
 
-  body[data-page="project"] .project-bottom {
+  body[data-page="project"]:not(.project-gallery-edit) .project-bottom {
     margin-top: 0;
   }
 
