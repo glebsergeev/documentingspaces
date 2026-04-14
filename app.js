@@ -890,8 +890,10 @@ async function initProjectPage() {
     if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
     if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
     inferProjectIndexFromTranslate(next);
-    scheduleAlignTitle();
-    syncMobileIndexPlacement();
+    if (!(isMobileViewport() && !document.body.classList.contains("project-fullscreen-on"))) {
+      scheduleAlignTitle();
+      syncMobileIndexPlacement();
+    }
   }
 
   function applyProjectSlideIndex(i, transitionMs = 340) {
@@ -1280,6 +1282,8 @@ async function initProjectPage() {
   window.addEventListener("resize", scheduleAlignTitle);
   swiper.on("resize", scheduleAlignTitle);
   swiper.on("slideChange", () => {
+    const mobileNonFullscreen =
+      isMobileViewport() && !document.body.classList.contains("project-fullscreen-on");
     if (!document.body.classList.contains("project-fullscreen-on")) {
       const t =
         typeof swiper.getTranslate === "function"
@@ -1287,9 +1291,14 @@ async function initProjectPage() {
           : Number(swiper.translate) || 0;
       inferProjectIndexFromTranslate(t);
     }
-    scheduleAlignTitle();
+    if (!mobileNonFullscreen) {
+      scheduleAlignTitle();
+    }
     if (document.body.classList.contains("project-fullscreen-on")) {
       syncFullscreenFromProjectIndex();
+    }
+    if (!mobileNonFullscreen) {
+      syncMobileIndexPlacement();
     }
   });
 }

@@ -84,6 +84,11 @@ body.page-body :where(h1, h2, h3, h4, h5, h6, p) {
 }
 
 @media (max-width: 767px) {
+  html,
+  body.page-body {
+    overscroll-behavior-y: none;
+  }
+
   body.page-body {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
