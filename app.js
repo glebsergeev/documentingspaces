@@ -959,6 +959,17 @@ async function initProjectPage() {
     applyProjectSlideIndex(projectSlideI - 1);
   }
 
+  function projectGoNextFullscreen() {
+    const next = projectSlideCount > 0 ? (projectSlideI + 1) % projectSlideCount : 0;
+    applyProjectSlideIndex(next);
+  }
+
+  function projectGoPrevFullscreen() {
+    const n = projectSlideCount;
+    const next = n > 0 ? (projectSlideI - 1 + n) % n : 0;
+    applyProjectSlideIndex(next);
+  }
+
   const prevHit = document.getElementById("swiperPrev");
   const nextHit = document.getElementById("swiperNext");
   if (prevHit) {
@@ -1177,13 +1188,13 @@ async function initProjectPage() {
   if (fsPrev) {
     fsPrev.addEventListener("click", (e) => {
       e.stopPropagation();
-      projectGoPrev();
+      projectGoPrevFullscreen();
     });
   }
   if (fsNext) {
     fsNext.addEventListener("click", (e) => {
       e.stopPropagation();
-      projectGoNext();
+      projectGoNextFullscreen();
     });
   }
 
@@ -1227,9 +1238,9 @@ async function initProjectPage() {
         lastTouchEndTs = now;
         if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy) * 1.1) return;
         if (dx > 0) {
-          projectGoPrev();
+          projectGoPrevFullscreen();
         } else {
-          projectGoNext();
+          projectGoNextFullscreen();
         }
       },
       { passive: false }
@@ -1260,7 +1271,7 @@ async function initProjectPage() {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
       if (document.body.classList.contains("project-fullscreen-on")) {
-        projectGoPrev();
+        projectGoPrevFullscreen();
       } else {
         const step = Math.max(140, Math.min((swiper.width || window.innerWidth) * 0.55, 420));
         scrollProjectStripBy(step);
@@ -1270,7 +1281,7 @@ async function initProjectPage() {
     if (e.key === "ArrowRight") {
       e.preventDefault();
       if (document.body.classList.contains("project-fullscreen-on")) {
-        projectGoNext();
+        projectGoNextFullscreen();
       } else {
         const step = Math.max(140, Math.min((swiper.width || window.innerWidth) * 0.55, 420));
         scrollProjectStripBy(-step);
