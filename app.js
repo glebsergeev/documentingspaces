@@ -1308,6 +1308,32 @@ function carousel() {
         initIndexCoverScales();
         this.swiper.update();
 
+        const indexGetTranslateBounds = () => {
+          const sw = this.swiper;
+          if (!sw) return { low: -Infinity, high: Infinity };
+          const minT = typeof sw.minTranslate === "function" ? sw.minTranslate() : sw.minTranslate;
+          const maxT = typeof sw.maxTranslate === "function" ? sw.maxTranslate() : sw.maxTranslate;
+          if (typeof minT !== "number" || typeof maxT !== "number") {
+            return { low: -Infinity, high: Infinity };
+          }
+          return { low: Math.min(minT, maxT), high: Math.max(minT, maxT) };
+        };
+
+        const indexScrollStripBy = (deltaPx, transitionMs = 360) => {
+          const sw = this.swiper;
+          if (!sw) return;
+          sw.update();
+          const current =
+            typeof sw.getTranslate === "function" ? sw.getTranslate() : Number(sw.translate) || 0;
+          const { low, high } = indexGetTranslateBounds();
+          const next = Math.max(low, Math.min(high, current + deltaPx));
+          if (Math.abs(next - current) < 0.5) return;
+          sw.setTransition(transitionMs);
+          sw.setTranslate(next);
+          if (sw.updateSlidesProgress) sw.updateSlidesProgress();
+          if (sw.updateSlidesClasses) sw.updateSlidesClasses();
+        };
+
         if (!window.__dsIndexArrowNavBound) {
           window.__dsIndexArrowNavBound = true;
           document.addEventListener("keydown", (e) => {
@@ -1319,12 +1345,14 @@ function carousel() {
             if (!this.swiper) return;
             if (e.key === "ArrowLeft") {
               e.preventDefault();
-              this.swiper.slidePrev(360);
+              const step = Math.max(140, Math.min((this.swiper.width || window.innerWidth) * 0.55, 420));
+              indexScrollStripBy(step);
               return;
             }
             if (e.key === "ArrowRight") {
               e.preventDefault();
-              this.swiper.slideNext(360);
+              const step = Math.max(140, Math.min((this.swiper.width || window.innerWidth) * 0.55, 420));
+              indexScrollStripBy(-step);
             }
           });
         }
