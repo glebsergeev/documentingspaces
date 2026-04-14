@@ -779,7 +779,9 @@ async function initProjectPage() {
     const maxT =
       typeof swiper.maxTranslate === "function" ? swiper.maxTranslate() : swiper.maxTranslate;
     if (typeof minT === "number" && typeof maxT === "number") {
-      nextTranslate = Math.max(minT, Math.min(maxT, nextTranslate));
+      const low = Math.min(minT, maxT);
+      const high = Math.max(minT, maxT);
+      nextTranslate = Math.max(low, Math.min(high, nextTranslate));
     }
     swiper.setTranslate(nextTranslate);
     if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
@@ -821,7 +823,9 @@ async function initProjectPage() {
     let next = current + deltaPx;
     const { minT, maxT } = getProjectTranslateBounds();
     if (typeof minT === "number" && typeof maxT === "number") {
-      next = Math.max(minT, Math.min(maxT, next));
+      const low = Math.min(minT, maxT);
+      const high = Math.max(minT, maxT);
+      next = Math.max(low, Math.min(high, next));
     }
     if (Math.abs(next - current) < 0.5) return;
     swiper.setTransition(transitionMs);
@@ -1315,12 +1319,12 @@ function carousel() {
             if (!this.swiper) return;
             if (e.key === "ArrowLeft") {
               e.preventDefault();
-              this.swiper.slidePrev(0);
+              this.swiper.slidePrev(360);
               return;
             }
             if (e.key === "ArrowRight") {
               e.preventDefault();
-              this.swiper.slideNext(0);
+              this.swiper.slideNext(360);
             }
           });
         }
