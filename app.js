@@ -877,49 +877,34 @@ async function initProjectPage() {
     const token = ++fullscreenSwapToken;
     clearFullscreenSwapTimer();
 
-    const applyUrlWithFadeIn = () => {
-      const preload = new Image();
-      preload.decoding = "async";
-      const done = () => {
-        if (token !== fullscreenSwapToken) return;
-        img.classList.remove("project-fullscreen__img--fading-out");
-        img.classList.remove("project-fullscreen__img--loading");
-        img.src = url;
-        img.alt = "";
-        requestAnimationFrame(() => {
-          if (token !== fullscreenSwapToken) return;
-          img.classList.add("project-fullscreen__img--fading-in");
-          fullscreenSwapTimer = setTimeout(() => {
-            if (token !== fullscreenSwapToken) return;
-            img.classList.remove("project-fullscreen__img--fading-in");
-          }, FULLSCREEN_FADE_MS);
-        });
-      };
-      preload.onload = done;
-      preload.onerror = done;
-      preload.src = url;
-    };
-
     if (sameUrl && img.complete && img.naturalWidth > 0) {
-      img.classList.remove("project-fullscreen__img--fading-out");
-      img.classList.remove("project-fullscreen__img--loading");
       img.classList.remove("project-fullscreen__img--fading-in");
       return;
     }
 
-    img.classList.remove("project-fullscreen__img--fading-in");
-    if (shouldAnimate) {
-      img.classList.add("project-fullscreen__img--fading-out");
-      fullscreenSwapTimer = setTimeout(() => {
+    const preload = new Image();
+    preload.decoding = "async";
+    const done = () => {
+      if (token !== fullscreenSwapToken) return;
+      img.src = url;
+      img.alt = "";
+      if (!shouldAnimate) {
+        img.classList.remove("project-fullscreen__img--fading-in");
+        return;
+      }
+      img.classList.remove("project-fullscreen__img--fading-in");
+      requestAnimationFrame(() => {
         if (token !== fullscreenSwapToken) return;
-        img.classList.add("project-fullscreen__img--loading");
-        applyUrlWithFadeIn();
-      }, FULLSCREEN_FADE_MS);
-      return;
-    }
-
-    img.classList.add("project-fullscreen__img--loading");
-    applyUrlWithFadeIn();
+        img.classList.add("project-fullscreen__img--fading-in");
+        fullscreenSwapTimer = setTimeout(() => {
+          if (token !== fullscreenSwapToken) return;
+          img.classList.remove("project-fullscreen__img--fading-in");
+        }, FULLSCREEN_FADE_MS);
+      });
+    };
+    preload.onload = done;
+    preload.onerror = done;
+    preload.src = url;
   }
 
   function forceSwiperToProjectSlide(i) {
@@ -1286,8 +1271,6 @@ async function initProjectPage() {
     }
     clearFullscreenSwapTimer();
     fullscreenSwapToken += 1;
-    fsImg?.classList.remove("project-fullscreen__img--fading-out");
-    fsImg?.classList.remove("project-fullscreen__img--loading");
     fsImg?.classList.remove("project-fullscreen__img--fading-in");
     seriesDescOpenBeforeFullscreen = false;
     applyProjectSlideIndex(projectSlideI);

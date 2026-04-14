@@ -1016,16 +1016,20 @@ body.project-fullscreen-on .project-series-desc {
   height: auto;
   object-fit: contain;
   opacity: 1;
-  transition: opacity 200ms ease;
-}
-
-.project-fullscreen__img--fading-out,
-.project-fullscreen__img--loading {
-  opacity: 0;
+  will-change: opacity;
 }
 
 .project-fullscreen__img--fading-in {
-  opacity: 1;
+  animation: project-fullscreen-fade-in 200ms ease both;
+}
+
+@keyframes project-fullscreen-fade-in {
+  from {
+    opacity: 0.82;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .project-fullscreen__zones {
