@@ -786,7 +786,54 @@ async function initProjectPage() {
     if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
   }
 
-  function applyProjectSlideIndex(i, transitionMs = 260) {
+  function inferProjectIndexFromTranslate(translateValue) {
+    const grid = swiper.slidesGrid;
+    if (!Array.isArray(grid) || !grid.length) return;
+    const pos = Math.max(0, -translateValue);
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    for (let idx = 0; idx < grid.length; idx += 1) {
+      const g = Number(grid[idx]);
+      if (!Number.isFinite(g)) continue;
+      const d = Math.abs(g - pos);
+      if (d < bestDist) {
+        bestDist = d;
+        bestIdx = idx;
+      }
+    }
+    projectSlideI = Math.max(0, Math.min(bestIdx, projectSlideCount - 1));
+  }
+
+  function getProjectTranslateBounds() {
+    const minT =
+      typeof swiper.minTranslate === "function" ? swiper.minTranslate() : swiper.minTranslate;
+    const maxT =
+      typeof swiper.maxTranslate === "function" ? swiper.maxTranslate() : swiper.maxTranslate;
+    return { minT, maxT };
+  }
+
+  function scrollProjectStripBy(deltaPx, transitionMs = 360) {
+    swiper.update();
+    const current =
+      typeof swiper.getTranslate === "function"
+        ? swiper.getTranslate()
+        : Number(swiper.translate) || 0;
+    let next = current + deltaPx;
+    const { minT, maxT } = getProjectTranslateBounds();
+    if (typeof minT === "number" && typeof maxT === "number") {
+      next = Math.max(minT, Math.min(maxT, next));
+    }
+    if (Math.abs(next - current) < 0.5) return;
+    swiper.setTransition(transitionMs);
+    swiper.setTranslate(next);
+    if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
+    if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
+    inferProjectIndexFromTranslate(next);
+    scheduleAlignTitle();
+    syncMobileIndexPlacement();
+  }
+
+  function applyProjectSlideIndex(i, transitionMs = 340) {
     const n = projectSlideCount;
     const next = Math.max(0, Math.min(i, n - 1));
     projectSlideI = next;
@@ -1122,12 +1169,22 @@ async function initProjectPage() {
     }
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      projectGoPrev();
+      if (document.body.classList.contains("project-fullscreen-on")) {
+        projectGoPrev();
+      } else {
+        const step = Math.max(140, Math.min((swiper.width || window.innerWidth) * 0.55, 420));
+        scrollProjectStripBy(step);
+      }
       return;
     }
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      projectGoNext();
+      if (document.body.classList.contains("project-fullscreen-on")) {
+        projectGoNext();
+      } else {
+        const step = Math.max(140, Math.min((swiper.width || window.innerWidth) * 0.55, 420));
+        scrollProjectStripBy(-step);
+      }
     }
   });
 
@@ -1168,7 +1225,11 @@ async function initProjectPage() {
   swiper.on("resize", scheduleAlignTitle);
   swiper.on("slideChange", () => {
     if (!document.body.classList.contains("project-fullscreen-on")) {
-      projectSlideI = swiper.activeIndex;
+      const t =
+        typeof swiper.getTranslate === "function"
+          ? swiper.getTranslate()
+          : Number(swiper.translate) || 0;
+      inferProjectIndexFromTranslate(t);
     }
     scheduleAlignTitle();
     if (document.body.classList.contains("project-fullscreen-on")) {
