@@ -818,6 +818,14 @@ async function initProjectPage() {
     applyProjectSlideIndex(projectSlideI - 1);
   }
 
+  function projectGoNextBounded() {
+    applyProjectSlideIndex(Math.min(projectSlideI + 1, projectSlideCount - 1));
+  }
+
+  function projectGoPrevBounded() {
+    applyProjectSlideIndex(Math.max(projectSlideI - 1, 0));
+  }
+
   const prevHit = document.getElementById("swiperPrev");
   const nextHit = document.getElementById("swiperNext");
   if (prevHit) {
@@ -1120,12 +1128,12 @@ async function initProjectPage() {
     }
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      projectGoPrevCircular();
+      projectGoPrevBounded();
       return;
     }
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      projectGoNextCircular();
+      projectGoNextBounded();
     }
   });
 
