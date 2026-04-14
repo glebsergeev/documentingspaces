@@ -542,10 +542,20 @@ function setupProjectLinks() {
       : `project.html?project=${index}`;
     link.setAttribute("href", href);
     link.textContent = "View Gallery";
-    link.addEventListener("click", (event) => {
+    link.addEventListener(
+      "click",
+      (event) => {
+        /* Prevent Alpine title-toggle handler from mutating card state before navigation. */
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        const card = link.closest(".slide-card");
+        const visual = card?.querySelector(".slide-visual");
+        if (visual) visual.classList.remove("is-hidden");
       event.preventDefault();
       window.location.href = href;
-    });
+      },
+      true
+    );
   });
 }
 
