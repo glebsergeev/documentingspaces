@@ -490,6 +490,8 @@ function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
   if (!swiperEl || !swiper || !isMobileViewport()) return;
   let startX = 0;
   let startY = 0;
+  let startTranslate = 0;
+  let verticalDrag = false;
 
   swiperEl.addEventListener(
     "touchstart",
@@ -498,31 +500,58 @@ function enableVerticalSwipeToHorizontal(swiperEl, swiper) {
       if (!t) return;
       startX = t.clientX;
       startY = t.clientY;
+      startTranslate =
+        typeof swiper.getTranslate === "function" ? swiper.getTranslate() : Number(swiper.translate) || 0;
+      verticalDrag = false;
+      swiper.allowTouchMove = true;
     },
     { passive: true }
   );
 
   swiperEl.addEventListener(
-    "touchend",
+    "touchmove",
     (e) => {
-      const t = e.changedTouches?.[0];
+      const t = e.touches?.[0];
       if (!t) return;
       const dx = t.clientX - startX;
       const dy = t.clientY - startY;
-      if (Math.abs(dy) < 26) return;
-      if (Math.abs(dy) <= Math.abs(dx) * 1.08) return;
-      const current =
-        typeof swiper.getTranslate === "function" ? swiper.getTranslate() : Number(swiper.translate) || 0;
+      if (!verticalDrag) {
+        if (Math.abs(dy) < 8) return;
+        if (Math.abs(dy) <= Math.abs(dx) * 1.05) return;
+        verticalDrag = true;
+        swiper.allowTouchMove = false;
+      }
+      e.preventDefault();
       const { low, high } = getSwiperTranslateBounds(swiper);
-      const step = Math.max(120, Math.min((swiper.width || window.innerWidth) * 0.42, 300));
       /* up => right, down => left */
-      const delta = dy < 0 ? -step : step;
-      const next = Math.max(low, Math.min(high, current + delta));
-      if (Math.abs(next - current) < 0.5) return;
-      swiper.setTransition(260);
+      const next = Math.max(low, Math.min(high, startTranslate + dy));
       swiper.setTranslate(next);
       if (swiper.updateSlidesProgress) swiper.updateSlidesProgress();
       if (swiper.updateSlidesClasses) swiper.updateSlidesClasses();
+    },
+    { passive: false, capture: true }
+  );
+
+  swiperEl.addEventListener(
+    "touchend",
+    () => {
+      if (verticalDrag) {
+        verticalDrag = false;
+        swiper.allowTouchMove = true;
+        swiper.setTransition(180);
+      }
+    },
+    { passive: true }
+  );
+
+  swiperEl.addEventListener(
+    "touchcancel",
+    () => {
+      if (verticalDrag) {
+        verticalDrag = false;
+      }
+      swiper.allowTouchMove = true;
+      swiper.setTransition(180);
     },
     { passive: true }
   );
