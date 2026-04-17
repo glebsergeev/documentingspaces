@@ -418,6 +418,19 @@ body.project-gallery-edit .project-edit-slide .project-slide-card {
   align-items: stretch;
 }
 
+/* In edit mode keep the image block on the same baseline logic as public desktop layout:
+   top-aligned inside the slide card (not pushed to viewport bottom by margin-top:auto). */
+body.project-gallery-edit .project-bottom {
+  margin-left: var(--g);
+  margin-bottom: var(--g);
+}
+
+@media (min-width: 768px) {
+  body.project-gallery-edit .project-bottom {
+    margin-top: 0;
+  }
+}
+
 /* Left-aligned with image (same inset as .project-bottom) */
 .project-edit-chrome-row {
   display: flex;
