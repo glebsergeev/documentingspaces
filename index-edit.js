@@ -68,6 +68,16 @@
   window.initIndexGalleryEdit = async function initIndexGalleryEdit(ctx) {
     const { data, wrapper, swiperEl } = ctx || {};
     if (!data || !wrapper || !swiperEl) return;
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      wrapper.classList.remove("index-edit-strip");
+      wrapper.innerHTML = `
+        <div class="edit-desktop-only-note" role="status" aria-live="polite">
+          <p>Editing is available on desktop only.</p>
+          <p>Open this page on a desktop device to edit the index.</p>
+        </div>
+      `;
+      return;
+    }
 
     document.body.classList.add("index-gallery-edit");
     swiperEl.classList.add("index-swiper--edit");

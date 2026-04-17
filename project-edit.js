@@ -101,13 +101,24 @@
 
   window.initProjectGalleryEdit = async function initProjectGalleryEdit(ctx) {
     const { data, project, projectIdx, wrapper, swiperEl, titleEl, titleBlock } = ctx;
-    document.body.classList.add("project-gallery-edit");
 
     if (!data || !project || !wrapper || !swiperEl) {
       wrapper.innerHTML =
         '<p class="project-edit-error">No project data. Open from the site with a valid <code>slug</code> (and run a local server).</p>';
       return;
     }
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      wrapper.classList.remove("project-edit-strip");
+      wrapper.innerHTML = `
+        <div class="edit-desktop-only-note" role="status" aria-live="polite">
+          <p>Editing is available on desktop only.</p>
+          <p>Open this page on a desktop device to edit the gallery.</p>
+        </div>
+      `;
+      return;
+    }
+
+    document.body.classList.add("project-gallery-edit");
 
     const getProjectImageScales =
       typeof window.__dsGetProjectImageScales === "function"
@@ -881,6 +892,15 @@
       }
       wrapper.appendChild(buildInsertGap(images.length));
       wrapper.appendChild(buildAddTile());
+      wrapper.querySelectorAll(".project-image-wrap img").forEach((imgEl) => {
+        const reveal = () => imgEl.classList.add("is-loaded");
+        if (imgEl.complete && imgEl.naturalWidth > 0) {
+          reveal();
+          return;
+        }
+        imgEl.addEventListener("load", reveal, { once: true });
+        imgEl.addEventListener("error", reveal, { once: true });
+      });
     }
 
     function onKeyDown(e) {

@@ -725,6 +725,20 @@ body.project-gallery-edit .nav-bar--project .nav-center {
   font-size: 0.95rem;
 }
 
+.edit-desktop-only-note {
+  width: min(560px, calc(100vw - 2 * var(--g)));
+  margin: max(2rem, var(--index-content-top)) auto 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, CanvasText 24%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, Canvas 96%, transparent);
+  color: CanvasText;
+}
+
+.edit-desktop-only-note p + p {
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 767px) {
   .project-edit-add-tile {
     width: 100%;
