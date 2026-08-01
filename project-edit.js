@@ -156,6 +156,7 @@
       <button type="button" class="project-edit-nav-btn" data-action="new-project">New Project</button>
       <button type="button" class="project-edit-nav-btn project-edit-nav-btn--save" data-action="save" title="Download projects.json — replace data/projects.json; copy new files into assets/">Save</button>
       <button type="button" class="project-edit-nav-btn project-edit-nav-btn--exit" data-action="exit" title="Leave editor">Exit</button>
+      <button type="button" class="project-edit-nav-btn" data-action="admin">Admin</button>
     `;
     if (navCenter) {
       navCenter.replaceChildren(navActions);
@@ -993,6 +994,16 @@
       window.location.href = u.toString();
     }
 
+    function openAdmin() {
+      const u = new URL(window.location.href);
+      const baseDir = u.pathname.endsWith("/")
+        ? u.pathname
+        : u.pathname.replace(/[^/]+$/, "");
+      u.pathname = `${baseDir}admin/index.html`;
+      u.search = "";
+      window.location.href = u.toString();
+    }
+
     navActions.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
@@ -1001,6 +1012,7 @@
       if (act === "index-edit") openIndexEdit();
       if (act === "new-project") openNewProjectEdit();
       if (act === "exit") exitEdit();
+      if (act === "admin") openAdmin();
     });
 
     document.addEventListener("keydown", onKeyDown);

@@ -108,6 +108,7 @@
       <button type="button" class="index-edit-nav-btn" data-action="new">New Project</button>
       <button type="button" class="index-edit-nav-btn index-edit-nav-btn--save" data-action="save">Save</button>
       <button type="button" class="index-edit-nav-btn index-edit-nav-btn--exit" data-action="exit">Exit</button>
+      <button type="button" class="index-edit-nav-btn" data-action="admin">Admin</button>
     `;
     navCenter.appendChild(navActions);
     if (navBar && navRight && navRight.parentNode === navBar) {
@@ -641,6 +642,16 @@
       window.location.href = u.toString();
     }
 
+    function openAdmin() {
+      const u = new URL(window.location.href);
+      const baseDir = u.pathname.endsWith("/")
+        ? u.pathname
+        : u.pathname.replace(/[^/]+$/, "");
+      u.pathname = `${baseDir}admin/index.html`;
+      u.search = "";
+      window.location.href = u.toString();
+    }
+
     navActions.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-action]");
       if (!btn) return;
@@ -648,6 +659,7 @@
       if (action === "new") openNewProjectEdit();
       if (action === "save") downloadJson(data, projectsOrdered);
       if (action === "exit") exitEdit();
+      if (action === "admin") openAdmin();
     });
     document.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", syncAddTileAlignment);
