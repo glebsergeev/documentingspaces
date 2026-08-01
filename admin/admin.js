@@ -183,11 +183,30 @@ function renderProjectList() {
     delBtn.textContent = "Delete";
     delBtn.addEventListener("click", () => deleteProject(p.id));
 
+    const visualBtn = document.createElement("button");
+    visualBtn.type = "button";
+    visualBtn.textContent = "Visual";
+    visualBtn.title = "Open visual project editor";
+    visualBtn.addEventListener("click", () => {
+      const slugRaw = String(p.slug || "").trim();
+      const slug = slugRaw || slugify(p.title || `project-${sortedIndex + 1}`);
+      if (!slugRaw) {
+        p.slug = slug;
+        renderProjectList();
+        if (editingId === p.id) renderEditor();
+      }
+      const u = new URL("../project.html", window.location.href);
+      u.searchParams.set("slug", slug);
+      u.searchParams.set("edit", "1");
+      window.location.href = u.toString();
+    });
+
     actions.appendChild(pubLabel);
     actions.appendChild(up);
     actions.appendChild(down);
     actions.appendChild(editBtn);
     actions.appendChild(delBtn);
+    actions.appendChild(visualBtn);
 
     row.appendChild(left);
     row.appendChild(actions);
