@@ -7,80 +7,142 @@
     <style>
       :root {
         color-scheme: light dark;
-        --border: color-mix(in srgb, CanvasText 18%, transparent);
+        --border: color-mix(in srgb, CanvasText 14%, transparent);
         --muted: color-mix(in srgb, CanvasText 55%, Canvas);
-        --focus: Highlight;
+        --focus: #007aff;
+        --edit-control-h: 2.1rem;
+        --edit-pill-track-h: calc(var(--edit-control-h) + 4px);
+        --edit-pill-bg: rgba(255, 255, 255, 0.94);
+        --edit-pill-border: rgba(0, 0, 0, 0.09);
+        --edit-pill-shadow: 0 2px 10px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
+        --edit-pill-hover: rgba(0, 0, 0, 0.05);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --edit-pill-bg: rgba(58, 58, 60, 0.92);
+          --edit-pill-border: rgba(255, 255, 255, 0.12);
+          --edit-pill-shadow: 0 2px 14px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25);
+          --edit-pill-hover: rgba(255, 255, 255, 0.08);
+        }
       }
       * {
         box-sizing: border-box;
       }
       body {
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
         font-size: 15px;
         line-height: 1.45;
         margin: 0;
-        padding: 1rem 1.25rem 3rem;
-        max-width: 52rem;
+        padding: 1.1rem 1.25rem 2rem;
+        max-width: 56rem;
         margin-inline: auto;
       }
       h1 {
-        font-size: 1.35rem;
+        font-size: 1.2rem;
         font-weight: 600;
-        margin: 0 0 0.5rem;
+        margin: 0;
       }
       h2 {
-        font-size: 1.05rem;
+        font-size: 0.98rem;
         font-weight: 600;
-        margin: 1.75rem 0 0.65rem;
-        padding-bottom: 0.35rem;
-        border-bottom: 1px solid var(--border);
+        margin: 0 0 0.75rem;
       }
       a {
         color: inherit;
+        text-decoration: none;
       }
       .toolbar {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem 1rem;
-        align-items: center;
-        margin-bottom: 1rem;
+        gap: 0.85rem;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.9rem;
       }
-      .toolbar a {
-        text-decoration: underline;
+      .toolbar-meta {
+        display: grid;
+        gap: 0.2rem;
+      }
+      .toolbar-subtitle {
+        margin: 0;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+      .toolbar-actions {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+      .nav-btn,
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--edit-pill-track-h);
+        margin: 0;
+        padding: 2px calc(0.66rem + 7px);
+        box-sizing: border-box;
+        border: 0.5px solid var(--edit-pill-border);
+        border-radius: 999px;
+        background: var(--edit-pill-bg);
+        box-shadow: var(--edit-pill-shadow);
+        color: color-mix(in srgb, CanvasText 84%, transparent);
+        font: inherit;
+        font-size: 0.93rem;
+        font-weight: 500;
+        line-height: var(--edit-control-h);
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .nav-btn:hover,
+      button:hover {
+        background: var(--edit-pill-hover);
+      }
+      .nav-btn--primary {
+        font-weight: 600;
       }
       .backup-notice {
         margin: 0 0 1rem;
         padding: 0.65rem 0.8rem;
-        border: 1px solid var(--border);
-        border-radius: 6px;
+        border: 0.5px solid var(--edit-pill-border);
+        border-radius: 14px;
         background: color-mix(in srgb, CanvasText 4%, Canvas);
-        font-size: 0.9rem;
+        box-shadow: var(--edit-pill-shadow);
+        font-size: 0.88rem;
       }
       .backup-notice strong {
         font-weight: 600;
       }
       #status {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
+        margin: 0.5rem 0 1rem;
+        font-size: 0.84rem;
         color: var(--muted);
       }
       #status.error {
         color: CanvasText;
         font-weight: 500;
       }
+      section {
+        margin: 0 0 0.95rem;
+        padding: 0.9rem 0.95rem 1rem;
+        border: 0.5px solid var(--edit-pill-border);
+        border-radius: 16px;
+        background: color-mix(in srgb, Canvas 98%, transparent);
+        box-shadow: var(--edit-pill-shadow);
+      }
       fieldset {
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 0.75rem 1rem 1rem;
-        margin: 0 0 1rem;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
       }
       legend {
-        padding: 0 0.35rem;
-        font-weight: 500;
+        display: none;
       }
       label.stack {
         display: block;
-        margin-top: 0.65rem;
+        margin-top: 0.62rem;
         font-size: 0.85rem;
         color: var(--muted);
       }
@@ -95,17 +157,31 @@
         display: block;
         width: 100%;
         max-width: 100%;
-        margin-top: 0.2rem;
-        padding: 0.4rem 0.5rem;
+        min-height: var(--edit-pill-track-h);
+        margin-top: 0.28rem;
+        padding: 9px 12px;
         font: inherit;
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        background: Field;
-        color: FieldText;
+        border: 1px solid #000;
+        border-radius: 999px;
+        background: #fff;
+        color: #000;
+        box-shadow: var(--edit-pill-shadow);
       }
       textarea {
-        min-height: 4.5rem;
+        min-height: 8rem;
+        border-radius: 14px;
         resize: vertical;
+      }
+      @media (prefers-color-scheme: dark) {
+        input[type="text"],
+        input[type="url"],
+        input[type="email"],
+        input[type="number"],
+        textarea {
+          border-color: rgba(255, 255, 255, 0.28);
+          background: rgba(28, 28, 30, 0.94);
+          color: #fff;
+        }
       }
       input:focus,
       textarea:focus,
@@ -114,21 +190,12 @@
         outline: 2px solid var(--focus);
         outline-offset: 1px;
       }
-      button {
-        font: inherit;
-        padding: 0.35rem 0.65rem;
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        background: ButtonFace;
-        color: ButtonText;
-        cursor: pointer;
-      }
       button:disabled {
-        opacity: 0.5;
+        opacity: 0.45;
         cursor: not-allowed;
       }
       button.danger {
-        border-color: color-mix(in srgb, #c00 40%, var(--border));
+        border-color: color-mix(in srgb, #c00 40%, var(--edit-pill-border));
       }
       .row-actions {
         display: flex;
@@ -141,8 +208,8 @@
         grid-template-columns: 1fr auto;
         gap: 0.5rem 0.75rem;
         align-items: start;
-        padding: 0.65rem 0;
-        border-bottom: 1px solid var(--border);
+        padding: 0.56rem 0;
+        border-bottom: 0.5px solid var(--edit-pill-border);
       }
       .project-row:last-child {
         border-bottom: none;
@@ -157,12 +224,16 @@
       .check-inline {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        font-size: 0.9rem;
+        gap: 0.3rem;
+        font-size: 0.88rem;
         white-space: nowrap;
       }
+      .check-inline > input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+      }
       #editor-section {
-        margin-top: 1.5rem;
+        margin-top: 0.95rem;
       }
       #editor-section[hidden] {
         display: none !important;
@@ -173,7 +244,7 @@
         gap: 0.5rem;
         align-items: center;
         padding: 0.4rem 0;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 0.5px solid var(--edit-pill-border);
       }
       .image-row:last-child {
         border-bottom: none;
@@ -183,43 +254,64 @@
         height: 3rem;
         object-fit: cover;
         border-radius: 4px;
-        border: 1px solid var(--border);
+        border: 0.5px solid var(--edit-pill-border);
         background: color-mix(in srgb, CanvasText 6%, Canvas);
       }
       .image-row img[data-broken="1"] {
         visibility: hidden;
       }
       .hint {
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         color: var(--muted);
-        margin-top: 0.35rem;
+        margin-top: 0.2rem;
       }
       .actions-bar {
         position: sticky;
         bottom: 0;
-        margin-top: 2rem;
-        padding: 0.75rem 0;
-        background: Canvas;
-        border-top: 1px solid var(--border);
+        margin-top: 1.15rem;
+        padding: 0.7rem;
+        background: color-mix(in srgb, Canvas 94%, transparent);
+        border: 0.5px solid var(--edit-pill-border);
+        border-radius: 14px;
+        box-shadow: var(--edit-pill-shadow);
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
         align-items: center;
       }
       #import-json {
-        font-size: 0.85rem;
-        max-width: 14rem;
+        font-size: 0.82rem;
+        max-width: 13rem;
+      }
+      @media (max-width: 760px) {
+        body {
+          padding-inline: 0.75rem;
+        }
+        section {
+          border-radius: 12px;
+          padding: 0.8rem;
+        }
+        .toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
       }
     </style>
   </head>
   <body>
     <header class="toolbar">
-      <h1>Projects admin (backup)</h1>
-      <a href="../index.html">View site</a>
+      <div class="toolbar-meta">
+        <h1>Projects admin (backup)</h1>
+        <p class="toolbar-subtitle">Fallback tools for emergency and recovery tasks.</p>
+      </div>
+      <div class="toolbar-actions">
+        <a class="nav-btn nav-btn--primary" href="../index.html?edit=1">Edit index visually</a>
+        <a class="nav-btn" href="../index.html">View site</a>
+      </div>
     </header>
     <p class="backup-notice">
       <strong>Backup/Emergency mode:</strong> use visual editing as the primary workflow:
-      <code>../index.html?edit=1</code> and project editing from there. This page is for fallback operations.
+      <code>../index.html?edit=1</code> and project editing from there.
     </p>
     <p id="status" aria-live="polite"></p>
 
@@ -234,8 +326,8 @@
     <section aria-labelledby="projects-heading">
       <h2 id="projects-heading">Projects</h2>
       <p class="hint">
-        Order matches the public list. Use arrows to reorder. Visual gallery editor (horizontal, same as the site):
-        <code>../project.html?slug=your-slug&amp;edit=1</code> (local server).
+        Order matches the public list. Use arrows to reorder. Visual editor URL:
+        <code>../project.html?slug=your-slug&amp;edit=1</code>.
       </p>
       <div id="project-list"></div>
       <p style="margin-top: 0.75rem">
