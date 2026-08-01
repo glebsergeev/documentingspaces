@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Projects admin</title>
+    <title>Projects admin (backup)</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -47,6 +47,17 @@
       }
       .toolbar a {
         text-decoration: underline;
+      }
+      .backup-notice {
+        margin: 0 0 1rem;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: color-mix(in srgb, CanvasText 4%, Canvas);
+        font-size: 0.9rem;
+      }
+      .backup-notice strong {
+        font-weight: 600;
       }
       #status {
         margin: 0.5rem 0;
@@ -203,9 +214,13 @@
   </head>
   <body>
     <header class="toolbar">
-      <h1>Projects admin</h1>
+      <h1>Projects admin (backup)</h1>
       <a href="../index.html">View site</a>
     </header>
+    <p class="backup-notice">
+      <strong>Backup/Emergency mode:</strong> use visual editing as the primary workflow:
+      <code>../index.html?edit=1</code> and project editing from there. This page is for fallback operations.
+    </p>
     <p id="status" aria-live="polite"></p>
 
     <section aria-labelledby="site-heading">
